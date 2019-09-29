@@ -1,0 +1,24 @@
+{
+    "name": "ModernDeck",
+    "version": "10.0.0",
+    "description": "A new, powerful Twitter client.",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "repository": "https://github.com/dangeredwolf/MD-10",
+    "keywords": [
+        "Electron",
+        "Twitter"
+    ],
+    "author": "GitHub",
+    "license": "MIT",
+    "devDependencies": {
+        "electron": "^6.0.10"
+    },
+    "dependencies": {
+        "electron-store": "^5.0.0",
+        "jquery": "^3.4.1",
+        "twitter": "^1.7.1"
+    }
+}
