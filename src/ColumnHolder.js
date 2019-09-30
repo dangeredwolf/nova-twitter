@@ -1,5 +1,5 @@
 const $ = require("jquery");
-const {make, body} = require("./src/Helpers.js");
+const {make, body} = require("./Helpers.js");
 
 class ColumnHolder {
     static getColumnHolder() {
