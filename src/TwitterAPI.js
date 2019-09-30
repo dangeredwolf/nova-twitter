@@ -13,13 +13,12 @@ class TwitterAPI {
             theFunc(url,
                 {
                     headers:
-                    {Authorization:`Bearer ${info.bearer || bearerTest}`,
-                    "Cookie": `auth_token=${info.auth_token}; ct0=00000000000000000000000000000000; lang=en`,
+                    {Authorization:`Bearer ${info.account.bearerToken}`,
+                    "Cookie": `auth_token=${info.account.authToken}; ct0=00000000000000000000000000000000; lang=en`,
                     "X-Csrf-Token":"00000000000000000000000000000000"},
                     method: (info.method || "GET")
                 },
                 (res) => {
-                    console.log(res);
                     res.on("data", (d) => {
                         data += d;
                     });

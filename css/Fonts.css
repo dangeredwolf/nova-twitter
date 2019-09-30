@@ -1,0 +1,55 @@
+@font-face{font-family:"MD";font-style:normal;font-weight:400;src:url("./../fonts/mdvectors.woff2") format("woff2");unicode-range:U+0000-FFFF}
+@font-face{font-family:"Material";font-style:normal;font-weight:400;src:url("./../fonts/MaterialIcons.woff2") format("woff2");unicode-range:U+0000-FFFF}
+@font-face{font-family:"Roboto";font-style:normal;font-weight:400;src:url("./../fonts/Roboto-Regular.woff2") format("woff2");unicode-range:U+0000-FFFF}
+@font-face{font-family:"Roboto";font-style:normal;font-weight:500;src:url("./../fonts/Roboto-Medium.woff2") format("woff2");unicode-range:U+0000-FFFF}
+@font-face{font-family:"Roboto";font-style:italic;font-weight:400;src:url("./../fonts/Roboto-Italic.woff2") format("woff2");unicode-range:U+0000-FFFF}
+@font-face{font-family:"Roboto";font-style:normal;font-weight:300;src:url("./../fonts/Roboto-Light.woff2") format("woff2");unicode-range:U+0000-FFFF}
+@font-face{font-family:"Roboto";font-style:italic;font-weight:500;src:url("./../fonts/Roboto-MediumItalic.woff2") format("woff2");unicode-range:U+0000-FFFF}
+@font-face{font-family:"Roboto";font-style:italic;font-weight:300;src:url("./../fonts/Roboto-LightItalic.woff2") format("woff2");unicode-range:U+0000-FFFF}
+@font-face{font-family:"Roboto";font-style:normal;font-weight:100;src:url("./../fonts/Roboto-Thin.woff2") format("woff2");unicode-range:U+0000-FFFF}
+@font-face{font-family:"Roboto";font-style:italic;font-weight:100;src:url("./../fonts/Roboto-ThinIalic.woff2") format("woff2");unicode-range:U+0000-FFFF}
+@font-face{font-family:"Noto Sans CJK";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansCJKjp-Medium.otf") format("opentype");unicode-range:U+0000-FFFF}
+@font-face{font-family:"Noto Sans CJK";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansCJKjp-Regular.otf") format("opentype");unicode-range:U+0000-FFFF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansHI-Medium.woff2") format("woff2");unicode-range:U+0900-097F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansHI-Regular.woff2") format("woff2");unicode-range:U+0900-097F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansArabic-Medium.woff2") format("woff2");unicode-range:U+0600-06FF,U+0750–077F,U+08A0–08FF,U+FB50–FDFF,U+FE70–FEFF,U+10E60–10E7F,U+1EE00—1EEFF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansArabic-Regular.woff2") format("woff2");unicode-range:U+0600-06FF,U+0750–077F,U+08A0–08FF,U+FB50–FDFF,U+FE70–FEFF,U+10E60–10E7F,U+1EE00—1EEFF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansArmenian-Medium.woff2") format("woff2");unicode-range:U+0530-0580}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansArmenian-Regular.woff2") format("woff2");unicode-range:U+0530-0580}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansBengali-Medium.woff2") format("woff2");unicode-range:U+0980-09FF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansBengali-Regular.woff2") format("woff2");unicode-range:U+0980-09FF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansBengali-Medium.woff2") format("woff2");unicode-range:U+0980-09FF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansBengali-Regular.woff2") format("woff2");unicode-range:U+0980-09FF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansBrahmi.woff2") format("woff2");unicode-range:U+11000-1107F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansBuginese.woff2") format("woff2");unicode-range:U+1A00-1A1B,U+1A1E-1A1F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansBuhid-Regular.woff2") format("woff2");unicode-range:U+1740-1753}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansCanadianAboriginal.woff2") format("woff2");unicode-range:U+1400-167F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansCarian-Regular.woff2") format("woff2");unicode-range:U+102A0-102DF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansChakma-Regular.woff2") format("woff2");unicode-range:U+11100-1114F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansCherokee-Regular.woff2") format("woff2");unicode-range:U+11100-1114F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansCherokee-Medium.woff2") format("woff2");unicode-range:U+13A0-13F4,U+13F5,U+13F8-13FD}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansCherokee-Regular.woff2") format("woff2");unicode-range:U+13A0-13F4,U+13F5,U+13F8-13FD}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansEthiopic-Medium.woff2") format("woff2");unicode-range:U+1200-137F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansEthiopic-Regular.woff2") format("woff2");unicode-range:U+1200-137F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansGeorgian-Medium.woff2") format("woff2");unicode-range:U+10A0-10FF,U+2D00-2D2F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansGeorgian-Regular.woff2") format("woff2");unicode-range:U+10A0-10FF,U+2D00-2D2F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansGujaratiUI-Bold.woff2") format("woff2");unicode-range:U+0A80-0AFF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansGujaratiUI.woff2") format("woff2");unicode-range:U+0A80-0AFF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansHebrew-Bold.woff2") format("woff2");unicode-range:U+0590-05FF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansHebrew-Regular.woff2") format("woff2");unicode-range:U+0590-05FF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansJavanese.woff2") format("woff2");unicode-range:U+A980-A9DF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansKannadaUI-Bold.woff2") format("woff2");unicode-range:U+0C80-0CFF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansKannadaUI.woff2") format("woff2");unicode-range:U+0C80-0CFF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansKayahLi-Regular.woff2") format("woff2");unicode-range:U+A900-A92F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansKhmerUI-Medium.woff2") format("woff2");unicode-range:U+1780-17FF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansKhmerUI-Regular.woff2") format("woff2");unicode-range:U+1780-17FF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansLaoUI-Medium.woff2") format("woff2");unicode-range:U+0E80-0EFF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansLaoUI-Regular.woff2") format("woff2");unicode-range:U+0E80-0EFF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansLisu-Regular.woff2") format("woff2");unicode-range:U+A4D0-A4FF}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansMalayalamUI-Bold.woff2") format("woff2");unicode-range:U+0D00-0D7F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansMalayalamUI.woff2") format("woff2");unicode-range:U+0D00-0D7F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansMyanmarUI-Bold.woff2") format("woff2");unicode-range:U+1000-109F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansMyanmarUI-Regular.woff2") format("woff2");unicode-range:U+1000-109F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansOriyaUI-Medium.woff2") format("woff2");unicode-range:U+0B00-0B7F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;src:url("./../fonts/NotoSansOriyaUI.woff2") format("woff2");unicode-range:U+0B00-0B7F}
+@font-face{font-family:"Noto Sans";font-style:normal;font-weight:500;src:url("./../fonts/NotoSansOriyaUI-Bold.woff2") format("woff2");unicode-range:U+0B00-0B7F}

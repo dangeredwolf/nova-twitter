@@ -1,0 +1,6 @@
+@import "./css/Column.css";
+@import "./css/Fonts.css";
+
+html {
+    font-family: Roboto, "Noto Sans", "Noto Sans CJK", "Segoe UI", "Helvetica Neue", sans-serif
+}
