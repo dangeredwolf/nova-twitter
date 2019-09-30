@@ -13,6 +13,9 @@ class Column {
     body;
     account;
 
+    displayedIds = {};
+    latestId = 0;
+
 
     constructor() {
         this.element = div("column");
@@ -38,17 +41,28 @@ class Column {
     renderTimer() {
         setInterval(() => {
             this.renderTweets()
-        }, 1500);
+        }, 2500);
     }
 
     renderTweets() {
         return new Promise((resolve, reject) => {
             this.updateTweets().then((tweets) => {
                 tweets.forEach((tweet) => {
-                    console.log(tweet);
-                    this.body.append(
-                        new Tweet(tweet).element
-                    );
+                    // console.log(tweet);
+
+                    if (this.displayedIds[tweet.id] !== true) {
+                        let makeTweet = new Tweet(tweet).element;
+                        this.displayedIds[tweet.id] = true;
+
+                        if (this.latestId !== 0) {
+                            this.body.prepend(makeTweet);
+                        } else {
+                            this.body.append(makeTweet);
+                        }
+                    }
+                    if (tweet.id > this.latestId) {
+                        this.latestId = tweet.id;
+                    }
                 })
             });
         })

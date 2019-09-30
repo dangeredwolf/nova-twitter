@@ -10,6 +10,8 @@ class TwitterAPI {
                 theFunc = https.request
             }
 
+            console.log(url);
+
             theFunc(url,
                 {
                     headers:
@@ -22,7 +24,9 @@ class TwitterAPI {
                     res.on("data", (d) => {
                         data += d;
                     });
-                    res.on("end", () => {
+                    res.on("end", (response) => {
+                        console.log(response);
+                        console.log(data);
                         resolve(data);
                     });
                 }

@@ -20,7 +20,7 @@ class StorageAccount {
     }
 
     static getAccount(id) {
-        let theAcc = ((Storage.get("accounts") || []).filter(acc => (acc.twitterId !== id)) || [])[0];
+        let theAcc = ((Storage.get("accounts") || []).filter(acc => (acc.twitterId === id)) || [])[0];
         return theAcc;
     }
 
