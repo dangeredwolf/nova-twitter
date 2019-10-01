@@ -1,6 +1,9 @@
 @import "./css/Column.css";
+@import "./css/Core.css";
 @import "./css/Fonts.css";
+@import "./css/Icon.css";
 @import "./css/ProfilePicture.css";
+@import "./css/Tweet.css";
 
 html {
     font-family: Roboto, "Noto Sans", "Noto Sans CJK", "Segoe UI", "Helvetica Neue", sans-serif

@@ -10,7 +10,8 @@ i {
 	vertical-align:middle;
 	font-size:20px;
 	height:1em;
-	width:1em
+	width:1em;
+	font-family:"Material"!important
 }
 
 .dropdown-menu a[data-action]:before,
@@ -18,7 +19,8 @@ i {
 .Icon:before,
 .search-input-control:before,
 .sprite-gif:before,
-.material-icon
+.material-icon,
+.material-icons
 {
 	content:" ";
 	font-style:normal;
@@ -29,6 +31,7 @@ i {
 	word-wrap:normal;
 	direction:ltr;
 	white-space:nowrap;
+	text-transform:none;
 	font-feature-settings:"liga"
 }
 
@@ -37,11 +40,16 @@ i {
 	font-family:Material
 }
 
-.material-icon {
-	font-family:Material;
-	font-size:24px;
+.material-icon,.material-icons {
+	font-family:Material!important;
 	display:inline-block;
 	line-height:1
+}
+
+.btn-flat.waves-circle i {
+	font-size:24px;
+	margin-top:-8px;
+	margin-left:-11px;
 }
 
 .mtd-icon-very-large {

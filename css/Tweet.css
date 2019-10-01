@@ -1,0 +1,98 @@
+.tweet-header {
+    display:inline;
+    pointer-events:none;
+    white-space:nowrap
+}
+
+.interaction-user-link {
+    white-space:nowrap
+}
+
+.interaction-display-name {
+    padding-left:7px;
+    font-weight: 500;
+}
+
+.interaction-attribution {
+    padding-left:7px
+}
+
+.interaction-recipient-link {
+    display:block;
+    padding-top:6px
+}
+
+.interaction-header {
+    white-space:unset
+}
+
+.tweet-header>a {
+    display:inline-block
+}
+
+.retweet-link {
+    display: block!important;
+}
+
+.tweet-header>* {
+    pointer-events:all
+}
+
+.tweet-display-name,.tweet-username,.interaction-display-name,.interaction-attribution {
+    display:inline;
+    vertical-align:top
+}
+
+.tweet-display-name {
+    padding-left:10px;
+    text-overflow: clip;
+    white-space:nowrap;
+    text-overflow:clip;
+    font-weight: 5;
+    font-weight: 500;
+}
+
+.tweet-username {
+    padding-left:5px;
+    font-size:0.9em;
+    margin-top:3px
+}
+
+article {
+    max-width:100%;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.tweet-username-group {
+    white-space:nowrap;
+    display:inline
+}
+
+.tweet-time {
+    right:10px;
+    top:0;
+    float:right
+}
+
+.tweet-attribution {
+    width:auto;
+    display: inline-block;
+    padding-left: 7px;
+    padding-bottom: 10px;
+}
+
+.tweet-text {
+    padding-left:10px
+}
+
+article:not(.interaction) .tweet-text {
+    padding-left:60px
+}
+
+.tweet:not(.is-retweet) .tweet-text {
+    margin-top:-24px
+}
+.tweet-body {
+    min-height:30px;
+}

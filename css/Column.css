@@ -12,6 +12,24 @@
 	margin:0
 }
 
+.column-header {
+	padding:16px;
+}
+
+.column-title,.column-username {
+	display:inline
+}
+
+.column-title {
+	font-weight:500;
+	font-size:16px
+}
+
+.column-username {
+	font-size:13px;
+	padding-left:5px
+}
+
 .column-holder {
 	position:absolute;
 	top:0;
@@ -28,5 +46,8 @@
 	overflow-x:hidden;
 	position:absolute;
 	bottom:0;
-	top:50px
+	top:50px;
+	padding: 10px;
+	width: 100%;
+	box-sizing: border-box;
 }

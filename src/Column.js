@@ -22,7 +22,7 @@ class Column {
     constructor() {
         this.element = div("column");
         this.columnTitle = div("column-title");
-        this.columnUsername = div("column-username");
+        this.columnUsername = div("column-username txt-mute");
         this.headElement = div("column-header").append(this.columnTitle, this.columnUsername);
         this.body = div("column-body");
         this.element.append(this.headElement, this.body);
@@ -44,6 +44,9 @@ class Column {
         setInterval(() => {
             this.renderTweets()
         }, 6500);
+        setTimeout(() => {
+            this.renderTweets()
+        }, 0);
     }
 
     renderTweets() {
