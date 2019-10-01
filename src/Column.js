@@ -12,9 +12,11 @@ class Column {
     columnUsername;
     body;
     account;
+    makeMe = Tweet;
 
     displayedIds = {};
     latestId = 0;
+    shouldReverse = false;
 
 
     constructor() {
@@ -41,27 +43,29 @@ class Column {
     renderTimer() {
         setInterval(() => {
             this.renderTweets()
-        }, 2500);
+        }, 6500);
     }
 
     renderTweets() {
         return new Promise((resolve, reject) => {
             this.updateTweets().then((tweets) => {
+                if (this.shouldReverse) {
+                    tweets = tweets.reverse();
+                }
                 tweets.forEach((tweet) => {
-                    // console.log(tweet);
+                    console.log(tweet);
 
-                    if (this.displayedIds[tweet.id] !== true) {
-                        let makeTweet = new Tweet(tweet).element;
-                        this.displayedIds[tweet.id] = true;
+                    let id = tweet.id || tweet.max_position;
 
-                        if (this.latestId !== 0) {
-                            this.body.prepend(makeTweet);
-                        } else {
-                            this.body.append(makeTweet);
-                        }
+                    if (this.displayedIds[id] !== true) {
+                        let makeTweet = new this.makeMe(tweet).element;
+                        this.displayedIds[id] = true;
+                        console.log(makeTweet)
+                        this.body.prepend(makeTweet);
+
                     }
-                    if (tweet.id > this.latestId) {
-                        this.latestId = tweet.id;
+                    if (id > this.latestId) {
+                        this.latestId = id;
                     }
                 })
             });

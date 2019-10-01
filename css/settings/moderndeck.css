@@ -1,0 +1,214 @@
+:root {
+	--columnSize:328px;
+	--avatarSize:48px;
+	--navDrawerBackground:rgba(100,100,100,.4);
+	--loginBackgroundColor:#263238;
+	--lightShadow:rgba(17,17,17,.1);
+	--contextMenuShadow:rgba(0,0,0,.23);
+	--thickerShadow:rgba(0,0,0,.4);
+	--composeShadow:rgba(17,17,17,.5);
+	--columnShadow:rgba(17,17,17,.25);
+	--avatarHoverShadow:rgba(17,17,17,.475);
+	--avatarActiveShadow:rgba(17,17,17,.95);
+	--genericDropShadow:rgba(17,17,17,.25);
+	--modalDropShadow:rgba(17,17,17,.6);
+	--retweetColor:#13B33F;
+	--likeColor:#e91e63;
+	--rootWhiteColor:#fff;
+	--rootLightGreyColor:#eee;
+	--rootBlackColor:#000;
+	--animationTiming:cubic-bezier(.1,1,.1,1);
+	--defaultFontOrder:Roboto,"Noto Sans","Noto Sans CJK";
+	--composeWidth:300px;
+	--scrollbarWidth:10px;
+	--verticalHeadWidth:50px
+}
+
+
+html {
+	font-family:var(--defaultFontOrder);
+	overflow:hidden
+}
+
+.preloader-wrapper {
+	display:inline-block;
+	position:relative;
+	width:48px;
+	height:48px;
+	box-sizing:border-box;
+	animation:containerRotate 1.568s linear infinite
+}
+
+
+.preloader-wrapper.small {
+	width:36px;
+	height:36px
+}
+
+.preloader-wrapper.tiny {
+	width:20px;
+	height:20px
+}
+
+.preloader-wrapper.big {
+	width:64px;
+	height:64px
+}
+
+body.scroll-v .spinner-layer {
+	border-color:#26a69a
+}
+
+.spinner-layer {
+	position:absolute;
+	box-sizing:border-box;
+	width:100%;
+	height:100%;
+	opacity:1;
+	animation:fillUnfillRotate 5.332s cubic-bezier(.4,0,.2,1) infinite both
+}
+
+.gap-patch {
+	position:absolute;
+	top:0;
+	left:45%;
+	width:10%;
+	height:100%;
+	overflow:hidden;
+	border-color:inherit;
+	display:none;
+	box-sizing:border-box
+}
+
+.gap-patch .circle {
+	box-sizing:border-box;
+	width:1000%;
+	left:-450%
+}
+
+.circle-clipper {
+	display:inline-block;
+	position:relative;
+	width:50%;
+	height:100%;
+	overflow:hidden;
+	text-align:center;
+	box-sizing:border-box;
+	border-color:inherit
+}
+
+.circle-clipper .circle {
+	width:200%;
+	height:100%;
+	border-width:5px;
+	border-color:inherit;
+	border-style:solid;
+	border-bottom-color:transparent;
+	border-radius:50%;
+	box-sizing:inherit;
+	animation:none;
+	position:absolute;
+	top:0;
+	right:0;
+	bottom:0
+}
+
+.tiny .circle-clipper .circle {
+	border-width:3px
+}
+
+.circle-clipper.left .circle {
+	left:0;
+	border-right-color:transparent;
+	transform:rotate(129deg);
+	animation:leftSpin 1.333s cubic-bezier(.4,0,.2,1) infinite both
+}
+
+.circle-clipper.right .circle {
+	left:-100%;
+	border-left-color:transparent;
+	transform:rotate(-129deg);
+	animation:rightSpin 1.333s cubic-bezier(.4,0,.2,1) infinite both
+}
+
+#spinnerContainer {
+	animation:containerRotate 1.568s linear infinite,fadeOut 0.4s cubic-bezier(.4,0,.2,1)
+}
+
+
+.scroll-v,.overlay .scroll-v {
+	overflow-y:auto
+}
+
+html.scroll-v {
+	overflow-y:hidden;
+	-webkit-app-region:drag
+}
+
+.scroll-h {
+	overflow-x:auto
+}
+
+.mdl:not(.s-tall-fixed)::-webkit-scrollbar,.keyboard-shortcut-list-modal::-webkit-scrollbar,.mdl.s-profile::-webkit-scrollbar,.scroll-styled-v::-webkit-scrollbar,.scroll-v::-webkit-scrollbar,.lst-launcher::-webkit-scrollbar,.mtd-nav-drawer::-webkit-scrollbar,.emoji-container>div::-webkit-scrollbar,.emoji-container::-webkit-scrollbar {
+	width:var(--scrollbarWidth);
+	pointer-events:all
+}
+
+.scroll-styled-h::-webkit-scrollbar,.scroll-h::-webkit-scrollbar {
+	height:var(--scrollbarWidth);
+	pointer-events:all
+}
+
+.antiscroll-inner::-webkit-scrollbar {
+	width:0;
+	height:0
+}
+
+.antiscroll-inner::-moz-scrollbar {
+	width:0;
+	height:0
+}
+
+
+button,a.btn,a.js-create-list,input[type="button"],.Button--primary,.Button {
+	position:relative;
+	display:inline-block;
+	pointer-events:all;
+	padding:4px 10px;
+	min-height:30px;
+	text-align:center;
+	text-decoration:none;
+	cursor:pointer;
+	font-size:14px;
+	font-weight:500;
+	border:0;
+	border-color:transparent;
+	background:transparent;
+	text-shadow:none;
+	text-transform:uppercase;
+	font-family:var(--defaultFontOrder);
+}
+
+button:hover,button:focus,.Button--primary {
+	background:transparent;
+	outline:0
+}
+
+
+.hidden {
+	display:none
+}
+
+label.checkbox::selection,label.control-label::selection {
+	background:transparent
+}
+
+
+.btn-primary,.Button--primary:not(.tweet-button):not(.action-text):not(.more-tweets-btn):not(.js-add-column):not(.js-spinner-button) {
+	float:none;
+	box-shadow:0 3px 7px var(--composeShadow);
+	border-radius:4px;
+	transition:background 0.2s var(--animationTiming),transform 0.25s var(--animationTiming)!important;
+	margin:5px 5px 5px 5px;
+	padding:7px 12px 7px 12px
+}

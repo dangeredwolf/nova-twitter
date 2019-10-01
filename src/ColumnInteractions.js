@@ -1,5 +1,6 @@
 const {Column} = require("./Column.js");
 const { TwitterAPI } = require("./TwitterAPI.js");
+const { Interaction } = require("./Interaction.js")
 
 class ColumnInteractions extends Column {
 
@@ -8,6 +9,8 @@ class ColumnInteractions extends Column {
         this.columnTitle.html("Notifications");
         this.columnUsername.html("@" + (user.userName || ""));
         this.account = user;
+        this.makeMe = Interaction;
+        this.shouldReverse = true;
     }
 
     updateTweets() {
@@ -20,6 +23,7 @@ class ColumnInteractions extends Column {
                 url,
                 {account:this.account, method:"GET"}
             ).then((reply) => {
+                console.log(JSON.parse(reply));
                 resolve(JSON.parse(reply));
             })
         });

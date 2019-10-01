@@ -5,6 +5,8 @@ class TwitterAPI {
         var data="";
         var promiseMe = new Promise((resolve, reject) => {
 
+
+
             let theFunc = https.get;
             if (info.method === "POST") {
                 theFunc = https.request
@@ -24,9 +26,12 @@ class TwitterAPI {
                     res.on("data", (d) => {
                         data += d;
                     });
-                    res.on("end", (response) => {
-                        console.log(response);
-                        console.log(data);
+                    res.on("end", () => {
+                        if (JSON.parse(data)) {
+                            if (typeof JSON.parse(data).errors !== "undefined") {
+                                reject(data)
+                            }
+                        }
                         resolve(data);
                     });
                 }
