@@ -34,6 +34,8 @@ class Interaction {
             case "reply":
                 return new Tweet(data.targets[0]);
                 break;
+            default:
+                console.error("Unknown interaction type " + data.action);
         }
 
         console.log(data.sources[0])

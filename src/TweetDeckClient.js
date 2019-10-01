@@ -1,8 +1,17 @@
 const { TwitterAPI } = require("./TwitterAPI.js");
 const { StorageAccount } = require("./StorageAccount.js");
 
+const { ColumnActivity } = require("./ColumnActivity.js");
+const { ColumnCollections } = require("./ColumnCollections.js");
+const { ColumnFollowers } = require("./ColumnFollowers.js");
 const { ColumnHome } = require("./ColumnHome.js");
 const { ColumnInteractions } = require("./ColumnInteractions.js");
+const { ColumnLikes } = require("./ColumnLikes.js");
+const { ColumnList } = require("./ColumnList.js");
+const { ColumnMentions } = require("./ColumnMentions.js");
+const { ColumnScheduled } = require("./ColumnScheduled.js");
+const { ColumnSearch } = require("./ColumnSearch.js");
+const { ColumnUser } = require("./ColumnUser.js");
 
 class TweetDeckClient {
 
@@ -17,15 +26,50 @@ class TweetDeckClient {
         if (typeof acc === "undefined") {
             return;
         }
+        var coltype;
         switch(col.type) {
+            case "direct":
+                // var colType = new ColumnMessages(acc).placeInHolder();
+                // colType.renderTimer();
+                break;
+            case "direct":
+                var colType = new ColumnCollections(acc).placeInHolder();
+                colType.renderTimer();
+                break;
             case "home":
-                let home = new ColumnHome(acc).placeInHolder();
-                home.renderTimer();
+                var colType = new ColumnHome(acc).placeInHolder();
+                colType.renderTimer();
                 break;
             case "interactions":
-                let interact = new ColumnInteractions(acc).placeInHolder();
-                interact.renderTimer();
+                var colType = new ColumnInteractions(acc).placeInHolder();
+                colType.renderTimer();
                 break;
+            case "list":
+                // var colType = new ColumnList(acc).placeInHolder();
+                // colType.renderTimer();
+                break;
+            case "mentions":
+                var colType = new ColumnMentions(acc).placeInHolder();
+                colType.renderTimer();
+                break;
+            case "networkactivity":
+                var colType = new ColumnActivity(acc).placeInHolder();
+                colType.renderTimer();
+                break;
+            case "search": // TODO: Add query
+                // var colType = new ColumnSearch(acc).placeInHolder();
+                // colType.renderTimer();
+                break;
+            case "scheduled": // TODO: Add query
+                var colType = new ColumnScheduled(acc).placeInHolder();
+                colType.renderTimer();
+                break;
+            case "usertweets":
+                var colType = new ColumnUser(acc).placeInHolder();
+                colType.renderTimer();
+                break;
+            default:
+                console.log("Unknown column type " + col.type)
         }
     }
 
