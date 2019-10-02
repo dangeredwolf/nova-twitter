@@ -83,16 +83,19 @@ article {
 }
 
 .tweet-text {
-    padding-left:10px
+    padding-left:10px;
+    margin-block-start:0;
+    margin-block-end:0
 }
 
 article:not(.interaction) .tweet-text {
-    padding-left:60px
+    padding-left:60px;
 }
 
 .tweet:not(.is-retweet) .tweet-text {
     margin-top:-24px
 }
+
 .tweet-body {
     min-height:30px;
 }

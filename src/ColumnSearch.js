@@ -5,12 +5,13 @@ class ColumnSearch extends Column {
 
     query;
 
-    constructor(user, query) {
-        super(user);
+    constructor(user, filters, settings, query) {
+        super(user, filters, settings);
         this.columnTitle.html(query);
         this.columnUsername.html("@" + (user.userName || ""));
         this.account = user;
         this.query = query;
+        this.icon.text("search");
     }
 
     updateTweets() {

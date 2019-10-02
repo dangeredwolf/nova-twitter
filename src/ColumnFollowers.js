@@ -4,13 +4,14 @@ const { Interaction } = require("./Interaction.js")
 
 class ColumnFollowers extends Column {
 
-    constructor(user) {
-        super(user);
+    constructor(user, filters, settings) {
+        super(user, filters, settings);
         this.columnTitle.html("Followers");
         this.columnUsername.html("@" + (user.userName || ""));
         this.account = user;
         this.makeMe = Interaction;
         this.shouldReverse = true;
+        this.icon.text("person_add");
     }
 
     updateTweets() {

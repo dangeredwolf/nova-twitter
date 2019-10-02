@@ -3,11 +3,12 @@ const { TwitterAPI } = require("./TwitterAPI.js");
 
 class ColumnUser extends Column {
 
-    constructor(user) {
-        super(user);
+    constructor(user, filters, settings, targetUser) {
+        super(user, filters, settings);
         this.columnTitle.html("User");
         this.columnUsername.html("@" + (user.userName || ""));
         this.account = user;
+        this.icon.text("person");
     }
 
     updateTweets() {

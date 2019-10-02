@@ -3,11 +3,12 @@ const { TwitterAPI } = require("./TwitterAPI.js");
 
 class ColumnLikes extends Column {
 
-    constructor(user) {
-        super(user);
+    constructor(user, filters, settings) {
+        super(user, filters, settings);
         this.columnTitle.html("Likes");
         this.columnUsername.html("@" + (user.userName || ""));
         this.account = user;
+        this.icon.removeClass("material-icons").addClass("icon icon-heart")
     }
 
     updateTweets() {

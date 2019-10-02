@@ -1,5 +1,5 @@
 const $ = require("jquery");
-const { div } = require("./Helpers.js");
+const { div, make } = require("./Helpers.js");
 const { ColumnHolder } = require("./ColumnHolder.js");
 const { Tweet } = require("./Tweet.js");
 
@@ -18,14 +18,20 @@ class Column {
     latestId = 0;
     shouldReverse = false;
 
+    filters = {};
+    settings = {}
 
-    constructor() {
+
+    constructor(user, filters, settings) {
         this.element = div("column");
         this.columnTitle = div("column-title");
         this.columnUsername = div("column-username txt-mute");
-        this.headElement = div("column-header").append(this.columnTitle, this.columnUsername);
+        this.icon = make("i").addClass("material-icons");
+        this.headElement = div("column-header").append(this.icon,this.columnTitle, this.columnUsername);
         this.body = div("column-body");
         this.element.append(this.headElement, this.body);
+        this.filters = filters;
+        this.settings = settings;
         return this;
     }
 

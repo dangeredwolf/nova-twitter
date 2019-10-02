@@ -5,12 +5,13 @@ class ColumnCollections extends Column {
 
     listId;
 
-    constructor(user, listId) {
-        super(user);
+    constructor(user, filters, settings, listId) {
+        super(user, filters, settings);
         this.columnTitle.html("Collections");
         this.columnUsername.html("@" + (user.userName || ""));
         this.account = user;
         this.listId = listId;
+        this.icon.text("collections_bookmark");
     }
 
     updateTweets() {

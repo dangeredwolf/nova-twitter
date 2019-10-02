@@ -6,13 +6,14 @@ class ColumnList extends Column {
     listId;
     listTitle;
 
-    constructor(user, listId, listTitle) {
-        super(user);
+    constructor(user, filters, settings, listId, listTitle) {
+        super(user, filters, settings);
         this.columnTitle.html(listTitle);
         this.columnUsername.html("@" + (user.userName || ""));
         this.account = user;
         this.listId = listId;
         this.listTitle = listTitle;
+        this.icon.text("format_list_bulleted");
     }
 
     updateTweets() {

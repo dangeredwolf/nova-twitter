@@ -5,12 +5,13 @@ const { Interaction } = require("./Interaction.js");
 class ColumnActivity extends Column {
 
 
-    constructor(user) {
-        super(user);
+    constructor(user, filters, settings) {
+        super(user, filters, settings);
         this.columnTitle.html("Activity");
         this.columnUsername.html("@" + (user.userName || ""));
         this.account = user;
         this.makeMe = Interaction;
+        this.icon.text("trending_up");
     }
 
     updateTweets() {
