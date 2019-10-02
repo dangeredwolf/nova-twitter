@@ -127,12 +127,24 @@ class Filter {
                 }
             }
             if (!!filters.user.from_type) {
-
+                if (filters.user.from_type === "verified") {
+                    if (typeof tweet.verified !== "undefined") {
+                        if (!tweet.verified) {
+                            isOK = false
+                        }
+                    }
+                    if (typeof tweet.user.verified !== "undefined") {
+                        if (!tweet.user.verified) {
+                            isOK = false;
+                        }
+                    }
+                }
             }
             if (!!filters.user.mention_name) {
-
+                
             }
         }
+        return isOK;
     }
 }
 

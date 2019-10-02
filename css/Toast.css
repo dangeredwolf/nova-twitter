@@ -1,0 +1,10 @@
+#toast-container {
+    right:20px;
+    left:auto;
+    position:fixed;
+    width:300px
+}
+
+.toast {
+    font-size:14px
+}

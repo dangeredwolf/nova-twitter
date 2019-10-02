@@ -87,21 +87,25 @@ class Interaction {
 
         if (tweetAttached) {
 
-            this.tweetActionReply = make("a").addClass("waves-effect waves-dark waves-circle btn-small btn-flat").html(
+            this.tweetActionReply = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").html(
                 make("i").addClass("material-icons").text("reply")
-            ).attr("href","#")
+            ).attr("href","#").attr("data-tooltip","Reply")
 
-            this.tweetActionRetweet = make("a").addClass("waves-effect waves-dark waves-circle btn-small btn-flat").html(
+            this.tweetActionRetweet = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").html(
                 make("i").addClass("icon icon-retweet").text("repeat")
-            ).attr("href","#")
+            ).attr("href","#").attr("data-tooltip","Retweet")
 
-            this.tweetActionLike = make("a").addClass("waves-effect waves-dark waves-circle btn-small btn-flat").html(
+            this.tweetActionLike = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").html(
                 make("i").addClass("icon icon-heart").text("heart")
-            ).attr("href","#")
+            ).attr("href","#").attr("data-tooltip","Like Tweet")
 
-            this.tweetActionMore = make("a").addClass("waves-effect waves-dark waves-circle btn-small btn-flat").html(
+            this.tweetActionMore = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat").html(
                 make("i").addClass("material-icons").text("more_horiz")
             ).attr("href","#")
+
+            M.Tooltip.init(
+                [this.tweetActionReply[0],this.tweetActionRetweet[0],this.tweetActionLike[0]]
+            )
 
             Waves.attach(
                 this.tweetActionReply[0],
@@ -125,7 +129,7 @@ class Interaction {
 
         this.interactionBody = div("tweet-body").append(this.interactionText);
 
-        this.element = make("article").addClass("interaction").attr("data-id", data.id).append(this.interactionHead, this.interactionBody, this.interactionFooter);
+        this.element = make("article").addClass("interaction").attr("data-time", Date.parse(data.created_at)).attr("data-id", data.id).append(this.interactionHead, this.interactionBody, this.interactionFooter);
 
         return this;
     }

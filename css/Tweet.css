@@ -99,3 +99,11 @@ article:not(.interaction) .tweet-text {
 .tweet-body {
     min-height:30px;
 }
+
+.has-profile-pic .tweet-actions {
+    margin-left:50px
+}
+
+ .tweet-action {
+     margin-left:20px
+ }

@@ -2,6 +2,7 @@ const $ = require("jquery");
 const { div, make } = require("./Helpers.js");
 const { ColumnHolder } = require("./ColumnHolder.js");
 const { Tweet } = require("./Tweet.js");
+const { Filter } = require("./Filter.js");
 
 class Column {
 
@@ -16,7 +17,9 @@ class Column {
 
     displayedIds = {};
     latestId = 0;
+    earliestId = 99999999999999999999;
     shouldReverse = false;
+    isLoadingMore = false;
 
     filters = {};
     settings = {}
@@ -32,6 +35,26 @@ class Column {
         this.element.append(this.headElement, this.body);
         this.filters = filters;
         this.settings = settings;
+
+        this.body.scroll(() => {
+            if ($(this.body).scrollTop() + $(this.body).height() > $(this.body).prop("scrollHeight") - 200) {
+    			if (!this.isLoadingMore) {
+                    console.log("im actually screaming")
+                    this.isLoadingMore = true;
+
+                    this.renderTweets(this.earliestId).catch(e => {
+                        let errMsg = e;
+                        try {
+                            errMsg = JSON.parse(e).errors[0].message;
+                        } catch(ee) {}
+                        M.toast({html: errMsg})
+                    }).then(e => {
+                        this.isLoadingMore = false
+                    })
+                }
+       		}
+        })
+
         return this;
     }
 
@@ -48,36 +71,54 @@ class Column {
 
     renderTimer() {
         setInterval(() => {
-            this.renderTweets()
+            this.renderTweets().catch(e => {
+                let errMsg = e;
+                try {
+                    errMsg = JSON.parse(e).errors[0].message;
+                } catch(ee) {}
+                M.toast({html: errMsg})
+            })
         }, 6500);
         setTimeout(() => {
-            this.renderTweets()
+            this.renderTweets().catch(e => {
+                let errMsg = e;
+                try {
+                    errMsg = JSON.parse(e).errors[0].message;
+                } catch(ee) {}
+                M.toast({html: errMsg})
+            })
         }, 0);
     }
 
-    renderTweets() {
+    renderTweets(overrideId) {
         return new Promise((resolve, reject) => {
-            this.updateTweets().then((tweets) => {
-                if (this.shouldReverse) {
-                    tweets = tweets.reverse();
-                }
+            this.updateTweets(overrideId).then((tweets) => {
+
                 tweets.forEach((tweet) => {
                     console.log(tweet);
 
                     let id = tweet.id || tweet.max_position;
 
-                    if (this.displayedIds[id] !== true) {
+                    if (this.displayedIds[id] !== true && Filter.filterTweet(tweet, this)) {
                         let makeTweet = new this.makeMe(tweet).element;
                         this.displayedIds[id] = true;
                         console.log(makeTweet)
-                        this.body.prepend(makeTweet);
+                        if (this.shouldReverse || overrideId) {
+                            this.body.append(makeTweet);
+                        } else {
+                            this.body.prepend(makeTweet);
+                        }
+
 
                     }
                     if (id > this.latestId) {
                         this.latestId = id;
                     }
+                    if (id < this.earliestId) {
+                        this.earliestId = id;
+                    }
                 })
-            });
+            }).catch(e => reject(e));
         })
     }
 }

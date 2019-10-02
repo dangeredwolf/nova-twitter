@@ -5,11 +5,9 @@ class TwitterAPI {
         var data="";
         var promiseMe = new Promise((resolve, reject) => {
 
-
-
             let theFunc = https.get;
             if (info.method === "POST") {
-                theFunc = https.request
+                theFunc = https.request;
             }
 
             console.log(url);
