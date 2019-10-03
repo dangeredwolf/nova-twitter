@@ -65,6 +65,10 @@
 	height: 36px;
 }
 
+.compose-send-button {
+    float:right
+}
+
 .compose-button i {
 	font-size:24px
 }
