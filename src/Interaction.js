@@ -61,14 +61,14 @@ class Interaction {
 
         console.log(data.sources[0])
 
-        this.interactionDisplayName = div("interaction-display-name").text(data.sources[0].name);
+        this.interactionDisplayName = div("interaction-display-name tweet-display-name").text(data.sources[0].name);
         this.interactionAttrib = div("interaction-attribution").text(attributionText);
         this.interactionProfilePic = make("img").attr("src", data.sources[0].profile_image_url_https).addClass("tweet-profile-pic small");
         this.interactionLink = make("a").addClass("interaction-user-link")
                         .attr("href","https://twitter.com/" + data.sources[0].screen_name).attr("target","_blank")
                         .append(this.interactionProfilePic, this.interactionDisplayName);
 
-        this.interactionTime = make("a").addClass("tweet-time").text(timeAgo(data.created_at))
+        this.interactionTime = make("a").addClass("tweet-time txt-mute").text(timeAgo(data.created_at))
                                 .attr("href","https://twitter.com/i/status/" + data.id_str).attr("target","_blank");
 
         if (!!linkInAttribution) {
@@ -78,8 +78,9 @@ class Interaction {
 
         this.interactionHead = div("tweet-header interaction-header").append(this.interactionLink, this.interactionAttrib, this.interactionAttribLink, this.interactionTime);
         if (tweetAttached) {
-            this.tweetDisplayName = div("tweet-display-name").text(data.targets[0].user.name);
-            this.tweetUsername = div("tweet-username").text("@" + data.targets[0].user.screen_name);
+            let userPath = data.targets[0].retweeted_status ? data.targets[0].retweeted_status.user : data.targets[0].user
+            this.tweetDisplayName = div("tweet-display-name").text(userPath.name);
+            this.tweetUsername = div("tweet-username txt-mute").text("@" + userPath.screen_name);
             this.tweetLink = make("a").addClass("interaction-recipient-link").attr("href","https://twitter.com/" + data.targets[0].user.screen_name).attr("target","_blank")
                             .append(this.tweetDisplayName, this.tweetUsername);
             this.interactionHead.append(this.tweetLink)

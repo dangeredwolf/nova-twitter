@@ -7,7 +7,38 @@
         <link rel="stylesheet" href="node_modules/materialize-css/dist/css/materialize.css"></link>
         <link rel="stylesheet" href="moderndeck.css"></link>
     </head>
-    <body>
+    <body class="composer-open">
+        <div class="composer">
+            <div class="compose-accounts">
+                <a class="compose-account" href="#">
+                    <img class="profile-picture compose-profile-picture" src="https://pbs.twimg.com/profile_images/1114972785133195264/LHxHhTQ-_normal.png">
+                </a>
+                <a class="compose-account" href="#">
+                    <img class="profile-picture compose-profile-picture" src="https://pbs.twimg.com/profile_images/1114972785133195264/LHxHhTQ-_normal.png">
+                </a>
+                <a class="compose-account" href="#">
+                    <img class="profile-picture compose-profile-picture" src="https://pbs.twimg.com/profile_images/1114972785133195264/LHxHhTQ-_normal.png">
+                </a>
+                <a class="compose-account" href="#">
+                    <img class="profile-picture compose-profile-picture" src="https://pbs.twimg.com/profile_images/1114972785133195264/LHxHhTQ-_normal.png">
+                </a>
+            </div>
+            <div class="compose-sheet">
+                <textarea class="compose-text" placeholder="What's happening?"></textarea>
+                <div class="compose-buttons">
+                    <button class="compose-button waves-dark"><i class="material-icons">photo</i></button>
+                    <button class="compose-button waves-dark"><i class="material-icons compose-gif-icon">gif</i></button>
+                    <button class="compose-button waves-dark"><i class="material-icons">schedule</i></button>
+                    <button class="compose-button waves-dark"><i class="material-icons">messenger</i></button>
+                    <span class="compose-char-count-container">
+                        <svg class="compose-char-count">
+                            <circle class="stroke-twitter-light-gray" cx="50%" cy="50%" r="8" fill="none" stroke-width="2"></circle>
+                            <circle class="js-progress-circle stroke-twitter-blue" cx="50%" cy="50%" r="8" fill="none" stroke-width="2" style="stroke-dasharray: 50.2655; stroke-dashoffset: 50.2655;"></circle>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+        </div>
         <div class="column-holder">
         </div>
     </body>

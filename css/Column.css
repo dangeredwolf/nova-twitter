@@ -14,6 +14,9 @@
 
 .column-header {
 	padding:16px;
+	background:var(--columnHeaderBackground);
+	color:var(--columnHeaderText);
+	box-shadow:0 1px 10px var(--columnHeaderShadow)
 }
 
 .column-title,.column-username {
@@ -22,7 +25,8 @@
 
 .column-title {
 	font-weight:500;
-	font-size:16px
+	font-size:16px;
+	padding-left: 7px;
 }
 
 .column-username {
@@ -41,12 +45,16 @@
 	white-space:nowrap
 }
 
+.composer-open .column-holder {
+	left:320px
+}
+
 .column-body {
 	overflow-y:auto;
 	overflow-x:hidden;
 	position:absolute;
 	bottom:0;
-	top:50px;
+	top: 56px;
 	padding: 10px;
 	width: 100%;
 	box-sizing: border-box;

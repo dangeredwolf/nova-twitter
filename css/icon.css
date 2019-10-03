@@ -46,6 +46,11 @@ i {
 	line-height:1
 }
 
+.column-header .material-icons {
+	margin-top:-2px;
+	font-size:24px
+}
+
 .btn-flat.waves-circle i {
 	font-size:24px;
 	margin-top:-8px;

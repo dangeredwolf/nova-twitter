@@ -1,0 +1,133 @@
+.composer {
+	position:absolute;
+	top:0;
+	left:0;
+	bottom:0;
+	width:320px;
+	box-shadow:0 3px 7px var(--composePanelShadow);
+	background-color:var(--composerBackground)
+}
+
+.compose-accounts {
+	margin-top:20px
+}
+
+.compose-account {
+	display:inline-block;
+	margin-left:24px
+}
+
+.compose-account>img {
+	border-radius:50%
+}
+
+.compose-sheet {
+	width:280px;
+	margin-left:19px;
+	margin-top:10px;
+	margin-bottom:14px;
+	height:180px;
+	padding:0!important;
+	padding-top:10px!important;
+	box-shadow:0 3px 7px var(--composeSheetShadow);
+	border-radius:4px;
+	overflow:visible;
+	z-index:2;
+	background-color:var(--composeSheetBackground)
+}
+
+
+.compose-text {
+	height:130px!important;
+	resize:none;
+	border:0;
+	font-size:14px;
+	text-overflow:ellipsis;
+	padding-left:15px!important;
+	padding-right:15px!important;
+	border-radius:2px;
+	padding-bottom:30px;
+	overflow:visible
+}
+
+.compose-buttons {
+	margin-top:-10px;
+	padding-left: 10px;
+}
+
+.compose-button {
+	-webkit-appearance:none;
+	background-color:transparent;
+	border:none;
+	/* padding: 10px 5px; */
+	margin-bottom: 10px;
+	width: 36px;
+	height: 36px;
+}
+
+.compose-button i {
+	font-size:24px
+}
+
+.compose-button>.compose-gif-icon {
+	font-size:32px;
+	margin-left: -4px;
+}
+
+/*
+	newcharacterindicator.css
+
+	Copyright (c) 2014-2019 dangered wolf, et al
+	Released under the MIT Licence
+*/
+
+.compose-char-count-container,.compose-char-count {
+	display:inline-block;
+	float: right;
+	width: 30px;
+	height: 30px;
+}
+
+.js-character-count.is-hidden {
+	display:none!important
+}
+
+.drawer .js-character-count {
+	font-size:12px;
+	bottom:2px;
+	right:1px;
+	text-align:right
+}
+
+.txt-right.height--16.margin-t--4.margin-r---3.margin-b--1 {
+	width:0;
+	position:absolute;
+	right:78px;
+	bottom:16px
+}
+
+.txt-right.height--16.margin-t--4.margin-r--7.margin-b--11 {
+	width:0;
+	position:absolute;
+	right:126px;
+	bottom:-4px
+}
+
+.inline-reply .js-character-count {
+	width:49px;
+	right:51px!important;
+	padding-bottom:21px;
+	margin-left:-57px
+}
+
+.stroke-twitter-light-gray {
+	stroke:#000
+}
+
+.stroke-twitter-blue {
+	stroke:#555
+}
+
+.compose-char-count-container>svg>circle {
+	stroke-width:4!important
+}

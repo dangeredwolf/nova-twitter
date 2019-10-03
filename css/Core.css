@@ -1,3 +1,15 @@
 a {
     text-decoration: none
 }
+
+.txt-mute {
+    color:var(--txtMuteText);
+}
+
+::placeholder,
+input::placeholder,
+textarea::placeholder
+{
+	color:var(--placeholderTextColor);
+	font-family:Roboto, "Noto Sans"
+}

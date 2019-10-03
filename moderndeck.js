@@ -13,6 +13,7 @@ $(document).ready(() => {
     // DefaultColumns.makeDefaultColumns();
 
         setInterval(UpdateTimes.do, 12000);
-        TweetDeckClient.getTweetDeckPreferences({account:StorageAccount.getDefaultAccount()}).then(prefs => TweetDeckClient.loadTweetDeckPreferences(JSON.parse(prefs)))
+        TweetDeckClient.getTweetDeckPreferences({account:StorageAccount.getDefaultAccount()})
+                        .then(prefs => TweetDeckClient.loadTweetDeckPreferences(JSON.parse(prefs)))
 
 })

@@ -28,7 +28,7 @@ class Column {
     constructor(user, filters, settings) {
         this.element = div("column");
         this.columnTitle = div("column-title");
-        this.columnUsername = div("column-username txt-mute");
+        this.columnUsername = div("column-username");
         this.icon = make("i").addClass("material-icons");
         this.headElement = div("column-header").append(this.icon,this.columnTitle, this.columnUsername);
         this.body = div("column-body");
@@ -71,22 +71,23 @@ class Column {
 
     renderTimer() {
         setInterval(() => {
-            this.renderTweets().catch(e => {
-                let errMsg = e;
-                try {
-                    errMsg = JSON.parse(e).errors[0].message;
-                } catch(ee) {}
-                M.toast({html: errMsg})
-            })
-        }, 6500);
+            this.renderTweets();//.catch(e => {
+                // let errMsg = e;
+                // try {
+                //     errMsg = JSON.parse(e).errors[0].message;
+                // } catch(ee) {}
+                // M.toast({html: errMsg})
+                //}
+            //)
+        }, 10000);
         setTimeout(() => {
-            this.renderTweets().catch(e => {
-                let errMsg = e;
-                try {
-                    errMsg = JSON.parse(e).errors[0].message;
-                } catch(ee) {}
-                M.toast({html: errMsg})
-            })
+            this.renderTweets();//.catch(e => {
+            //     let errMsg = e;
+            //     try {
+            //         errMsg = JSON.parse(e).errors[0].message;
+            //     } catch(ee) {}
+            //     M.toast({html: errMsg})
+            // })
         }, 0);
     }
 
@@ -118,7 +119,7 @@ class Column {
                         this.earliestId = id;
                     }
                 })
-            }).catch(e => reject(e));
+            })//.catch(e => reject(e));
         })
     }
 }

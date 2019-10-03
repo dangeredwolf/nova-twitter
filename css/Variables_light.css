@@ -1,0 +1,12 @@
+:root {
+    --columnHeaderBackground:#03A9F4;
+    --columnHeaderText:#fff;
+    --composeSheetShadow:rgba(17,17,17,.25);
+    --composePanelShadow:rgba(17,17,17,.25);
+    --columnHeaderShadow:rgba(17,17,17,.25);
+    --tweetDisplayNameText:#000;
+    --txtMuteText:#787878;
+    --composerBackground:#00BCD4;
+    --composeSheetBackground:#fff;
+    --placeholderTextColor:#aaa;
+}

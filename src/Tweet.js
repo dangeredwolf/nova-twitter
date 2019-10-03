@@ -37,7 +37,7 @@ class Tweet {
 
         this.tweetLink = make("a").attr("href","https://twitter.com/" + data.user.screen_name).attr("target","_blank")
                         .append(this.tweetProfilePic, this.tweetUsernameGroup);
-        this.tweetTime = make("a").addClass("tweet-time").text(timeAgo(data.created_at)).attr("href","https://twitter.com/" + data.user.screen_name + "/status/" + data.id_str).attr("target","_blank");
+        this.tweetTime = make("a").addClass("tweet-time txt-mute").text(timeAgo(data.created_at)).attr("href","https://twitter.com/" + data.user.screen_name + "/status/" + data.id_str).attr("target","_blank");
 
         this.tweetHead = div("tweet-header").append(this.tweetLink, this.tweetTime);
 
@@ -60,7 +60,7 @@ class Tweet {
             .append(this.retweetProfilePic, this.retweetUsernameGroup);
             this.tweetHead.append(this.attribution, this.retweetLink);
 
-            this.tweetText.text(data.retweeted_status.text);
+            this.tweetText.text(data.retweeted_status.full_text || data.retweeted_status.text);
             this.tweetTime.text(timeAgo(data.retweeted_status.created_at));
             this.element.addClass("is-retweet");
         }
