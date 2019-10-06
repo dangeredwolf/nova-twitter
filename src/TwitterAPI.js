@@ -7,9 +7,9 @@ class TwitterAPI {
 
             let theFunc = https.get;
             var postData;
-            //if (info.method !== "GET" && typeof info.method !== "undefined") {
+            if (info.method !== "GET" && typeof info.method !== "undefined") {
                 theFunc = https.request;
-            //}
+            }
 
             console.log(url);
 

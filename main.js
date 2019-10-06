@@ -4,6 +4,8 @@ const path = require("path")
 let mainWindow;
 let settingsWindow;
 
+let useFiddlerProxy = false;
+
 function createSettingsWindow() {
     settingsWindow = new BrowserWindow({
         width: 715,
@@ -54,7 +56,14 @@ function createWindow () {
 
     ipcMain.on("open_settings",()=> {
         createSettingsWindow()
-    })
+   });
+
+   if (useFiddlerProxy) {
+	   const ses = mainWindow.webContents.session;
+	   ses.setProxy({proxyRules:"<local>:8888"});
+	   console.log("Did the proxy thing, i hope");
+
+   }
 }
 
 app.on("ready", createWindow)
