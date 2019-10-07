@@ -1,5 +1,6 @@
 const {make, div, timeAgo} = require("./Helpers.js");
 const {TweetTextFormatUtils} = require("./TweetTextFormatUtils.js");
+const Waves = require("node-waves");
 
 class Tweet {
 	element;
@@ -124,7 +125,7 @@ class Tweet {
 
 		this.tweetBody = div("tweet-body").append(this.tweetText);
 
-		this.element = make("article").addClass("tweet").attr("data-id", data.id).attr("data-time", Date.parse(data.created_at)).append(this.tweetHead, this.tweetBody);
+		this.element = make("article").addClass("tweet waves-effect waves-dark").attr("data-id", data.id).attr("data-time", Date.parse(data.created_at)).append(this.tweetHead, this.tweetBody);
 
 		if (this.useProfilePic && !this.isQuotedTweet) {
 			this.element.addClass("has-profile-pic")
@@ -153,24 +154,36 @@ class Tweet {
 		if (this.attachedTweet && !this.isQuotedTweet) {
 			this.tweetActionReply = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("material-icons").text("reply")
-			).attr("href","#").attr("data-tooltip","Reply");
+			).attr("href","#").attr("data-tooltip","Reply").attr("aria-label","Reply Button").click(() => {
+				console.log("This means we should reply to this tweet");
+			});
 
-			this.tweetActionReplyCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.reply_count));
+			if (this.sourceTweet.reply_count > 0)
+				this.tweetActionReplyCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.reply_count));
 
 			this.tweetActionRetweet = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("icon icon-retweet").text("repeat")
-			).attr("href","#").attr("data-tooltip","Retweet");
+			).attr("href","#").attr("data-tooltip","Retweet").attr("aria-label","Retweet Button").click(() => {
+				console.log("This means we should retweet this tweet");
 
-			this.tweetActionRetweetCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.retweet_count));
+			});
+
+
+			if (this.sourceTweet.retweet_count > 0)
+				this.tweetActionRetweetCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.retweet_count));
 
 			this.tweetActionLike = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("icon icon-heart").text("heart")
-			).attr("href","#").attr("data-tooltip","Like Tweet");
+			).attr("href","#").attr("data-tooltip","Like Tweet").attr("aria-label","Like Button").click(() => {
+				console.log("This means we should like this tweet");
 
-			this.tweetActionLikeCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.favorite_count));
+			});
+
+			if (this.sourceTweet.favorite_count > 0)
+				this.tweetActionLikeCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.favorite_count));
 
 			this.tweetActionMore = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat").append(
-				make("i").addClass("material-icons").text("more_horiz")
+				make("i").addClass("material-icons").text("more_horiz").attr("aria-label","Tweet Options Button")
 			).attr("href","#")
 
 			Waves.attach(
@@ -197,6 +210,11 @@ class Tweet {
 			);
 
 		}
+
+		Waves.attach(
+			this.element[0]
+		)
+
 		if (this.attachedTweet || this.isQuotedTweet || this.sourceTweet.is_quote_status) {
 
 			if (typeof this.sourceTweet.extended_entities !== "undefined" && typeof this.sourceTweet.extended_entities.media !== "undefined") {

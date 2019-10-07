@@ -4,8 +4,8 @@
     "description": "A new, powerful Twitter client.",
     "main": "main.js",
     "scripts": {
-		"start": "electron .",
-     	"inspect": "electron . --inspect"
+        "start": "electron .",
+        "inspect": "electron . --inspect"
     },
     "repository": "https://github.com/dangeredwolf/MD-10",
     "keywords": [
@@ -21,6 +21,7 @@
         "electron-store": "^5.0.0",
         "jquery": "^3.4.1",
         "materialize-css": "^1.0.0-rc.2",
+        "node-waves": "^0.7.6",
         "twitter": "^1.7.1"
     }
 }

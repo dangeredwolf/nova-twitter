@@ -29,7 +29,8 @@ function createWindow () {
 
 	mainWindow.loadFile("index.html")
 
-	mainWindow.webContents.openDevTools()
+	mainWindow.webContents.openDevTools();
+	mainWindow.webContents.setUserAgent("Mozilla/5.0 ModernDeck/10.0 (Chrome, like AppleWebKit) Safari/537.36");
 
 	mainWindow.on("closed", function () {
 		mainWindow = null
