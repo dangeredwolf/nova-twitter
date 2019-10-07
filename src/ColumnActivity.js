@@ -1,6 +1,5 @@
 const {Column} = require("./Column.js");
 const { TwitterAPI } = require("./TwitterAPI.js");
-const { Interaction } = require("./Interaction.js");
 const {buildApiUrl} = require("./Helpers.js");
 
 class ColumnActivity extends Column {
@@ -11,7 +10,6 @@ class ColumnActivity extends Column {
         this.columnTitle.html("Activity");
         this.columnUsername.html("@" + (user.userName || ""));
         this.account = user;
-        this.makeMe = Interaction;
         this.icon.text("trending_up");
     }
 
