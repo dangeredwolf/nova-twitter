@@ -129,12 +129,17 @@ article:not(.interaction) .tweet-text {
 }
 
 .column-settings-media_preview_size-large .tweet-media-img  {
-    max-height:200px;
+    max-height:250px;
     max-width:110%
 }
 
 
-
 .column-settings-media_preview_size-large .tweet.has-profile-pic .tweet-media-img {
-    margin-left:-10px
+    margin-left:0
+}
+
+
+.tweet-media-container-grid .tweet-media-img {
+    max-width:50%;
+    max-height:149px
 }

@@ -170,18 +170,20 @@ class Tweet {
 				this.tweetActionMore
 			);
 
-			this.tweetFooter = div("tweet-footer").append(this.tweetActions)
 
-			this.element.append(this.tweetFooter);
 
 			M.Tooltip.init(
 				[this.tweetActionReply[0],this.tweetActionRetweet[0],this.tweetActionLike[0]]
 			);
 
-			if (typeof this.sourceTweet.entities.media !== "undefined") {
+			if (typeof this.sourceTweet.extended_entities !== "undefined" && typeof this.sourceTweet.extended_entities.media !== "undefined") {
 				this.tweetMediaContainer = div("tweet-media-container");
 
-				this.sourceTweet.entities.media.forEach(media => {
+				if (this.sourceTweet.extended_entities.media.length > 1) {
+					this.tweetMediaContainer.addClass("tweet-media-container-grid tweet-media-container-grid-" + this.sourceTweet.extended_entities.media.length)
+				}
+
+				this.sourceTweet.extended_entities.media.forEach(media => {
 					this.tweetMediaContainer.append(
 						make("a").addClass("tweet-media").attr("href",media.expanded_url).attr("target","_blank").append(
 							make("img").addClass("tweet-media-img").attr("src",media.media_url_https)
@@ -192,6 +194,8 @@ class Tweet {
 				this.element.append(this.tweetMediaContainer)
 			}
 
+			this.tweetFooter = div("tweet-footer").append(this.tweetActions)
+			this.element.append(this.tweetFooter);
 		}
 
 		return this;
