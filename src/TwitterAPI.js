@@ -11,7 +11,7 @@ class TwitterAPI {
                 theFunc = https.request;
             }
 
-            console.log(url);
+            // console.log(url);
 
             let reqObj = {
                 headers:
@@ -29,7 +29,7 @@ class TwitterAPI {
                 hostname:url.match(/(?<=:\/\/)[\w\.]+(?=\/)/g)[0]
             }
 
-            console.log(reqObj);
+            // console.log(reqObj);
 
             if (info.method === "POST") {
                 postData = JSON.stringify(info.postData)
@@ -41,8 +41,8 @@ class TwitterAPI {
             var req = theFunc(url,
                 reqObj,
                 (res) => {
-                    console.log(`STATUS: ${res.statusCode}`);
-                    console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
+                    // console.log(`STATUS: ${res.statusCode}`);
+                    // console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
                     res.setEncoding("utf8");
                     res.on("data", (d) => {
                         data += d;
@@ -66,7 +66,7 @@ class TwitterAPI {
                 console.error(`Request failure: ${e.message}`);
             });
 
-            console.log(postData);
+            // console.log(postData);
 
         });
 

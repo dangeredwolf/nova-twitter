@@ -32,6 +32,7 @@
 
 .retweet-link {
     display: block!important;
+    float:left
 }
 
 .tweet-header>* {
@@ -80,6 +81,7 @@ article {
     display: inline-block;
     padding-left: 7px;
     padding-bottom: 10px;
+    float: left;
 }
 
 .tweet-text {

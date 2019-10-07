@@ -17,9 +17,11 @@ class Column {
 
     displayedIds = {};
     latestId = 0;
-    earliestId = 99999999999999999999;
+    earliestId = 99**9;
     shouldReverse = false;
     isLoadingMore = false;
+
+	shouldCatchErrs = false;
 
     filters = {};
     settings = {}
@@ -71,25 +73,28 @@ class Column {
 
     renderTimer() {
         setInterval(() => {
-            this.renderTweets();//.catch(e => {
-                // let errMsg = e;
-                // try {
-                //     errMsg = JSON.parse(e).errors[0].message;
-                // } catch(ee) {}
-                // M.toast({html: errMsg})
-                //}
-            //)
+            this.renderTweetsWrapper();
         }, 10000);
         setTimeout(() => {
-            this.renderTweets();//.catch(e => {
-            //     let errMsg = e;
-            //     try {
-            //         errMsg = JSON.parse(e).errors[0].message;
-            //     } catch(ee) {}
-            //     M.toast({html: errMsg})
-            // })
+            this.renderTweetsWrapper();
         }, 0);
     }
+
+	renderTweetsWrapper(overrideId) {
+		let func = this.renderTweets(overrideId); // Promise
+
+		if (this.shouldCatchErrs) {
+			func.catch(e => {
+				let errMsg = e;
+				try {
+					errMsg = JSON.parse(e).errors[0].message;
+				} catch(ee) {}
+				M.toast({html: errMsg})
+			});
+		}
+
+		return func;
+	}
 
     renderTweets(overrideId) {
         return new Promise((resolve, reject) => {
@@ -119,7 +124,7 @@ class Column {
                         this.earliestId = id;
                     }
                 })
-            })//.catch(e => reject(e));
+            }).catch(e => reject(e));
         })
     }
 }

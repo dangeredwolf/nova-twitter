@@ -10,7 +10,7 @@ class ColumnInteractions extends Column {
         this.columnTitle.html("Notifications");
         this.columnUsername.html("@" + (user.userName || ""));
         this.account = user;
-        this.makeMe = Interaction;
+        // this.makeMe = Interaction;
         this.shouldReverse = true;
         this.icon.text("notifications");
     }

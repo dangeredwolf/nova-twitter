@@ -1,5 +1,6 @@
 const {make, div, timeAgo} = require("./Helpers.js");
 const {Tweet} = require("./Tweet.js");
+const {TweetTextFormatUtils} = require("./TweetTextFormatUtils.js");
 
 class Interaction {
     element;
@@ -27,37 +28,7 @@ class Interaction {
         var tweetAttached = true;
         let linkInAttribution = false;
 
-        switch(data.action) {
-            case "favorite":
-                attributionText = "liked";
-                break;
-            case "favorited_retweet":
-                attributionText = "liked a Tweet you retweeted";
-                break;
-            case "retweet":
-                attributionText = "retweeted";
-                break;
-            case "retweeted_retweet":
-                attributionText = "retweeted a Tweet you retweeted";
-                break;
-            case "favorited_mention":
-                attributionText = "liked a Tweet you were mentioned in";
-                break;
-            case "list_member_added":
-                attributionText = "added you to their list ";
-                linkInAttribution = {link:("https://twitter.com/" + data.target_objects[0].uri), name: data.target_objects[0].name}
-                tweetAttached = false;
-                break;
-            case "follow":
-                attributionText = "followed you";
-                tweetAttached = false;
-                break;
-            case "reply":
-                return new Tweet(data.targets[0]);
-                break;
-            default:
-                console.error("Unknown interaction type " + data.action);
-        }
+
 
         console.log(data.sources[0])
 
@@ -79,11 +50,13 @@ class Interaction {
         this.interactionHead = div("tweet-header interaction-header").append(this.interactionLink, this.interactionAttrib, this.interactionAttribLink, this.interactionTime);
         if (tweetAttached) {
             let userPath = data.targets[0].retweeted_status ? data.targets[0].retweeted_status.user : data.targets[0].user
-            this.tweetDisplayName = div("tweet-display-name").text(userPath.name);
-            this.tweetUsername = div("tweet-username txt-mute").text("@" + userPath.screen_name);
-            this.tweetLink = make("a").addClass("interaction-recipient-link").attr("href","https://twitter.com/" + data.targets[0].user.screen_name).attr("target","_blank")
-                            .append(this.tweetDisplayName, this.tweetUsername);
-            this.interactionHead.append(this.tweetLink)
+			if (typeof userPath !== "undefined") {
+	            this.tweetDisplayName = div("tweet-display-name").text(userPath.name);
+	            this.tweetUsername = div("tweet-username txt-mute").text("@" + userPath.screen_name);
+	            this.tweetLink = make("a").addClass("interaction-recipient-link").attr("href","https://twitter.com/" + data.targets[0].user.screen_name).attr("target","_blank")
+	                            .append(this.tweetDisplayName, this.tweetUsername);
+	            this.interactionHead.append(this.tweetLink)
+			}
         }
 
         if (tweetAttached) {
@@ -126,7 +99,7 @@ class Interaction {
 
         this.interactionFooter = div("interaction-footer tweet-footer").append(this.tweetActions)
 
-        this.interactionText = make("p").addClass("tweet-text").text(!!data.targets[0].retweeted_status ? data.targets[0].retweeted_status.full_text : (data.targets[0].full_text || data.targets[0].text));
+        this.interactionText = make("p").addClass("tweet-text").html(((!!data.targets[0].retweeted_status ? data.targets[0].retweeted_status.full_text : (data.targets[0].full_text || data.targets[0].text))));
 
         this.interactionBody = div("tweet-body").append(this.interactionText);
 
