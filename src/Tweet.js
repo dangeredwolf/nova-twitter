@@ -27,6 +27,12 @@ class Tweet {
 	tweetActionLike;
 	tweetActionMore;
 
+	tweetActionReplyCount;
+	tweetActionRetweetCount;
+	tweetActionLikeCount;
+
+	tweetMediaContainer;
+
 	attachedTweet = true; // bool: whether or not tweet is attached
 	linkInAttribution;
 
@@ -69,7 +75,8 @@ class Tweet {
 		}
 
 		if (typeof this.data.retweeted_status !== "undefined") {
-			this.sourceInteractionUser = this.data.retweeted_status.user;
+			this.attributionText = "retweeted";
+			this.sourceInteractionUser = this.data.user;
 		}
 
 		if (this.attachedTweet) {
@@ -124,19 +131,25 @@ class Tweet {
 		this.tweetHead.append(this.tweetLink, this.tweetTime);
 
 		if (this.attachedTweet) {
-			this.tweetActionReply = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").html(
+			this.tweetActionReply = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("material-icons").text("reply")
-			).attr("href","#").attr("data-tooltip","Reply")
+			).attr("href","#").attr("data-tooltip","Reply");
 
-			this.tweetActionRetweet = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").html(
+			this.tweetActionReplyCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.reply_count));
+
+			this.tweetActionRetweet = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("icon icon-retweet").text("repeat")
-			).attr("href","#").attr("data-tooltip","Retweet")
+			).attr("href","#").attr("data-tooltip","Retweet");
 
-			this.tweetActionLike = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").html(
+			this.tweetActionRetweetCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.retweet_count));
+
+			this.tweetActionLike = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("icon icon-heart").text("heart")
-			).attr("href","#").attr("data-tooltip","Like Tweet")
+			).attr("href","#").attr("data-tooltip","Like Tweet");
 
-			this.tweetActionMore = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat").html(
+			this.tweetActionLikeCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.favorite_count));
+
+			this.tweetActionMore = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat").append(
 				make("i").addClass("material-icons").text("more_horiz")
 			).attr("href","#")
 
@@ -149,8 +162,11 @@ class Tweet {
 
 			this.tweetActions = div("tweet-actions").append(
 				this.tweetActionReply,
+				this.tweetActionReplyCount,
 				this.tweetActionRetweet,
+				this.tweetActionRetweetCount,
 				this.tweetActionLike,
+				this.tweetActionLikeCount,
 				this.tweetActionMore
 			);
 
@@ -160,11 +176,37 @@ class Tweet {
 
 			M.Tooltip.init(
 				[this.tweetActionReply[0],this.tweetActionRetweet[0],this.tweetActionLike[0]]
-			)
+			);
+
+			if (typeof this.sourceTweet.entities.media !== "undefined") {
+				this.tweetMediaContainer = div("tweet-media-container");
+
+				this.sourceTweet.entities.media.forEach(media => {
+					this.tweetMediaContainer.append(
+						make("a").addClass("tweet-media").attr("href",media.expanded_url).attr("target","_blank").append(
+							make("img").addClass("tweet-media-img").attr("src",media.media_url_https)
+						)
+					)
+				})
+
+				this.element.append(this.tweetMediaContainer)
+			}
 
 		}
 
 		return this;
+	}
+
+	formatInteractionCount(count) {
+		if (count > 1000000) {
+			return (Math.floor(count/100000)/10) + "M"
+		} else if (count > 10000) {
+			return (Math.floor(count/1000)) + "K"
+		} else if (count > 1000) {
+			return (Math.floor(count/100)/10) + "K"
+		} else {
+			return String(count)
+		}
 	}
 
 	determineAttributionHeader() {

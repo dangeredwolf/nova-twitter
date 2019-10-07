@@ -38,6 +38,12 @@ class Column {
         this.filters = filters;
         this.settings = settings;
 
+		for (let setting in this.settings) {
+			if (setting === "media_preview_size") {
+				this.element.addClass("column-settings-media_preview_size-" +  this.settings[setting])
+			}
+		}
+
         this.body.scroll(() => {
             if ($(this.body).scrollTop() + $(this.body).height() > $(this.body).prop("scrollHeight") - 200) {
     			if (!this.isLoadingMore) {

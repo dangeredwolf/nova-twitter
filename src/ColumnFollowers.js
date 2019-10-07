@@ -1,6 +1,5 @@
 const {Column} = require("./Column.js");
 const { TwitterAPI } = require("./TwitterAPI.js");
-const { Interaction } = require("./Interaction.js");
 const {buildApiUrl} = require("./Helpers.js");
 
 class ColumnFollowers extends Column {
@@ -10,7 +9,6 @@ class ColumnFollowers extends Column {
         this.columnTitle.html("Followers");
         this.columnUsername.html("@" + (user.userName || ""));
         this.account = user;
-        this.makeMe = Interaction;
         this.shouldReverse = true;
         this.icon.text("person_add");
     }
