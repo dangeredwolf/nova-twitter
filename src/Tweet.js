@@ -34,6 +34,7 @@ class Tweet {
 	tweetMediaContainer;
 
 	attachedTweet = true; // bool: whether or not tweet is attached
+	isQuotedTweet = false;
 	linkInAttribution;
 
 	attributionLink;
@@ -46,12 +47,18 @@ class Tweet {
 	sourceInteractionUser;
 
 	isInteraction = false;
+	useProfilePic = true;
 
 	constructor(data) {
 		this.data = data;
 		this.sourceTweet = data;
 
-		if (typeof this.data.retweeted_status !== "undefined") {
+		if (typeof data.quotedTweet !== "undefined") {
+			this.sourceTweet = data.quotedTweet;
+			this.isQuotedTweet = true;
+		}
+
+		if (typeof this.data.retweeted_status !== "undefined" && !this.isQuotedTweet) {
 			this.sourceTweet = this.data.retweeted_status;
 
 			if (typeof this.sourceTweet.display_text_range !== "undefined") {
@@ -59,8 +66,9 @@ class Tweet {
 			}
 		}
 
-		if (typeof this.data.action !== "undefined") {
+		if (typeof this.data.action !== "undefined" && !this.isQuotedTweet) {
 			this.isInteraction = true;
+			this.useProfilePic = false;
 			this.sourceInteractionUser = this.data.sources[0];
 			this.determineAttributionHeader();
 			if (this.attachedTweet) {
@@ -74,7 +82,7 @@ class Tweet {
 			}
 		}
 
-		if (typeof this.data.retweeted_status !== "undefined") {
+		if (typeof this.data.retweeted_status !== "undefined" && !this.isQuotedTweet) {
 			this.attributionText = "retweeted";
 			this.sourceInteractionUser = this.data.user;
 		}
@@ -83,16 +91,21 @@ class Tweet {
 			this.tweetDisplayName = div("tweet-display-name").text(this.sourceTweet.user.name);
 
 		 	this.tweetUsername = div("tweet-username txt-mute").text("@" + this.sourceTweet.user.screen_name);
-			this.tweetProfilePic = make("img").attr("src", this.sourceTweet.user.profile_image_url_https).addClass("tweet-profile-pic");
+			if (this.useProfilePic && !this.isQuotedTweet) {
+				this.tweetProfilePic = make("img").attr("src", this.sourceTweet.user.profile_image_url_https).addClass("tweet-profile-pic");
+			}
 
 			this.tweetUsernameGroup = div("tweet-username-group").append(this.tweetDisplayName, this.tweetUsername)
 		}
 
 		this.tweetLink = make("a").attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name).attr("target","_blank")
 						.append(this.tweetProfilePic, this.tweetUsernameGroup);
-		this.tweetTime = make("a").addClass("tweet-time txt-mute").text(timeAgo(this.sourceTweet.created_at)).attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name + "/status/" + data.id_str).attr("target","_blank");
 
-		if (!!this.linkInAttribution) {
+		if (!this.isQuotedTweet) {
+				this.tweetTime = make("a").addClass("tweet-time txt-mute").text(timeAgo(this.sourceTweet.created_at)).attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name + "/status/" + data.id_str).attr("target","_blank");
+		}
+
+		if (!!this.linkInAttribution && !this.isQuotedTweet) {
 			this.interactionAttribLink = make("a").addClass("interaction-attribution-link").attr("href",this.linkInAttribution.link)
 								 		 .attr("target","_blank").text(this.linkInAttribution.name)
 		}
@@ -111,10 +124,17 @@ class Tweet {
 
 		this.tweetBody = div("tweet-body").append(this.tweetText);
 
-		this.element = make("article").addClass("tweet has-profile-pic").attr("data-id", data.id).attr("data-time", Date.parse(data.created_at)).append(this.tweetHead, this.tweetBody);
+		this.element = make("article").addClass("tweet").attr("data-id", data.id).attr("data-time", Date.parse(data.created_at)).append(this.tweetHead, this.tweetBody);
 
+		if (this.useProfilePic && !this.isQuotedTweet) {
+			this.element.addClass("has-profile-pic")
+		}
 
-		if (typeof data.retweeted_status !== "undefined" || this.isInteraction) {
+		if (this.isQuotedTweet) {
+			this.element.addClass("quote-tweet")
+		}
+
+		if ((typeof data.retweeted_status !== "undefined" || this.isInteraction) && !this.isQuotedTweet) {
 			this.attribution = div("tweet-attribution").text(this.attributionText);
 			this.retweetDisplayName = div("tweet-display-name retweet-display-name").text(this.sourceInteractionUser.name);
 
@@ -130,7 +150,7 @@ class Tweet {
 
 		this.tweetHead.append(this.tweetLink, this.tweetTime);
 
-		if (this.attachedTweet) {
+		if (this.attachedTweet && !this.isQuotedTweet) {
 			this.tweetActionReply = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("material-icons").text("reply")
 			).attr("href","#").attr("data-tooltip","Reply");
@@ -176,6 +196,9 @@ class Tweet {
 				[this.tweetActionReply[0],this.tweetActionRetweet[0],this.tweetActionLike[0]]
 			);
 
+		}
+		if (this.attachedTweet || this.isQuotedTweet || this.sourceTweet.is_quote_status) {
+
 			if (typeof this.sourceTweet.extended_entities !== "undefined" && typeof this.sourceTweet.extended_entities.media !== "undefined") {
 				this.tweetMediaContainer = div("tweet-media-container");
 
@@ -192,6 +215,13 @@ class Tweet {
 				})
 
 				this.element.append(this.tweetMediaContainer)
+			}
+
+			if (this.sourceTweet.is_quote_status) {
+				console.log("IM A QUOTE TWEET!!!");
+				let quotedTweet = new Tweet({quotedTweet:this.sourceTweet.quoted_status});
+				console.log(quotedTweet);
+				this.element.append(quotedTweet.element)
 			}
 
 			this.tweetFooter = div("tweet-footer").append(this.tweetActions)
@@ -243,6 +273,9 @@ class Tweet {
 				this.attachedTweet = false;
 				break;
 			case "reply":
+			case "mention":
+				this.isInteraction = false;
+				this.useProfilePic = true;
 				break;
 			default:
 				console.error("Unknown interaction type " + this.data.action);

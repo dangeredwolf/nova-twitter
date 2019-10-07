@@ -32,7 +32,8 @@
 
 .retweet-link {
     display: block!important;
-    float:left
+    float:left;
+    margin-right: 5px;
 }
 
 .tweet-header>* {
@@ -78,10 +79,11 @@ article {
 
 .tweet-attribution {
     width:auto;
-    display: inline-block;
+    display: block;
     padding-left: 7px;
     padding-bottom: 10px;
-    float: left;
+    /* float: left; */
+    /* margin-left: 10px; */
 }
 
 .tweet-text {
@@ -92,11 +94,8 @@ article {
     line-height: 1.35;
 }
 
-article:not(.interaction) .tweet-text {
+.tweet.has-profile-pic>.tweet-body>.tweet-text {
     padding-left:60px;
-}
-
-.tweet .tweet-text {
     margin-top:-24px
 }
 
@@ -142,4 +141,13 @@ article:not(.interaction) .tweet-text {
 .tweet-media-container-grid .tweet-media-img {
     max-width:50%;
     max-height:149px
+}
+
+.quote-tweet {
+    padding:10px;
+	box-shadow:0 5px 5px var(--quoteTweetShadow)
+}
+
+.quote-tweet .tweet-text {
+    font-size:13px
 }
