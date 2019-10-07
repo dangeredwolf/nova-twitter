@@ -1,6 +1,5 @@
 const {Column} = require("./Column.js");
 const { TwitterAPI } = require("./TwitterAPI.js");
-const { Interaction } = require("./Interaction.js");
 const {buildApiUrl} = require("./Helpers.js");
 
 class ColumnFollowers extends Column {
