@@ -131,9 +131,9 @@ class Column {
 	}
 
 	trimTweets() {
-		if (this.body1.children().length > tweetLimit) {
+		if (this.body1.children().length > this.tweetLimit) {
 			this.body1.children().each((i, tweet) => {
-				if (i > tweetLimit) {
+				if (i > this.tweetLimit) {
 					tweet.remove();
 				}
 			})
@@ -141,6 +141,8 @@ class Column {
 	}
 
     renderTweets(overrideId) {
+
+		this.trimTweets();
         return new Promise((resolve, reject) => {
             this.updateTweets(overrideId).then((tweets) => {
 
@@ -176,7 +178,6 @@ class Column {
 
             }).catch(e => reject(e));
         });
-		this.trimTweets();
     }
 }
 

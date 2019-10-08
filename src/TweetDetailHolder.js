@@ -36,9 +36,10 @@ class TweetDetailHolder {
 		}).then(data => {
 			let timeline = data.data.timeline.instructions[0].addEntries.entries;
 			let rootTweetId = data.data.timeline.instructions[0].addEntries.entries[0].content.item.content.tweet.id;
-			if (rootTweetId === newData.id_str) {
-				console.log("This tweet is the root tweet");
-			} else {
+			// if (rootTweetId === newData.id_str) {
+			// 	console.log("This tweet is the root tweet");
+			// } else
+			{
 				let convo = this.findCorrectConversation(timeline, newData.id_str);
 				let convoTweets = this.findTweetsInConvo(convo, data.data);
 				let rootTweet = this.processConvoTweet(data.data.globalObjects.tweets[rootTweetId], data.data);

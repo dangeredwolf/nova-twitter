@@ -8,6 +8,7 @@ const { Settings } = require("./src/Settings.js");
 const { UpdateTimes } = require("./src/UpdateTimes.js");
 const { TweetSender } = require("./src/TweetSender.js");
 const { Tweet } = require("./src/Tweet.js");
+const { TwitterPollCard } = require("./src/TwitterPollCard.js");
 const $ = require("jquery")
 
 $(document).ready(() => {

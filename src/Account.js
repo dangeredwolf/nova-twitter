@@ -5,12 +5,14 @@ class Account {
     bearerToken;
     authToken;
     userName;
+	twitterSess;
 
     constructor(data) {
         this.twitterId = data.twitterId;
         this.bearerToken = data.bearerToken;
         this.authToken = data.authToken;
         this.userName = data.userName;
+		this.twitterSess = data.twitterSess;
     }
 
     saveAccount() {
