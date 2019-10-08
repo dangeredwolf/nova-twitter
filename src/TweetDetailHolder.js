@@ -76,14 +76,14 @@ class TweetDetailHolder {
 					let repliesBefore = div("tweet-detail-replies-before");
 					this.column.body2.prepend(repliesBefore);
 
-					prependTweets.forEach(tweet => repliesBefore.append(new Tweet(tweet).element));
+					prependTweets.forEach(tweet => repliesBefore.append(new Tweet(tweet, this.column).element));
 				}
 
 				if (appendTweets.length > 0) {
 					let repliesAfter = div("tweet-detail-replies-after");
 					this.column.body2.append(repliesAfter);
 
-					appendTweets.forEach(tweet => repliesAfter.append(new Tweet(tweet).element));
+					appendTweets.forEach(tweet => repliesAfter.append(new Tweet(tweet, this.column).element));
 				}
 
 				console.log("Phew, I worked really hard on that")

@@ -1,4 +1,4 @@
-const {make, div, timeAgo} = require("./Helpers.js");
+const {make, div, timeAgo, timeAgoRaw} = require("./Helpers.js");
 const {TweetTextFormatUtils} = require("./TweetTextFormatUtils.js");
 const {TweetDetailHolder} = require("./TweetDetailHolder.js");
 const {ProviderLikeTweet} = require("./ProviderLikeTweet.js");
@@ -62,14 +62,18 @@ class Tweet {
 		if (typeof data.quotedTweet !== "undefined") {
 			this.sourceTweet = data.quotedTweet;
 			this.isQuotedTweet = true;
+
+			if (this.data.is_detail_holder) {
+				this.isQuotedTweet = false;
+			}
 		}
 
 		if (typeof this.data.retweeted_status !== "undefined" && !this.isQuotedTweet) {
 			this.sourceTweet = this.data.retweeted_status;
 
-			if (typeof this.sourceTweet.display_text_range !== "undefined") {
-				this.sourceTweet.full_text = this.sourceTweet.full_text.substr(this.sourceTweet.display_text_range[0],this.data.retweeted_status.display_text_range[1]);
-			}
+			// if (typeof this.sourceTweet.display_text_range !== "undefined") {
+			// 	this.sourceTweet.full_text = this.sourceTweet.full_text.substr(this.sourceTweet.display_text_range[0],this.data.retweeted_status.display_text_range[1]);
+			// }
 		}
 
 		if (typeof this.data.action !== "undefined" && !this.isQuotedTweet) {
@@ -117,6 +121,16 @@ class Tweet {
 				this.tweetTime = make("a").addClass("tweet-time txt-mute").text(timeAgo(this.sourceTweet.created_at))
 				.attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name + "/status/" + data.id_str).attr("target","_blank")
 				.click(e => e.stopPropagation());
+
+				if (timeAgoRaw(this.sourceTweet.created_at) < 60) { // 60 seconds
+					var interval = setInterval(() => {
+						this.tweetTime.text(timeAgo(this.sourceTweet.created_at))
+						if (timeAgoRaw(this.sourceTweet.created_at) > 60) { // 60 seconds
+							console.log("it's time to stop :D");
+							clearInterval(interval);
+						}
+					}, 500)
+				}
 		}
 
 		if (!!this.linkInAttribution && !this.isQuotedTweet) {
@@ -138,14 +152,14 @@ class Tweet {
 			if (link.mtd_unused_link) {
 				text = text.replace(new RegExp(link.url,"g"),"")
 			} else {
-				text = text.replace(new RegExp(link.url,"g"),"<a class=\"tweet-link-inline\" href=\"" + link.url + "\">" + link.display_url + "</a>");
+				text = text.replace(new RegExp(link.url,"g"),"<a class=\"tweet-link-inline\" target=\"_blank\" href=\"" + link.url + "\">" + link.display_url + "</a>");
 			}
 
 		})
 
 		this.findUsers(text, this.sourceTweet).forEach(user => {
 			console.log(user);
-			text = text.replace(new RegExp("@" + user.screen_name,"g"),"<a class=\"tweet-link-inline tweet-link-user\" href=\"https://twitter.com/" + user.screen_name + "\"> @" + user.screen_name + "</a>");
+			text = text.replace(new RegExp("@" + user.screen_name,"g"),"<a class=\"tweet-link-inline tweet-link-user\" target=\"_blank\" href=\"https://twitter.com/" + user.screen_name + "\"> @" + user.screen_name + "</a>");
 		})
 
 		this.tweetText = make("p").addClass("tweet-text").html(text);
@@ -273,8 +287,19 @@ class Tweet {
 							)
 						)
 					} else if (!!media.video_info && !!this.data.is_detail_holder) {
+						let url;
+						let max_bitrate = 0;
+
+						media.video_info.variants.forEach(variant => {
+							if (variant.content_type === "video/mp4") {
+								if (variant.bitrate > max_bitrate) {
+									max_bitrate = variant.bitrate;
+									url = variant.url;
+								}
+							}
+						})
 						this.tweetMediaContainer.append(
-							make("iframe").attr("allowfullscreen","true").attr("frameborder","0").attr("src",media.video_info.variants[0].url).addClass("tweet-media-video")
+							make("iframe").attr("allowfullscreen","true").attr("frameborder","0").attr("src",url).addClass("tweet-media-video")
 						)
 					}
 				})
@@ -282,11 +307,12 @@ class Tweet {
 				this.element.append(this.tweetMediaContainer)
 			}
 
-			if (this.sourceTweet.is_quote_status) {
+			if (this.sourceTweet.is_quote_status && !!this.sourceTweet.quoted_status) {
 				console.log("IM A QUOTE TWEET!!!");
-				let quotedTweet = new Tweet({quotedTweet:this.sourceTweet.quoted_status});
+				let quotedTweet = new Tweet({quotedTweet:this.sourceTweet.quoted_status}, this.column);
 				console.log(quotedTweet);
-				this.element.append(quotedTweet.element)
+				this.element.append(quotedTweet.element);
+				quotedTweet.element.click(e => e.stopPropagation())
 			}
 
 			this.tweetFooter = div("tweet-footer").append(this.tweetActions)

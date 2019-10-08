@@ -165,7 +165,7 @@ max-width: 170px;
 }
 
 .column-settings-media_preview_size-large .tweet.has-profile-pic>.tweet-media-container>.tweet-media>.tweet-media-img {
-	margin-left:0
+	/* margin-left:0 */
 }
 
 .column-settings-media_preview_size-large .tweet-media-img  {
@@ -179,8 +179,8 @@ max-width: 170px;
 }
 
 
-.tweet-media-container-grid .tweet-media-img {
-    max-width:50%;
+.tweet-media-container-grid .tweet-media {
+    max-width:49%;
     max-height:149px
 }
 
@@ -197,6 +197,11 @@ max-width: 170px;
     padding:10px;
 	box-shadow:0 5px 5px var(--quoteTweetShadow);
 	background-color:var(--quoteTweetBackground)
+}
+
+.has-profile-pic .quote-tweet {
+	margin-left:60px;
+	max-width:250px
 }
 
 .quote-tweet .tweet-text {
@@ -237,4 +242,8 @@ max-width: 170px;
 
 .column-settings-media_preview_size-large .tweet-media-container {
 	min-height:200px;
+}
+
+.tweet-media-container-grid-2 .tweet-media:nth-child(2) {
+	left:50%
 }

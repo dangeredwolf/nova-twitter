@@ -80,7 +80,15 @@ class Column {
                         this.isLoadingMore = false
                     })
                 }
-       		}
+       		} else if ($(this.body1).scrollTop() === 0) {
+				console.log(this.queuedTweets)
+				this.queuedTweets.forEach(tweet => {
+					console.log(tweet);
+					this.body1.prepend(tweet.element);
+				});
+
+				this.queuedTweets = []
+			}
         })
 
         return this;
@@ -137,7 +145,7 @@ class Column {
             this.updateTweets(overrideId).then((tweets) => {
 
 				if (this.body1.scrollTop() > 0) {
-					tweets.forEach(tweet => this.queuedTweets.push(tweet));
+					tweets.forEach(tweet => this.queuedTweets.push(new Tweet(tweet, this)));
 				} else {
 					tweets.forEach((tweet) => {
 	                    console.log(tweet);
