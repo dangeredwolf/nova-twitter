@@ -28,7 +28,7 @@ class ColumnInteractions extends Column {
                 url,
                 {account:this.account, method:"GET"}
             ).then((reply) => {
-                resolve(JSON.parse(reply));
+                resolve(reply.data);
             }).catch(e => reject(e))
         });
     }

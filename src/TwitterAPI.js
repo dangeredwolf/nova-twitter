@@ -1,15 +1,13 @@
 const https = require("https");
+const axios = require("axios");
 
 class TwitterAPI {
     static call(url, info) {
         var data="";
         var promiseMe = new Promise((resolve, reject) => {
 
-            let theFunc = https.get;
-            var postData;
-            if (info.method !== "GET" && typeof info.method !== "undefined") {
-                theFunc = https.request;
-            }
+            let theFunc = axios.request;
+            // var postData;
 
             // console.log(url);
 
@@ -26,47 +24,35 @@ class TwitterAPI {
                 },
                 method: (info.method || "GET"),
                 path:"/" + url.match(/(?<=:\/\/[\w\.]+\/).+/g)[0],
-                hostname:url.match(/(?<=:\/\/)[\w\.]+(?=\/)/g)[0]
+                hostname:url.match(/(?<=:\/\/)[\w\.]+(?=\/)/g)[0],
+				data: info.postData
             }
 
             // console.log(reqObj);
 
             if (info.method === "POST") {
-                postData = JSON.stringify(info.postData)
-                reqObj.headers["Content-Type"] = "application/x-www-form-urlencoded";
-                reqObj.headers["Content-Length"] = Buffer.byteLength(postData);
+                // reqObj.headers["Content-Type"] = "application/x-www-form-urlencoded";
+                // reqObj.headers["Content-Length"] = Buffer.byteLength(postData);
 
             }
 
             var req = theFunc(url,
-                reqObj,
-                (res) => {
-                    // console.log(`STATUS: ${res.statusCode}`);
-                    // console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
-                    res.setEncoding("utf8");
-                    res.on("data", (d) => {
-                        data += d;
-                    });
-                    res.on("end", () => {
-                        if (JSON.parse(data)) {
-                            if (typeof JSON.parse(data).errors !== "undefined") {
-                                reject(data)
-                            }
-                        }
-                        resolve(data);
-                    });
-                }
-            );
-
-            if (info.method === "POST") {
-                req.write(postData);
-                req.end();
-            }
-            req.on("error", (e) => {
+                reqObj
+            ).then((data) => {
+				// console.log(data)
+				if (typeof data === "object") {
+					resolve(data);
+				}
+			}).catch(e => {
                 console.error(`Request failure: ${e.message}`);
+				if (e.response) {
+					console.log(e.response.data);
+					console.log(e.response.status);
+					console.log(e.response.headers);
+				}
             });
 
-            // console.log(postData);
+            // console.log(info.postData);
 
         });
 

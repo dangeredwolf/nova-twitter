@@ -10,6 +10,6 @@ a {
 input::placeholder,
 textarea::placeholder
 {
-	color:var(--placeholderTextColor);
+	color:var(--placeholderText);
 	font-family:Roboto, "Noto Sans"
 }

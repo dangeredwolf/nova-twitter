@@ -27,8 +27,7 @@ class ColumnFollowers extends Column {
                 url,
                 {account:this.account, method:"GET"}
             ).then((reply) => {
-                console.log(JSON.parse(reply));
-                resolve(JSON.parse(reply));
+                resolve(reply.data);
             }).catch(e => reject(e))
         });
     }

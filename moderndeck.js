@@ -7,6 +7,7 @@ const { TweetDeckClient } = require("./src/TweetDeckClient.js");
 const { Settings } = require("./src/Settings.js");
 const { UpdateTimes } = require("./src/UpdateTimes.js");
 const { TweetSender } = require("./src/TweetSender.js");
+const { Tweet } = require("./src/Tweet.js");
 const $ = require("jquery")
 
 $(document).ready(() => {
@@ -14,6 +15,6 @@ $(document).ready(() => {
 
         setInterval(UpdateTimes.do, 12000);
         TweetDeckClient.getTweetDeckPreferences({account:StorageAccount.getDefaultAccount()})
-                        .then(prefs => TweetDeckClient.loadTweetDeckPreferences(JSON.parse(prefs)))
+                        .then(prefs => TweetDeckClient.loadTweetDeckPreferences(prefs.data))
 
 })

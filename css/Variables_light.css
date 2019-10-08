@@ -9,5 +9,8 @@
     --txtMuteText:#787878;
     --composerBackground:#00BCD4;
     --composeSheetBackground:#fff;
-    --placeholderTextColor:#aaa;
+    --quoteTweetBackground:#fff;
+	--tweetDetaiLWrapperShadow:rgba(0,0,0,.4);
+    --placeholderText:#aaa;
+	--columnBackground:#f9f9f9;
 }

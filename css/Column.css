@@ -16,7 +16,23 @@
 	padding:16px;
 	background:var(--columnHeaderBackground);
 	color:var(--columnHeaderText);
-	box-shadow:0 1px 10px var(--columnHeaderShadow)
+	box-shadow:0 1px 10px var(--columnHeaderShadow);
+	height:55px
+}
+
+.column-header-link {
+	color:var(--columnHeaderText);
+	font-size:16px;
+	position:absolute;
+	top:0;
+	height:55px;
+	left:0;
+	right:0;
+	padding:16px;
+}
+
+.column-header-link i {
+	margin-right:9px
 }
 
 .column-title,.column-username {
@@ -58,4 +74,32 @@
 	/* padding: 10px; */
 	width: 100%;
 	box-sizing: border-box;
+}
+
+.column-wrapper {
+    position:absolute;
+    width:350px;
+    top:0;
+    bottom:0;
+    left:0;
+    transition:left 0.5s var(--animationTiming);
+	background-color:var(--columnBackground)
+}
+
+.column-level-1 .column-wrapper-level-2 {
+    position:absolute;
+	left:360px;
+	pointer-events: none;
+	top:0
+}
+
+.column-level-2 .column-wrapper-level-2 {
+	left:0;
+	z-index:3
+}
+
+
+.column-level-2 .column-wrapper-level-1 {
+	left:-200px;
+	pointer-events: none;
 }

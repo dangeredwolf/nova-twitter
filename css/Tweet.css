@@ -65,6 +65,11 @@ article {
     margin-top: 7px;
     margin-bottom: 7px;
     padding: 10px;
+    width: 100%
+}
+
+.tweet-detail-wrapper .tweet-text {
+    font-size:15px
 }
 
 .tweet-username-group {
@@ -108,6 +113,15 @@ article {
     margin-left:50px
 }
 
+.tweet-detail-wrapper .tweet-actions {
+    margin-left:10px
+}
+
+.tweet-detail-wrapper .tweet-action-count {
+    font-size:14px;
+    font-weight:500
+}
+
  .tweet-action {
      margin-left: 12px;
      color:#aaa;
@@ -144,9 +158,18 @@ article {
     max-height:149px
 }
 
+.tweet-detail-wrapper {
+	box-shadow:0 2px 5px var(--tweetDetaiLWrapperShadow);
+	box-sizing:border-box;
+	padding:5px;
+	margin-top:7px;
+	z-index:2
+}
+
 .quote-tweet {
     padding:10px;
-	box-shadow:0 5px 5px var(--quoteTweetShadow)
+	box-shadow:0 5px 5px var(--quoteTweetShadow);
+	background-color:var(--quoteTweetBackground)
 }
 
 .quote-tweet .tweet-text {

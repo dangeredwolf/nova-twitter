@@ -1,5 +1,7 @@
 const {make, div, timeAgo} = require("./Helpers.js");
 const {TweetTextFormatUtils} = require("./TweetTextFormatUtils.js");
+const {TweetDetailHolder} = require("./TweetDetailHolder.js");
+const {ProviderLikeTweet} = require("./ProviderLikeTweet.js");
 const Waves = require("node-waves");
 
 class Tweet {
@@ -50,8 +52,11 @@ class Tweet {
 	isInteraction = false;
 	useProfilePic = true;
 
-	constructor(data) {
+	column;
+
+	constructor(data, column) {
 		this.data = data;
+		this.column = column;
 		this.sourceTweet = data;
 
 		if (typeof data.quotedTweet !== "undefined") {
@@ -74,6 +79,8 @@ class Tweet {
 			this.determineAttributionHeader();
 			if (this.attachedTweet) {
 				this.sourceTweet = this.data.targets[0];
+			} else {
+				this.sourceTweet = {user:this.data.sources[0]};
 			}
 
 			console.log("This is an action",this.sourceTweet);
@@ -92,18 +99,23 @@ class Tweet {
 			this.tweetDisplayName = div("tweet-display-name").text(this.sourceTweet.user.name);
 
 		 	this.tweetUsername = div("tweet-username txt-mute").text("@" + this.sourceTweet.user.screen_name);
-			if (this.useProfilePic && !this.isQuotedTweet) {
-				this.tweetProfilePic = make("img").attr("src", this.sourceTweet.user.profile_image_url_https).addClass("tweet-profile-pic");
-			}
 
 			this.tweetUsernameGroup = div("tweet-username-group").append(this.tweetDisplayName, this.tweetUsername)
 		}
 
-		this.tweetLink = make("a").attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name).attr("target","_blank")
-						.append(this.tweetProfilePic, this.tweetUsernameGroup);
+		if ((this.useProfilePic && !this.isQuotedTweet)) {
+			this.tweetProfilePic = make("img").attr("src", this.sourceTweet.user.profile_image_url_https).addClass("tweet-profile-pic");
+		}
+
+		this.tweetLink = make("a").attr("target","_blank").attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name)
+						 .append(this.tweetProfilePic, this.tweetUsernameGroup);
+
+
 
 		if (!this.isQuotedTweet) {
-				this.tweetTime = make("a").addClass("tweet-time txt-mute").text(timeAgo(this.sourceTweet.created_at)).attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name + "/status/" + data.id_str).attr("target","_blank");
+				this.tweetTime = make("a").addClass("tweet-time txt-mute").text(timeAgo(this.sourceTweet.created_at))
+				.attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name + "/status/" + data.id_str).attr("target","_blank")
+				.click(e => e.stopPropagation());
 		}
 
 		if (!!this.linkInAttribution && !this.isQuotedTweet) {
@@ -125,7 +137,15 @@ class Tweet {
 
 		this.tweetBody = div("tweet-body").append(this.tweetText);
 
-		this.element = make("article").addClass("tweet waves-effect waves-dark").attr("data-id", data.id).attr("data-time", Date.parse(data.created_at)).append(this.tweetHead, this.tweetBody);
+		this.element = make("article").addClass("tweet").attr("data-id", data.id)
+					   .attr("data-time", Date.parse(data.created_at)).append(this.tweetHead, this.tweetBody);
+
+
+		if (!this.data.is_detail_holder) {
+			this.element.addClass("waves-effect waves-dark").click(() => {
+				new TweetDetailHolder(this);
+			});
+		}
 
 		if (this.useProfilePic && !this.isQuotedTweet) {
 			this.element.addClass("has-profile-pic")
@@ -142,7 +162,7 @@ class Tweet {
 			this.retweetUsernameGroup = div("retweet-username-group tweet-username-group").append(this.retweetDisplayName);
 
 			this.interactionLink = make("a").addClass("retweet-link").attr("href","https://twitter.com/" + this.sourceInteractionUser.screen_name).attr("target","_blank")
-							   .append(this.retweetUsernameGroup);
+							   .append(this.retweetUsernameGroup).click(e => e.stopPropagation());
 
 			this.tweetHead.append(this.interactionLink, this.attribution);
 
@@ -154,8 +174,9 @@ class Tweet {
 		if (this.attachedTweet && !this.isQuotedTweet) {
 			this.tweetActionReply = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("material-icons").text("reply")
-			).attr("href","#").attr("data-tooltip","Reply").attr("aria-label","Reply Button").click(() => {
+			).attr("href","#").attr("data-tooltip","Reply").attr("aria-label","Reply Button").click(e => {
 				console.log("This means we should reply to this tweet");
+				e.stopPropagation();
 			});
 
 			if (this.sourceTweet.reply_count > 0)
@@ -163,9 +184,9 @@ class Tweet {
 
 			this.tweetActionRetweet = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("icon icon-retweet").text("repeat")
-			).attr("href","#").attr("data-tooltip","Retweet").attr("aria-label","Retweet Button").click(() => {
+			).attr("href","#").attr("data-tooltip","Retweet").attr("aria-label","Retweet Button").click(e => {
 				console.log("This means we should retweet this tweet");
-
+				e.stopPropagation();
 			});
 
 
@@ -174,9 +195,12 @@ class Tweet {
 
 			this.tweetActionLike = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("icon icon-heart").text("heart")
-			).attr("href","#").attr("data-tooltip","Like Tweet").attr("aria-label","Like Button").click(() => {
+			).attr("href","#").attr("data-tooltip","Like Tweet").attr("aria-label","Like Button").click(e => {
 				console.log("This means we should like this tweet");
-
+				e.stopPropagation();
+				ProviderLikeTweet.like(this.sourceTweet, this.column.account).then((res) => {
+					console.log(res);
+				})
 			});
 
 			if (this.sourceTweet.favorite_count > 0)
@@ -211,9 +235,11 @@ class Tweet {
 
 		}
 
-		Waves.attach(
-			this.element[0]
-		)
+		if (!this.data.is_detail_holder) {
+			Waves.attach(
+				this.element[0]
+			)
+		}
 
 		if (this.attachedTweet || this.isQuotedTweet || this.sourceTweet.is_quote_status) {
 
@@ -226,7 +252,7 @@ class Tweet {
 
 				this.sourceTweet.extended_entities.media.forEach(media => {
 					this.tweetMediaContainer.append(
-						make("a").addClass("tweet-media").attr("href",media.expanded_url).attr("target","_blank").append(
+						make("a").addClass("tweet-media").attr("href",media.expanded_url).attr("target","_blank").click(e => e.stopPropagation()).append(
 							make("img").addClass("tweet-media-img").attr("src",media.media_url_https)
 						)
 					)
