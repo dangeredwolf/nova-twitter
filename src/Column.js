@@ -29,7 +29,7 @@ class Column {
     filters = {};
     settings = {};
 	queuedTweets = [];
-	tweetLimit = 100;
+	tweetLimit = 50;
 
 
     constructor(user, filters, settings) {
