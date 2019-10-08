@@ -44,7 +44,7 @@ class TwitterAPI {
 					resolve(data);
 				}
 			}).catch(e => {
-                console.error(`Request failure: ${e.message}`);
+                console.error(`Request error: ${e.message}\nOccurred during a request for ` + url);
 				if (e.response) {
 					console.log(e.response.data);
 					console.log(e.response.status);
