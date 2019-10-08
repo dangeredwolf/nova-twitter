@@ -1,0 +1,27 @@
+.scroll-v::-webkit-scrollbar-thumb,
+.scroll-h::-webkit-scrollbar-thumb
+{
+	border-radius:5px;
+	background:var(--scrollbar)
+}
+
+.scroll-v::-webkit-scrollbar-thumb:hover,
+.scroll-h::-webkit-scrollbar-thumb:hover
+{
+	background:var(--scrollbarHover)
+}
+
+.scroll-v::-webkit-scrollbar {
+	width:var(--scrollbarWidth);
+	pointer-events:all
+}
+
+.scroll-h::-webkit-scrollbar {
+	height:var(--scrollbarWidth);
+	pointer-events:all
+}
+
+.scroll-h,.scroll-v {
+	scrollbar-color:var(--scrollbar) var(--columnBackground);
+	scrollbar-width:var(--scrollbarWidth)
+}

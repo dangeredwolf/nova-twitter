@@ -9,6 +9,11 @@ class TweetDetailHolder {
 		this.tweet = tweet;
 		this.column = tweet.column;
 
+		if (typeof this.tweet.retweeted_status !== "undefined") {
+			tweet = this.tweet.retweeted_status;
+			this.tweet = this.tweet.retweeted_status;
+		}
+
 		this.column.element.removeClass("column-level-1").addClass("column-level-2");
 
 		let newData = this.tweet.data;
@@ -67,8 +72,19 @@ class TweetDetailHolder {
 				// prependTweets.forEach(tweet => prependedTweets.push(new Tweet(tweet)));
 				// appendTweets.forEach(tweet => appendedTweets.push(new Tweet(tweet)));
 
-				prependTweets.forEach(tweet => this.column.body2.prepend(new Tweet(tweet).element));
-				appendTweets.forEach(tweet => this.column.body2.append(new Tweet(tweet).element));
+				if (prependTweets.length > 0) {
+					let repliesBefore = div("tweet-detail-replies-before");
+					this.column.body2.prepend(repliesBefore);
+
+					prependTweets.forEach(tweet => repliesBefore.append(new Tweet(tweet).element));
+				}
+
+				if (appendTweets.length > 0) {
+					let repliesAfter = div("tweet-detail-replies-after");
+					this.column.body2.append(repliesAfter);
+
+					appendTweets.forEach(tweet => repliesAfter.append(new Tweet(tweet).element));
+				}
 
 				console.log("Phew, I worked really hard on that")
 

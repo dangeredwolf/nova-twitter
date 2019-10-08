@@ -27,7 +27,9 @@ class Column {
 	shouldCatchErrs = false;
 
     filters = {};
-    settings = {}
+    settings = {};
+	queuedTweets = [];
+	tweetLimit = 100;
 
 
     constructor(user, filters, settings) {
@@ -48,8 +50,8 @@ class Column {
 		Waves.attach(
 			this.back2[0]
 		);
-        this.body1 = div("column-body");
-        this.body2 = div("column-body");
+        this.body1 = div("column-body scroll-v");
+        this.body2 = div("column-body scroll-v");
 		this.wrapper1 = div("column-wrapper column-wrapper-level-1").append(this.headElement1, this.body1);
 		this.wrapper2 = div("column-wrapper column-wrapper-level-2").append(this.headElement2, this.body2);
         this.element.append(this.wrapper1,this.wrapper2);
@@ -120,36 +122,53 @@ class Column {
 		return func;
 	}
 
+	trimTweets() {
+		if (this.body1.children().length > tweetLimit) {
+			this.body1.children().each((i, tweet) => {
+				if (i > tweetLimit) {
+					tweet.remove();
+				}
+			})
+		}
+	}
+
     renderTweets(overrideId) {
         return new Promise((resolve, reject) => {
             this.updateTweets(overrideId).then((tweets) => {
 
-                tweets.forEach((tweet) => {
-                    console.log(tweet);
+				if (this.body1.scrollTop() > 0) {
+					tweets.forEach(tweet => this.queuedTweets.push(tweet));
+				} else {
+					tweets.forEach((tweet) => {
+	                    console.log(tweet);
 
-                    let id = tweet.id || tweet.max_position;
+	                    let id = tweet.id || tweet.max_position;
 
-                    if (this.displayedIds[id] !== true && Filter.filterTweet(tweet, this)) {
-                        let makeTweet = new Tweet(tweet, this).element;
-                        this.displayedIds[id] = true;
-                        console.log(makeTweet)
-                        if (this.shouldReverse || overrideId) {
-                            this.body1.append(makeTweet);
-                        } else {
-                            this.body1.prepend(makeTweet);
-                        }
+	                    if (this.displayedIds[id] !== true && Filter.filterTweet(tweet, this)) {
+	                        let makeTweet = new Tweet(tweet, this).element;
+	                        this.displayedIds[id] = true;
+	                        console.log(makeTweet)
+	                        if (this.shouldReverse || overrideId) {
+	                            this.body1.append(makeTweet);
+	                        } else {
+	                            this.body1.prepend(makeTweet);
+	                        }
 
 
-                    }
-                    if (id > this.latestId) {
-                        this.latestId = id;
-                    }
-                    if (id < this.earliestId) {
-                        this.earliestId = id;
-                    }
-                })
+	                    }
+	                    if (id > this.latestId) {
+	                        this.latestId = id;
+	                    }
+	                    if (id < this.earliestId) {
+	                        this.earliestId = id;
+	                    }
+	                })
+				}
+
+
             }).catch(e => reject(e));
-        })
+        });
+		this.trimTweets();
     }
 }
 

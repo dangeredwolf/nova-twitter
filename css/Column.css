@@ -74,6 +74,7 @@
 	/* padding: 10px; */
 	width: 100%;
 	box-sizing: border-box;
+	border-right: var(--columnBorderColor) 3px solid
 }
 
 .column-wrapper {

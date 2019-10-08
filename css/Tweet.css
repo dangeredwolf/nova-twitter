@@ -1,3 +1,9 @@
+@keyframes tweetIncomingTimeline {
+	0% {opacity:0;margin-top:-43px}
+	20% {opacity:0}
+	100% {opacity:1;margin-top:7px}
+}
+
 .tweet-header {
     display:inline;
     pointer-events:none;
@@ -10,7 +16,7 @@
 
 .interaction-display-name {
     padding-left:7px;
-    font-weight: 500;
+    font-weight:500;
 }
 
 .interaction-attribution {
@@ -30,10 +36,17 @@
     display:inline-block
 }
 
+.tweet-header>a:not(.retweet-link) {
+	pointer-events:none
+}
+.tweet-header>a:not(.retweet-link)>* {
+	pointer-events:all
+}
+
 .retweet-link {
-    display: block!important;
+    display:block!important;
     float:left;
-    margin-right: 5px;
+    margin-right:5px;
 }
 
 .tweet-header>* {
@@ -47,7 +60,7 @@
 
 .tweet-display-name {
     padding-left:10px;
-    text-overflow: clip;
+    text-overflow:clip;
     white-space:nowrap;
     text-overflow:clip;
     font-weight:500;
@@ -62,10 +75,11 @@
 
 article {
     max-width:100%;
-    margin-top: 7px;
-    margin-bottom: 7px;
-    padding: 10px;
-    width: 100%
+    margin-top:7px;
+    margin-bottom:7px;
+    padding:10px;
+    width:100%;
+	animation:tweetIncomingTimeline 0.4s var(--animationTiming);
 }
 
 .tweet-detail-wrapper .tweet-text {
@@ -85,19 +99,19 @@ article {
 
 .tweet-attribution {
     width:auto;
-    display: block;
-    padding-left: 7px;
-    padding-bottom: 10px;
-    /* float: left; */
-    /* margin-left: 10px; */
+    display:block;
+    padding-left:7px;
+    padding-bottom:10px;
+    /* float:left; */
+    /* margin-left:10px; */
 }
 
 .tweet-text {
     padding-left:10px;
     margin-block-start:0;
     margin-block-end:0;
-    font-size: 14px;
-    line-height: 1.35;
+    font-size:14px;
+    line-height:1.35;
 }
 
 .tweet.has-profile-pic>.tweet-body>.tweet-text {
@@ -123,7 +137,7 @@ article {
 }
 
  .tweet-action {
-     margin-left: 12px;
+     margin-left:12px;
      color:#aaa;
  }
 
@@ -134,17 +148,29 @@ article {
 }
 
 .tweet-media-img {
-    max-height:100px;
-    max-width:400px
+
+background-repeat:no-repeat;
+
+background-position:50% 50%;
+
+background-size:cover;
+
+max-height: 100px;
+
+max-width: 170px;
 }
 
-.tweet.has-profile-pic .tweet-media-img {
+.tweet.has-profile-pic>.tweet-media-container>.tweet-media>.tweet-media-img {
     margin-left:60px
 }
 
+.column-settings-media_preview_size-large .tweet.has-profile-pic>.tweet-media-container>.tweet-media>.tweet-media-img {
+	margin-left:0
+}
+
 .column-settings-media_preview_size-large .tweet-media-img  {
-    max-height:250px;
-    max-width:110%
+    max-height: 230px;
+    max-width:110%;
 }
 
 
@@ -175,4 +201,40 @@ article {
 
 .quote-tweet .tweet-text {
     font-size:13px
+}
+
+.tweet-media-container {
+	max-height: 300px;
+	min-height: 100px;
+}
+
+.tweet-media-img {
+	height:100%;
+	width:100%;
+	pointer-events:all
+}
+
+.tweet-media {
+	height:100%;
+	width:100%;
+	position:absolute;
+	max-height:100px;
+	pointer-events: none;
+}
+
+.quote-tweet .tweet-media,
+.quote-tweet .tweet-media-img,
+.quote-tweet .tweet-media-container
+{
+	max-height:100px!important;
+	min-height:100px!important;
+}
+.column-settings-media_preview_size-large .tweet-media,
+.column-settings-media_preview_size-large .tweet-media-img
+{
+	max-height:200px
+}
+
+.column-settings-media_preview_size-large .tweet-media-container {
+	min-height:200px;
 }

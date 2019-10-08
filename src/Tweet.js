@@ -134,6 +134,20 @@ class Tweet {
 
 		text = TweetTextFormatUtils.format(text);
 
+		this.findLinks(text, this.sourceTweet).forEach(link => {
+			if (link.mtd_unused_link) {
+				text = text.replace(new RegExp(link.url,"g"),"")
+			} else {
+				text = text.replace(new RegExp(link.url,"g"),"<a class=\"tweet-link-inline\" href=\"" + link.url + "\">" + link.display_url + "</a>");
+			}
+
+		})
+
+		this.findUsers(text, this.sourceTweet).forEach(user => {
+			console.log(user);
+			text = text.replace(new RegExp("@" + user.screen_name,"g"),"<a class=\"tweet-link-inline tweet-link-user\" href=\"https://twitter.com/" + user.screen_name + "\"> @" + user.screen_name + "</a>");
+		})
+
 		this.tweetText = make("p").addClass("tweet-text").html(text);
 
 		this.tweetBody = div("tweet-body").append(this.tweetText);
@@ -252,11 +266,17 @@ class Tweet {
 				}
 
 				this.sourceTweet.extended_entities.media.forEach(media => {
-					this.tweetMediaContainer.append(
-						make("a").addClass("tweet-media").attr("href",media.expanded_url).attr("target","_blank").click(e => e.stopPropagation()).append(
-							make("img").addClass("tweet-media-img").attr("src",media.media_url_https)
+					if (!media.video_info || !this.data.is_detail_holder) {
+						this.tweetMediaContainer.append(
+							make("a").addClass("tweet-media").attr("href",media.expanded_url).attr("target","_blank").click(e => e.stopPropagation()).append(
+								make("div").addClass("tweet-media-img").attr("style","background-image:url(\""+media.media_url_https+"\")")
+							)
 						)
-					)
+					} else if (!!media.video_info && !!this.data.is_detail_holder) {
+						this.tweetMediaContainer.append(
+							make("iframe").attr("allowfullscreen","true").attr("frameborder","0").attr("src",media.video_info.variants[0].url).addClass("tweet-media-video")
+						)
+					}
 				})
 
 				this.element.append(this.tweetMediaContainer)
@@ -274,6 +294,37 @@ class Tweet {
 		}
 
 		return this;
+	}
+
+	findLinks(text, tweet) {
+		let arr = [];
+		(text.match(/https?:\/\/t\.co\/[a-zA-Z0-9]+/g) || []).forEach(link => {
+			let foundLink = false;
+			for (let i in tweet.entities.urls) {
+				let letsSee = tweet.entities.urls[i];
+				if (letsSee.url === link) {
+					foundLink = true;
+					arr.push(letsSee);
+				}
+			}
+			if (!foundLink) {
+				arr.push({url:link,mtd_unused_link:true})
+			}
+		});
+		return arr;
+	}
+
+	findUsers(text, tweet) {
+		let arr = [];
+		(text.match(/@[a-zA-Z0-9_]{1,15}(?=\b)/g) || []).forEach(username => {
+			for (let i in tweet.entities.user_mentions) {
+				let letsSee = tweet.entities.user_mentions[i];
+				if (("@" + letsSee.screen_name) === username) {
+					arr.push(letsSee);
+				}
+			}
+		});
+		return arr;
 	}
 
 	formatInteractionCount(count) {
