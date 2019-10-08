@@ -163,7 +163,8 @@ article {
 	box-sizing:border-box;
 	padding:5px;
 	margin-top:7px;
-	z-index:2
+	z-index:2;
+	background-color:var(--tweetDetailWrapperBackground)
 }
 
 .quote-tweet {

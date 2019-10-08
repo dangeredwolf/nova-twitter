@@ -96,6 +96,7 @@ class Tweet {
 		}
 
 		if (this.attachedTweet) {
+			console.log(this.sourceTweet);
 			this.tweetDisplayName = div("tweet-display-name").text(this.sourceTweet.user.name);
 
 		 	this.tweetUsername = div("tweet-username txt-mute").text("@" + this.sourceTweet.user.screen_name);

@@ -30,17 +30,59 @@ class TweetDetailHolder {
 			account:this.column.account
 		}).then(data => {
 			let timeline = data.data.timeline.instructions[0].addEntries.entries;
-			let rootTweet = data.data.timeline.instructions[0].addEntries.entries[0].content.item.content.tweet.id;
-			if (rootTweet === newData.id_str) {
+			let rootTweetId = data.data.timeline.instructions[0].addEntries.entries[0].content.item.content.tweet.id;
+			if (rootTweetId === newData.id_str) {
 				console.log("This tweet is the root tweet");
 			} else {
 				let convo = this.findCorrectConversation(timeline, newData.id_str);
+				let convoTweets = this.findTweetsInConvo(convo, data.data);
+				let rootTweet = this.processConvoTweet(data.data.globalObjects.tweets[rootTweetId], data.data);
+
+				convoTweets.unshift(rootTweet);
+
+				if (!!rootTweet) {
+					console.warn("There's no root tweet? o.O")
+				}
+
 				console.log(timeline);
-				console.log(this.findTweetsInConvo(convo, data.data))
+
+				let prependTweets = [];
+				let appendTweets = [];
+				let timeToAppend = false;
+
+				for (let i in convoTweets) {
+					if (timeToAppend) {
+						appendTweets.push(convoTweets[i])
+					} else {
+						if (convoTweets[i].id_str === newData.id_str) {
+							console.log("This is the middle one!");
+							timeToAppend = true;
+						} else {
+							prependTweets.push(convoTweets[i])
+						}
+					}
+				}
+				console.log(prependTweets);
+				console.log(appendTweets);
+				// prependTweets.forEach(tweet => prependedTweets.push(new Tweet(tweet)));
+				// appendTweets.forEach(tweet => appendedTweets.push(new Tweet(tweet)));
+
+				prependTweets.forEach(tweet => this.column.body2.prepend(new Tweet(tweet).element));
+				appendTweets.forEach(tweet => this.column.body2.append(new Tweet(tweet).element));
+
+				console.log("Phew, I worked really hard on that")
+
+
 			}
 
 		})
 
+	}
+
+	processConvoTweet(tweet, data) {
+		tweet.user = data.globalObjects.users[tweet.user_id_str];
+		tweet.is_quote_status = false;
+		return tweet;
 	}
 
 	findTweetsInConvo(convo, data) {
@@ -48,7 +90,7 @@ class TweetDetailHolder {
 		let ray = [];
 		for (let j in convo) {
 			let id = convo[j].conversationTweetComponent.tweet.id;
-			ray.push(data.globalObjects.tweets[id]);
+			ray.push(this.processConvoTweet(data.globalObjects.tweets[id], data));
 		}
 		return ray;
 	}
