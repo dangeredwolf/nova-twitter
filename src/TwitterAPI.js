@@ -1,8 +1,12 @@
 const https = require("https");
 const axios = require("axios");
 const StorageAccount = require("./StorageAccount.js");
+const qs = require('qs');
+
+window.useFiddlerProxy = true;
 
 class TwitterAPI {
+
     static call(url, info) {
         var data="";
         var promiseMe = new Promise((resolve, reject) => {
@@ -12,6 +16,7 @@ class TwitterAPI {
             // var postData;
 
             // console.log(url);
+			console.log(typeof info.postData)
 
 			if (!info.account) {
 				throw "Account property required";
@@ -36,11 +41,25 @@ class TwitterAPI {
                     Referer:"https://tweetdeck.twitter.com/",
                     "User-Agent":"Mozilla/5.0 ModernDeck/10.0 (Chrome, like AppleWebKit) Safari/537.36"
                 },
+
                 method: (info.method || "GET"),
                 path:"/" + url.match(/(?<=:\/\/[\w\.]+\/).+/g)[0],
                 hostname:url.match(/(?<=:\/\/)[\w\.]+(?=\/)/g)[0],
 				data: info.postData
             }
+
+			if (info.addHeaders) {
+				for (let i in info.addHeaders) {
+					reqObj.headers[i] = info.addHeaders[i];
+				}
+			}
+
+			if (window.useFiddlerProxy) {
+				reqObj.proxy = {
+					host:"127.0.0.1",
+					port:8888
+				}
+			}
 
 			if (!!realAccount) {
 				reqObj.headers["x-act-as-user-id"] = realAccount.twitterId;
@@ -49,8 +68,8 @@ class TwitterAPI {
             // console.log(reqObj);
 
             if (info.method === "POST") {
-                // reqObj.headers["Content-Type"] = "application/x-www-form-urlencoded";
-                // reqObj.headers["Content-Length"] = Buffer.byteLength(postData);
+                reqObj.headers["Content-Type"] = "application/x-www-form-urlencoded";
+                reqObj.headers["Content-Length"] =(info.postData.length);
 
             }
 
@@ -61,14 +80,14 @@ class TwitterAPI {
 				if (typeof data === "object") {
 					resolve(data);
 				}
-			}).catch(e => {
-                console.error(`Request error: ${e.message}\nOccurred during a request for ` + url);
-				if (e.response) {
-					console.log(e.response.data);
-					console.log(e.response.status);
-					console.log(e.response.headers);
-				}
-            });
+			})//.catch(e => {
+            //     console.error(`Request error: ${e.message}\nOccurred during a request for ` + url);
+			// 	if (e.response) {
+			// 		console.log(e.response.data);
+			// 		console.log(e.response.status);
+			// 		console.log(e.response.headers);
+			// 	}
+            // });
 
             // console.log(info.postData);
 
