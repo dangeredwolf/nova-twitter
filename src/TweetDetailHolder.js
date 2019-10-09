@@ -31,15 +31,33 @@ class TweetDetailHolder {
 			)
 		);
 
-		TwitterAPI.call("https://api.twitter.com/2/timeline/conversation/" + newData.conversation_id_str +  ".json?include_reply_count=true&cards_platform=Web-13&include_entities=1&include_user_entities=1&include_cards=1&send_error_codes=1&tweet_mode=extended&include_ext_alt_text=true",{
+		console.log(newData);
+
+		TwitterAPI.call("https://api.twitter.com/2/timeline/conversation/" + (newData.conversation_id_str || newData.quotedTweet.conversation_id_str) +  ".json?include_reply_count=true&cards_platform=Web-13&include_entities=1&include_user_entities=1&include_cards=1&send_error_codes=1&tweet_mode=extended&include_ext_alt_text=true",{
 			account:this.column.account
 		}).then(data => {
 			let timeline = data.data.timeline.instructions[0].addEntries.entries;
 			let rootTweetId = data.data.timeline.instructions[0].addEntries.entries[0].content.item.content.tweet.id;
-			// if (rootTweetId === newData.id_str) {
-			// 	console.log("This tweet is the root tweet");
-			// } else
-			{
+
+			var prependTweets = [];
+			var appendTweets = [];
+			var timeToAppend = false;
+
+			if (rootTweetId === newData.id_str) {
+				console.log("This tweet is the root tweet");
+				let entries = data.data.timeline.instructions[0].addEntries.entries;
+				for (var i in entries) {
+					if (!!entries[i].content.item) {
+						let convo = entries[i].content.item.content;
+						console.log(convo);
+						if (!!convo.conversationThread) {
+							let tweets = this.findTweetsInConvo(convo.conversationThread.conversationComponents, data.data)
+							console.log(tweets)
+							tweets.forEach(tweet => appendTweets.push(tweet))
+						}
+					}
+				}
+			} else {
 				let convo = this.findCorrectConversation(timeline, newData.id_str);
 				let convoTweets = this.findTweetsInConvo(convo, data.data);
 				let rootTweet = this.processConvoTweet(data.data.globalObjects.tweets[rootTweetId], data.data);
@@ -51,10 +69,6 @@ class TweetDetailHolder {
 				}
 
 				console.log(timeline);
-
-				let prependTweets = [];
-				let appendTweets = [];
-				let timeToAppend = false;
 
 				for (let i in convoTweets) {
 					if (timeToAppend) {
@@ -68,29 +82,27 @@ class TweetDetailHolder {
 						}
 					}
 				}
-				console.log(prependTweets);
-				console.log(appendTweets);
-				// prependTweets.forEach(tweet => prependedTweets.push(new Tweet(tweet)));
-				// appendTweets.forEach(tweet => appendedTweets.push(new Tweet(tweet)));
-
-				if (prependTweets.length > 0) {
-					let repliesBefore = div("tweet-detail-replies-before");
-					this.column.body2.prepend(repliesBefore);
-
-					prependTweets.forEach(tweet => repliesBefore.append(new Tweet(tweet, this.column).element));
-				}
-
-				if (appendTweets.length > 0) {
-					let repliesAfter = div("tweet-detail-replies-after");
-					this.column.body2.append(repliesAfter);
-
-					appendTweets.forEach(tweet => repliesAfter.append(new Tweet(tweet, this.column).element));
-				}
-
-				console.log("Phew, I worked really hard on that")
 
 
 			}
+			console.log(prependTweets);
+			console.log(appendTweets);
+
+			if (prependTweets.length > 0) {
+				let repliesBefore = div("tweet-detail-replies-before");
+				this.column.body2.prepend(repliesBefore);
+
+				prependTweets.forEach(tweet => repliesBefore.append(new Tweet(tweet, this.column).element));
+			}
+
+			if (appendTweets.length > 0) {
+				let repliesAfter = div("tweet-detail-replies-after");
+				this.column.body2.append(repliesAfter);
+
+				appendTweets.forEach(tweet => repliesAfter.append(new Tweet(tweet, this.column).element));
+			}
+
+			console.log("Phew, I worked really hard on that")
 
 		})
 
@@ -114,13 +126,15 @@ class TweetDetailHolder {
 
 	findCorrectConversation(timeline, id) {
 		for (let i in timeline) {
-			// console.log(timeline[i]);
-			if (!!timeline[i].content.item.content.conversationThread) {
-				let convoComponents = timeline[i].content.item.content.conversationThread.conversationComponents;
-				for (let j in convoComponents) {
-					// console.log(convoComponents[j]);
-					if (convoComponents[j].conversationTweetComponent.tweet.id === id) {
-						return convoComponents;
+			console.log(timeline[i]);
+			if (!!timeline[i].content.item) {
+				if (!!timeline[i].content.item.content.conversationThread) {
+					let convoComponents = timeline[i].content.item.content.conversationThread.conversationComponents;
+					for (let j in convoComponents) {
+						console.log(convoComponents[j]);
+						if (convoComponents[j].conversationTweetComponent.tweet.id === id) {
+							return convoComponents;
+						}
 					}
 				}
 			}

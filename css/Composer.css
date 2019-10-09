@@ -135,3 +135,12 @@
 .compose-char-count-container>svg>circle {
 	stroke-width:4!important
 }
+
+.compose-tabs.tabs {
+	background:transparent;
+	color:var(--composeTabText)!important
+}
+
+.compose-tabs.tabs .tab a {
+	color:var(--composeTabText)!important
+}

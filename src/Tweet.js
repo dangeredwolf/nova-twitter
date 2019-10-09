@@ -59,6 +59,8 @@ class Tweet {
 		this.column = column;
 		this.sourceTweet = data;
 
+		console.log(data)
+
 		if (typeof data.quotedTweet !== "undefined") {
 			this.sourceTweet = data.quotedTweet;
 			this.isQuotedTweet = true;
@@ -119,7 +121,7 @@ class Tweet {
 
 		if (!this.isQuotedTweet) {
 				this.tweetTime = make("a").addClass("tweet-time txt-mute").text(timeAgo(this.sourceTweet.created_at))
-				.attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name + "/status/" + data.id_str).attr("target","_blank")
+				.attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name + "/status/" + this.sourceTweet.id_str).attr("target","_blank")
 				.click(e => e.stopPropagation());
 
 				if (timeAgoRaw(this.sourceTweet.created_at) < 60) { // 60 seconds
