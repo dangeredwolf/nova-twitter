@@ -3,7 +3,7 @@ const axios = require("axios");
 const StorageAccount = require("./StorageAccount.js");
 const qs = require('qs');
 
-window.useFiddlerProxy = true;
+window.useFiddlerProxy = false;
 
 class TwitterAPI {
 
@@ -80,16 +80,16 @@ class TwitterAPI {
 				if (typeof data === "object") {
 					resolve(data);
 				}
-			})//.catch(e => {
-            //     console.error(`Request error: ${e.message}\nOccurred during a request for ` + url);
-			// 	if (e.response) {
-			// 		console.log(e.response.data);
-			// 		console.log(e.response.status);
-			// 		console.log(e.response.headers);
-			// 	}
-            // });
+			}).catch(e => {
+                console.error(`Request error: ${e.message}\nOccurred during a request for ` + url);
+				if (e.response) {
+					console.log(e.response.data);
+					console.log(e.response.status);
+					console.log(e.response.headers);
+				}
+            });
 
-            // console.log(info.postData);
+            console.log(info.postData);
 
         });
 

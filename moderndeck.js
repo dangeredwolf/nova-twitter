@@ -2,6 +2,7 @@ const { Account } = require("./src/Account.js");
 const { Column } = require("./src/Column.js");
 const { ComposeController } = require("./src/ComposeController.js");
 const { DefaultColumns } = require("./src/DefaultColumns.js");
+const { LinkDelegation } = require("./src/LinkDelegation.js");
 const { StorageAccount } = require("./src/StorageAccount.js");
 const { Settings } = require("./src/Settings.js");
 const { TweetDeckClient } = require("./src/TweetDeckClient.js");
@@ -20,4 +21,6 @@ $(document).ready(() => {
                         .then(prefs => TweetDeckClient.loadTweetDeckPreferences(prefs.data))
 
 		window.composeController = new ComposeController();
+
+        LinkDelegation.attach();
 })
