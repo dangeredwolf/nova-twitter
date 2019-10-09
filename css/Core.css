@@ -13,3 +13,7 @@ textarea::placeholder
 	color:var(--placeholderText);
 	font-family:Roboto, "Noto Sans"
 }
+
+.is-hidden {
+	display:none
+}

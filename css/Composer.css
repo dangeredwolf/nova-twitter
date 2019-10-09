@@ -59,14 +59,16 @@
 	-webkit-appearance:none;
 	background-color:transparent;
 	border:none;
-	/* padding: 10px 5px; */
+	padding: 5px 0px;
 	margin-bottom: 10px;
 	width: 36px;
 	height: 36px;
+	margin-left: -3px;
 }
 
 .compose-send-button {
-    float:right
+    float:right;
+    margin-right: 12px;
 }
 
 .compose-button i {
@@ -74,8 +76,7 @@
 }
 
 .compose-button>.compose-gif-icon {
-	font-size:32px;
-	margin-left: -4px;
+	font-size:32px
 }
 
 /*
@@ -90,6 +91,8 @@
 	float: right;
 	width: 30px;
 	height: 30px;
+	margin-top: 2px;
+	margin-right: 2px;
 }
 
 .js-character-count.is-hidden {
@@ -125,11 +128,11 @@
 }
 
 .stroke-twitter-light-gray {
-	stroke:#000
+	stroke:var(--composeCharCountInactive)
 }
 
 .stroke-twitter-blue {
-	stroke:#555
+	stroke:var(--composeCharCountActive)
 }
 
 .compose-char-count-container>svg>circle {
