@@ -1,14 +1,15 @@
-const { Column } = require("./src/Column.js");
-const { TwitterAPI } = require("./src/TwitterAPI.js");
 const { Account } = require("./src/Account.js");
-const { StorageAccount } = require("./src/StorageAccount.js");
+const { Column } = require("./src/Column.js");
+const { ComposeController } = require("./src/ComposeController.js");
 const { DefaultColumns } = require("./src/DefaultColumns.js");
-const { TweetDeckClient } = require("./src/TweetDeckClient.js");
+const { StorageAccount } = require("./src/StorageAccount.js");
 const { Settings } = require("./src/Settings.js");
-const { UpdateTimes } = require("./src/UpdateTimes.js");
+const { TweetDeckClient } = require("./src/TweetDeckClient.js");
 const { TweetSender } = require("./src/TweetSender.js");
 const { Tweet } = require("./src/Tweet.js");
+const { TwitterAPI } = require("./src/TwitterAPI.js");
 const { TwitterPollCard } = require("./src/TwitterPollCard.js");
+const { UpdateTimes } = require("./src/UpdateTimes.js");
 const $ = require("jquery")
 
 $(document).ready(() => {
@@ -18,4 +19,5 @@ $(document).ready(() => {
         TweetDeckClient.getTweetDeckPreferences({account:StorageAccount.getDefaultAccount()})
                         .then(prefs => TweetDeckClient.loadTweetDeckPreferences(prefs.data))
 
+		window.composeController = new ComposeController();
 })
