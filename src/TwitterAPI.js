@@ -1,5 +1,6 @@
 const https = require("https");
 const axios = require("axios");
+const StorageAccount = require("./StorageAccount.js");
 
 class TwitterAPI {
     static call(url, info) {
@@ -7,9 +8,20 @@ class TwitterAPI {
         var promiseMe = new Promise((resolve, reject) => {
 
             let theFunc = axios.request;
+			let realAccount;
             // var postData;
 
             // console.log(url);
+
+			if (!info.account) {
+				throw "Account property required";
+			}
+
+			if (!info.account.bearerToken) {
+				console.log("Using x-act-as-user-id");
+				realAccount = info.account;
+				info.account = StorageAccount.getDefaultAccount();
+			}
 
             let reqObj = {
                 headers:
@@ -19,6 +31,8 @@ class TwitterAPI {
                     Cookie: `auth_token=${info.account.authToken}; ct0=00000000000000000000000000000000; lang=en`,
                     DNT:1,
                     "X-Csrf-Token":"00000000000000000000000000000000",
+					"X-Twitter-Auth_type":"OAuth2Session",
+                    Origin:"https://tweetdeck.twitter.com/",
                     Referer:"https://tweetdeck.twitter.com/",
                     "User-Agent":"Mozilla/5.0 ModernDeck/10.0 (Chrome, like AppleWebKit) Safari/537.36"
                 },
@@ -27,6 +41,10 @@ class TwitterAPI {
                 hostname:url.match(/(?<=:\/\/)[\w\.]+(?=\/)/g)[0],
 				data: info.postData
             }
+
+			if (!!realAccount) {
+				reqObj.headers["x-act-as-user-id"] = realAccount.twitterId;
+			}
 
             // console.log(reqObj);
 
