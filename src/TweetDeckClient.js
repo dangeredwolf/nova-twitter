@@ -1,5 +1,6 @@
 const { TwitterAPI } = require("./TwitterAPI.js");
 const { StorageAccount } = require("./StorageAccount.js");
+const { Account } = require("./Account.js");
 
 const { ColumnActivity } = require("./ColumnActivity.js");
 const { ColumnCollections } = require("./ColumnCollections.js");
@@ -17,6 +18,36 @@ class TweetDeckClient {
 
     static getTweetDeckPreferences(info) {
         return TwitterAPI.call("https://api.twitter.com/1.1/tweetdeck/clients/blackbird/all",{account:info.account})
+    }
+
+    static getContributees(info) {
+        return TwitterAPI.call("https://api.twitter.com/1.1/users/contributees.json",{account:info.account})
+    }
+
+    static verifyCredentials(info) {
+        return TwitterAPI.call("https://api.twitter.com/1.1/account/verify_credentials.json",{account:info.account})
+    }
+
+    static initializeTweetDeckClient(account) {
+
+        TweetDeckClient.getTweetDeckPreferences({
+            account:account
+        })
+        .then(prefs => TweetDeckClient.loadTweetDeckPreferences(prefs.data));
+
+        TweetDeckClient.getContributees({account:account})
+        .then(contributees => {
+            console.log(contributees);
+            contributees.data.forEach(acc => {
+                if (!StorageAccount.getAccount(acc.user.id)) {
+                    StorageAccount.saveAccount(new Account({
+                        admin:acc.admin,
+                        twitterId:acc.user.id,
+                        userName:acc.user.screen_name
+                    }))
+                }
+            })
+        })
     }
 
     static interpretColumn(col, filters, settings) {

@@ -191,7 +191,7 @@ class Tweet {
 					   .attr("data-time", Date.parse(data.created_at)).append(this.tweetHead, this.tweetBody);
 
 
-		if (!this.data.is_detail_holder) {
+		if (!this.data.is_detail_holder && this.attachedTweet) {
 			this.element.addClass("waves-effect waves-dark").click(() => {
 				new TweetDetailHolder(this);
 			});

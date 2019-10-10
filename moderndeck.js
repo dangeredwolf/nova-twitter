@@ -30,8 +30,10 @@ $(document).ready(() => {
 		})
 
         setInterval(UpdateTimes.do, 12000);
-        TweetDeckClient.getTweetDeckPreferences({account:StorageAccount.getDefaultAccount()})
-                        .then(prefs => TweetDeckClient.loadTweetDeckPreferences(prefs.data))
+
+        let account = StorageAccount.getDefaultAccount();
+
+        TweetDeckClient.initializeTweetDeckClient(account);
 
 		window.composeController = new ComposeController();
 

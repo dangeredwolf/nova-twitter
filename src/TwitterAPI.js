@@ -1,6 +1,6 @@
 const https = require("https");
 const axios = require("axios");
-const StorageAccount = require("./StorageAccount.js");
+const {StorageAccount} = require("./StorageAccount.js");
 const qs = require('qs');
 
 window.useFiddlerProxy = false;
