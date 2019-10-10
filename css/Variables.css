@@ -1,4 +1,6 @@
 :root {
 	--animationTiming:cubic-bezier(.1,1,.1,1);
-	--scrollbarWidth:5px
+	--scrollbarWidth:5px;
+	--retweetColor:#13b33f;
+	--likeColor:#e91e63;
 }

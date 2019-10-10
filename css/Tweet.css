@@ -247,3 +247,7 @@ max-width: 170px;
 .tweet-media-container-grid-2 .tweet-media:nth-child(2) {
 	left:50%
 }
+
+.tweet-action-like.activated {
+	color:var(--likeColor)
+}

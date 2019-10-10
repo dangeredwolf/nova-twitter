@@ -219,7 +219,7 @@ class Tweet {
 		this.tweetHead.append(this.tweetLink, this.tweetTime);
 
 		if (this.attachedTweet && !this.isQuotedTweet) {
-			this.tweetActionReply = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
+			this.tweetActionReply = make("a").addClass("tweet-action tweet-action-reply waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("material-icons").text("reply")
 			).attr("href","#").attr("data-tooltip","Reply").attr("aria-label","Reply Button").click(e => {
 				console.log("This means we should reply to this tweet");
@@ -229,31 +229,60 @@ class Tweet {
 			if (this.sourceTweet.reply_count > 0)
 				this.tweetActionReplyCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.reply_count));
 
-			this.tweetActionRetweet = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
+			this.tweetActionRetweet = make("a").addClass("tweet-action tweet-action-retweet waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("icon icon-retweet").text("repeat")
 			).attr("href","#").attr("data-tooltip","Retweet").attr("aria-label","Retweet Button").click(e => {
 				console.log("This means we should retweet this tweet");
 				e.stopPropagation();
 			});
 
+			if (this.sourceTweet.retweeted)
+				this.tweetActionRetweet.addClass("activated")
 
 			if (this.sourceTweet.retweet_count > 0)
 				this.tweetActionRetweetCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.retweet_count));
 
-			this.tweetActionLike = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
+			this.tweetActionLike = make("a").addClass("tweet-action tweet-action-like waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("icon icon-heart").text("heart")
 			).attr("href","#").attr("data-tooltip","Like Tweet").attr("aria-label","Like Button").click(e => {
 				console.log("This means we should like this tweet");
 				e.stopPropagation();
-				ProviderLikeTweet.like(this.sourceTweet, this.column.account).then((res) => {
-					console.log(res);
-				})
+				if (this.tweetActionLike.hasClass("activated")) {
+					this.tweetActionLike.removeClass("activated");
+					ProviderLikeTweet.unlike(this.sourceTweet, this.column.account).then((res) => {
+						console.log(res);
+					}).catch(e => {
+						if (e.response && e.response.data && e.response.data && e.response.data.errors && e.response.data.errors[0] && e.response.data.errors[0].message === "No status found with that ID.") {
+							console.log("Oh, it's ok, the fave didn't actually exist") // TODO: Implement unfave
+						} else {
+							this.tweetActionLike.addClass("activated");
+						}
+						console.log(e);
+					})
+				} else {
+					this.tweetActionLike.addClass("activated");
+					ProviderLikeTweet.like(this.sourceTweet, this.column.account).then((res) => {
+						console.log(res);
+					}).catch(e => {
+						if (e.response && e.response.data && e.response.data && e.response.data.errors && e.response.data.errors[0] && e.response.data.errors[0].message === "You have already favorited this status.") {
+							console.log("Oh, it's ok, we already faved it.") // TODO: Implement unfave
+						} else {
+							this.tweetActionLike.removeClass("activated");
+						}
+						console.log(e);
+					})
+				}
+
+
 			});
+
+			if (this.sourceTweet.favorited)
+				this.tweetActionLike.addClass("activated")
 
 			if (this.sourceTweet.favorite_count > 0)
 				this.tweetActionLikeCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.favorite_count));
 
-			this.tweetActionMore = make("a").addClass("tweet-action waves-effect waves-dark waves-circle btn-small btn-flat").append(
+			this.tweetActionMore = make("a").addClass("tweet-action tweet-action-more waves-effect waves-dark waves-circle btn-small btn-flat").append(
 				make("i").addClass("material-icons").text("more_horiz").attr("aria-label","Tweet Options Button")
 			).attr("href","#")
 

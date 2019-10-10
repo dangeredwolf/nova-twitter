@@ -87,6 +87,7 @@ class TwitterAPI {
 					console.log(e.response.status);
 					console.log(e.response.headers);
 				}
+				reject(e);
             });
 
             console.log(info.postData);
