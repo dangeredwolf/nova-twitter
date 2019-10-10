@@ -11,10 +11,23 @@ const { Tweet } = require("./src/Tweet.js");
 const { TwitterAPI } = require("./src/TwitterAPI.js");
 const { TwitterPollCard } = require("./src/TwitterPollCard.js");
 const { UpdateTimes } = require("./src/UpdateTimes.js");
-const $ = require("jquery")
+const $ = require("jquery");
+
+const { ModalRetweet } = require("./src/ModalRetweet.js");
 
 $(document).ready(() => {
     // DefaultColumns.makeDefaultColumns();
+
+		window.Modals = [];
+
+		$(".mdl-container").click(() => {
+			window.Modals.forEach((a, i) => {
+				if (typeof a !== "undefined") {
+					a.dismiss();
+					window.Modals[i] = undefined;
+				}
+			})
+		})
 
         setInterval(UpdateTimes.do, 12000);
         TweetDeckClient.getTweetDeckPreferences({account:StorageAccount.getDefaultAccount()})

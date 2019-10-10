@@ -1,0 +1,82 @@
+@keyframes modalEnter {
+	0% {opacity:0.5;transform:scale(1.125,1.125)}
+	100% {opacity:1;transform:scale(1,1)}
+}
+
+@keyframes modalRetweetEnter {
+	0% {opacity:0.5;top:100%}
+	100% {opacity:1;top:50%}
+}
+
+.mdl-container {
+	pointer-events:none;
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	z-index:6;
+	transition:background-color 0.4s var(--animationTiming);
+	background-color:transparent;
+	overflow:hidden
+}
+
+.mdl-container:not(:empty) {
+	background-color:var(--modalContainerBackground);
+	pointer-events:all
+}
+
+.mdl {
+	--mdlWidth:500px;
+	--mdlHeight:300px;
+	background-color:var(--modalBackground);
+	position:absolute;
+	min-width:var(--mdlWidth);
+	min-height:var(--mdlHeight);
+	left:50%;
+	margin-left:calc(var(--mdlWidth) / -2);
+	top:50%;
+	margin-top:calc(var(--mdlHeight) / -2);
+	animation:modalEnter 0.3s var(--animationTiming);
+	border-radius:3px;
+	box-shadow:0 10px 15px var(--modalShadow);
+}
+
+.mdl-title {
+	font-size:20px;
+	padding:15px;
+	line-height:3
+}
+
+.mdl-retweet .mdl-body {
+	max-height:250px;
+	overflow:hidden
+}
+
+.mdl-retweet {
+	bottom:0;
+	width:var(--mdlWidth);
+	border-radius:3px 3px 0 0;
+	animation:modalRetweetEnter 0.5s var(--animationTiming);
+	--mdlHeight:0;
+}
+
+.mdl-retweet-btn {
+	float:right;
+}
+
+.mdl-retweet-btn i {
+	margin-top:-16px;
+	margin-right:10px;
+	font-size:24px
+}
+
+.mdl-retweet-btn {
+	margin-right:10px
+}
+
+.mdl-footer {
+	/* position:absolute;
+	bottom:15px;
+	right:0; */
+}

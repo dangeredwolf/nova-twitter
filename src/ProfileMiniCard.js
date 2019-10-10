@@ -10,8 +10,9 @@ class ProfileMiniCard {
 		this.username = div("tweet-username txt-mute").text("@" + profileData.screen_name);
 		this.usernameGroup = div("tweet-username-group").append(this.displayName, this.username);
 		this.bio = div("minicard-bio").text(profileData.description);
-		this.element = div("minicard").append(this.profilePic, this.usernameGroup, this.bio)
-		.css(position).on("mouseout", (e) => {
+		this.element = div("minicard").append(this.profilePic, this.usernameGroup, this.bio).css(position)
+
+		.on("mouseout", (e) => {
 			console.log(e);
 
 			if (!this.element[0].contains(e.relatedTarget)) {
@@ -23,8 +24,8 @@ class ProfileMiniCard {
 				this.bio = undefined;
 				this.element = undefined;
 			}
-
 		})
+		
 		$("body").append(this.element);
 	}
 }

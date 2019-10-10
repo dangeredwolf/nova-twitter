@@ -1,0 +1,11 @@
+.btn {
+	font-weight:500
+}
+
+.btn-retweet,.btn-retweet:hover,.btn-retweet:active {
+	background-color:var(--retweetColor)
+}
+
+.btn-small:hover {
+	background-color:inherit
+}

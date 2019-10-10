@@ -17,7 +17,3 @@ textarea::placeholder
 .is-hidden {
 	display:none
 }
-
-.btn:hover, .btn-large:hover, .btn-small:hover {
-	background-color:inherit
-}

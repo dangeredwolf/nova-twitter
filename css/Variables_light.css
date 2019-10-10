@@ -12,14 +12,17 @@
     --tweetDetailWrapperBackground:#fff;
     --quoteTweetBackground:#fff;
     --minicardBackground:#fff;
+    --modalBackground:#fff;
 	--tweetDetaiLWrapperShadow:rgba(0,0,0,.4);
+	--modalContainerBackground:rgba(100,100,100,.4);
+	--modalShadow:rgba(0,0,0,.4);
 	--minicardShadow:rgba(0,0,0,.4);
     --placeholderText:#aaa;
 	--columnBackground:#f9f9f9;
-	--columnBorderColor:#e9e9e9;
+	--columnBorder:#e9e9e9;
 	--composeTabText:#e9e9e9;
-	--scrollbar:#d9d9d9;
 	--composeCharCountInactive:#cacaca;
 	--composeCharCountActive:#00BCD4;
+	--scrollbar:#d9d9d9;
 	--scrollbarHover:#c9c9c9;
 }

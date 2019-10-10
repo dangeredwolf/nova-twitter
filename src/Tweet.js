@@ -114,19 +114,22 @@ class Tweet {
 		}
 
 		if ((this.useProfilePic && !this.isQuotedTweet)) {
-			this.tweetProfilePic = make("img").attr("src", this.sourceTweet.user.profile_image_url_https)
-			.addClass("tweet-profile-pic").on("mouseover",() => {
+			this.tweetProfilePic = make("img")
+			.attr("src", this.sourceTweet.user.profile_image_url_https).addClass("tweet-profile-pic")
+			.on("mouseover",() => {
 				if (this.avatarHoverTimeout) {
 					clearTimeout(this.avatarHoverTimeout);
 					this.avatarHoverTimeout = undefined;
-				} else {
-					this.avatarHoverTimeout = setTimeout(() => {
-						console.log("Open profile mini card");
-						new ProfileMiniCard(this.sourceTweet.user, this.tweetProfilePic.offset());
-					}, 700);
 				}
-			}).addClass("tweet-profile-pic").on("mouseout",() => {
-				if (this.avatarHoverTimeout) {clearTimeout(this.avatarHoverTimeout); this.avatarHoverTimeout = undefined}
+				this.avatarHoverTimeout = setTimeout(() => {
+					console.log("Open profile mini card");
+					new ProfileMiniCard(this.sourceTweet.user, this.tweetProfilePic.offset());
+				}, 700);
+			}).on("mouseout",() => {
+				if (this.avatarHoverTimeout) {
+					clearTimeout(this.avatarHoverTimeout);
+					this.avatarHoverTimeout = undefined;
+				}
 			})
 		}
 
@@ -192,6 +195,8 @@ class Tweet {
 			this.element.addClass("waves-effect waves-dark").click(() => {
 				new TweetDetailHolder(this);
 			});
+		} else {
+			this.data.disableActionButtons = false;
 		}
 
 		if (this.useProfilePic && !this.isQuotedTweet) {
@@ -218,7 +223,7 @@ class Tweet {
 
 		this.tweetHead.append(this.tweetLink, this.tweetTime);
 
-		if (this.attachedTweet && !this.isQuotedTweet) {
+		if (this.attachedTweet && !this.isQuotedTweet && !(this.data.disableActionButtons)) {
 			this.tweetActionReply = make("a").addClass("tweet-action tweet-action-reply waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("material-icons").text("reply")
 			).attr("href","#").attr("data-tooltip","Reply").attr("aria-label","Reply Button").click(e => {
@@ -234,6 +239,7 @@ class Tweet {
 			).attr("href","#").attr("data-tooltip","Retweet").attr("aria-label","Retweet Button").click(e => {
 				console.log("This means we should retweet this tweet");
 				e.stopPropagation();
+				new ModalRetweet({tweet:this}).display();
 			});
 
 			if (this.sourceTweet.retweeted)
@@ -253,7 +259,7 @@ class Tweet {
 						console.log(res);
 					}).catch(e => {
 						if (e.response && e.response.data && e.response.data && e.response.data.errors && e.response.data.errors[0] && e.response.data.errors[0].message === "No status found with that ID.") {
-							console.log("Oh, it's ok, the fave didn't actually exist") // TODO: Implement unfave
+							console.log("Oh, it's ok, the fave didn't actually exist")
 						} else {
 							this.tweetActionLike.addClass("activated");
 						}
@@ -265,7 +271,7 @@ class Tweet {
 						console.log(res);
 					}).catch(e => {
 						if (e.response && e.response.data && e.response.data && e.response.data.errors && e.response.data.errors[0] && e.response.data.errors[0].message === "You have already favorited this status.") {
-							console.log("Oh, it's ok, we already faved it.") // TODO: Implement unfave
+							console.log("Oh, it's ok, we already faved it.")
 						} else {
 							this.tweetActionLike.removeClass("activated");
 						}

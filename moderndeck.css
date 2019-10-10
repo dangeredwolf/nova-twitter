@@ -1,9 +1,11 @@
+@import "./css/Button.css";
 @import "./css/Column.css";
 @import "./css/Composer.css";
 @import "./css/Core.css";
 @import "./css/Fonts.css";
 @import "./css/Icon.css";
 @import "./css/Minicard.css";
+@import "./css/Modal.css";
 @import "./css/ProfilePicture.css";
 @import "./css/Scroller.css";
 @import "./css/Toast.css";

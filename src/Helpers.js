@@ -27,6 +27,12 @@ exports.timeAgo = function(compareDate) {
 	return exports.formatTimeAgo(exports.timeAgoRaw(compareDate));
 }
 
+exports.assert = function(compare, message) {
+	if (!compare) {
+		throw (message || "Assertion failed")
+	}
+}
+
 exports.timeAgoRaw = function(compareDate) {
 	let currentTime = new Date().getTime();
 	let oldTime = Date.parse(compareDate);
