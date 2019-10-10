@@ -2,6 +2,7 @@ const {make, div, timeAgo, timeAgoRaw} = require("./Helpers.js");
 const {TweetTextFormatUtils} = require("./TweetTextFormatUtils.js");
 const {TweetDetailHolder} = require("./TweetDetailHolder.js");
 const {ProviderLikeTweet} = require("./ProviderLikeTweet.js");
+const {ProfileMiniCard} = require("./ProfileMiniCard.js");
 const Waves = require("node-waves");
 
 class Tweet {
@@ -51,6 +52,8 @@ class Tweet {
 
 	isInteraction = false;
 	useProfilePic = true;
+
+	avatarHoverTimeout;
 
 	column;
 
@@ -111,7 +114,20 @@ class Tweet {
 		}
 
 		if ((this.useProfilePic && !this.isQuotedTweet)) {
-			this.tweetProfilePic = make("img").attr("src", this.sourceTweet.user.profile_image_url_https).addClass("tweet-profile-pic");
+			this.tweetProfilePic = make("img").attr("src", this.sourceTweet.user.profile_image_url_https)
+			.addClass("tweet-profile-pic").on("mouseover",() => {
+				if (this.avatarHoverTimeout) {
+					clearTimeout(this.avatarHoverTimeout);
+					this.avatarHoverTimeout = undefined;
+				} else {
+					this.avatarHoverTimeout = setTimeout(() => {
+						console.log("Open profile mini card");
+						new ProfileMiniCard(this.sourceTweet.user, this.tweetProfilePic.offset());
+					}, 700);
+				}
+			}).addClass("tweet-profile-pic").on("mouseout",() => {
+				if (this.avatarHoverTimeout) {clearTimeout(this.avatarHoverTimeout); this.avatarHoverTimeout = undefined}
+			})
 		}
 
 		this.tweetLink = make("a").attr("target","_blank").attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name)

@@ -1,0 +1,29 @@
+@keyframes minicard {
+	0% {
+		opacity:0;
+		margin-top:5px
+	}
+	100% {
+		opacity:1;
+		margin-top:-9px
+	}
+}
+
+.minicard {
+	position:absolute;
+	z-index:5;
+	width:300px;
+	background:var(--minicardBackground);
+	box-shadow:0 10px 15px var(--minicardShadow);
+	padding:9px;
+	pointer-events: all;
+	margin-top:-9px;
+	margin-left:-9px;
+	animation:minicard 0.4s var(--animationTiming)
+}
+
+.minicard .tweet-username {
+	display:block;
+	margin-bottom:10px;
+	padding-left:58px
+}
