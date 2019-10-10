@@ -38,7 +38,9 @@ class AccountSelector {
 
     drawSelector() {
         assert(window.mainAccount, "why did you call me? there's no main account");
+        assert(window.contributees, "why did you call me? there's no contributees");
 
+        makeOption({user:window.mainAccount})
         window.contributees.forEach(acc => {
             this.select.append(
                 makeOption(acc)
