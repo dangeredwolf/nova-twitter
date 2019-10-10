@@ -5,6 +5,7 @@ class Account {
     bearerToken;
     authToken;
     userName;
+	contribId;
 	// twitterSess;
 
     constructor(data) {
@@ -12,6 +13,7 @@ class Account {
         this.bearerToken = data.bearerToken;
         this.authToken = data.authToken;
         this.userName = data.userName;
+        this.contribId = data.contribId;
 		// this.twitterSess = data.twitterSess;
     }
 

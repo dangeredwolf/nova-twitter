@@ -7,6 +7,8 @@ window.useFiddlerProxy = false;
 
 class TwitterAPI {
 
+	catchErrors = true;
+
     static call(url, info) {
         var data="";
         var promiseMe = new Promise((resolve, reject) => {
@@ -26,6 +28,7 @@ class TwitterAPI {
 				console.log("Using x-act-as-user-id");
 				realAccount = info.account;
 				info.account = StorageAccount.getDefaultAccount();
+				console.log(realAccount);
 			}
 
             let reqObj = {
@@ -62,7 +65,9 @@ class TwitterAPI {
 			}
 
 			if (!!realAccount) {
-				reqObj.headers["x-act-as-user-id"] = realAccount.twitterId;
+				console.log(realAccount)
+					reqObj.headers["x-act-as-user-id"] = StorageAccount.getAccount(realAccount).contribId;
+
 			}
 
             // console.log(reqObj);
@@ -81,14 +86,17 @@ class TwitterAPI {
 					resolve(data);
 				}
 			}).catch(e => {
-                console.error(`Request error: ${e.message}\nOccurred during a request for ` + url);
-				if (e.response) {
-					console.log(e.response.data);
-					console.log(e.response.status);
-					console.log(e.response.headers);
-				}
-				reject(e);
-            });
+	                console.error(`Request error: ${e.message}\nOccurred during a request for ` + url);
+						console.log(e.request);
+					if (e.response) {
+						console.log(e.response.data);
+						console.log(e.response.status);
+						console.log(e.response.headers);
+					} else {
+					}
+					reject(e);
+	            });
+
 
             console.log(info.postData);
 

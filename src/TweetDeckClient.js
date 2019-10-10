@@ -39,11 +39,13 @@ class TweetDeckClient {
         .then(contributees => {
             console.log(contributees);
             contributees.data.forEach(acc => {
+				console.log(acc.user.id_str,acc.user.id,acc.user.id_str===acc.user.id)
                 if (!StorageAccount.getAccount(acc.user.id)) {
                     StorageAccount.saveAccount(new Account({
                         admin:acc.admin,
                         twitterId:acc.user.id,
-                        userName:acc.user.screen_name
+                        userName:acc.user.screen_name,
+                        contribId:acc.user.id_str
                     }))
                 }
             })

@@ -2,6 +2,7 @@ const $ = require("jquery");
 const {TweetSender} = require("./TweetSender.js");
 const {MediaUpload} = require("./MediaUpload.js");
 const {StorageAccount} = require("./StorageAccount.js");
+const {AccountSelector} = require("./AccountSelector.js");
 const fs = require("fs");
 const fsPromises = fs.promises;
 
@@ -10,13 +11,14 @@ class ComposeController {
 
 	selectedAccount = StorageAccount.getDefaultAccount();
 
-	buttonAddImage = $(".compose-add-image-button");;
+	accountSelector;
+	buttonAddImage = $(".compose-add-image-button");
 	buttonAddGif = $(".compose-add-gif-button");
 	// buttonAddPoll = $(".compose-add-poll-button");
 	buttonSchedule = $(".compose-schedule-button");
 	buttonSend = $(".compose-send-button");
 	composeText = $(".compose-text");
-	characterCount = $(".composer-char-display");
+	characterCount = $(".compose-char-display");
 	characterStroke = $(".character-char-stroke");
 	element = $(".compose");
 
@@ -24,6 +26,9 @@ class ComposeController {
 		this.composeText.on("input keyup paste", ()=>this.updateCharCount(this));
 		this.buttonSend.click(this.sendTweet);
 		this.buttonAddImage.click(this.addImagePanel);
+
+		this.accountSelector = new AccountSelector(true);
+		console.log(this.accountSelector);
 	}
 
 	updateCharCount() {
@@ -46,7 +51,7 @@ class ComposeController {
 						handle.readFile({encoding:"utf8"}).then(fileCont => {
 							console.log(fileCont);
 							console.log("Above are the file contents");
-							MediaUpload.initUpload({account:composeController.selectedAccount,blob:fileCont,mediaType:"image/jpeg"}).then(ree => {
+							MediaUpload.initUpload({account:(composeController.accountSelector.selectedAccount),blob:fileCont,mediaType:"image/jpeg"}).then(ree => {
 								console.log("Success bitches");
 								console.log(ree)
 							})
@@ -78,11 +83,11 @@ class ComposeController {
 	sendTweet() {
 		M.toast({html: "Sending tweet..."});
 
-		TweetSender.send({account:composeController.selectedAccount,text:composeController.composeText.val()}).then(() => {
+		TweetSender.send({account:(composeController.accountSelector.selectedAccount),text:composeController.composeText.val()}).then(() => {
 			M.toast({html: "Tweet sent!"});
-		}).catch(e => {
-			M.toast({html: "Error sending tweet: " + e.message});
-		})
+		})//.catch(e => {
+			//M.toast({html: "Error sending tweet: " + e.message});
+		//})
 
 	}
 }
