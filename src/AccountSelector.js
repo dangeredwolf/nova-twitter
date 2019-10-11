@@ -75,7 +75,7 @@ class AccountSelector {
 
 
     makeOption(acc) {
-        let thing = make("a").attr("href","#").addClass("dropdown-item dropdown-user").attr("value", acc.user.id).append(
+        let thing = make("a").attr("href","#").addClass("dropdown-item dropdown-user waves-dark waves-effect").attr("value", acc.user.id).append(
             make("img").addClass("tweet-profile-pic").attr("src",acc.user.profile_image_url_https),
             "@" + acc.user.screen_name
         )
@@ -88,6 +88,7 @@ class AccountSelector {
 			if (this.element.hasClass("open")) {
 				this.select.attr("style","")
 			} else {
+				this.element.scrollTop(0);
 				this.select.attr("style","margin-top: -" + (thing.index()*50) + "px")
 			}
 

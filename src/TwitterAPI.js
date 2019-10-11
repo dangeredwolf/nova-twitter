@@ -65,12 +65,8 @@ class TwitterAPI {
 			}
 
 			if (!!realAccount) {
-				console.log(realAccount)
-					reqObj.headers["x-act-as-user-id"] = StorageAccount.getAccount(realAccount).contribId;
-
+				reqObj.headers["x-act-as-user-id"] = StorageAccount.getAccount(realAccount).contribId;
 			}
-
-            // console.log(reqObj);
 
             if (info.method === "POST") {
                 reqObj.headers["Content-Type"] = "application/x-www-form-urlencoded";

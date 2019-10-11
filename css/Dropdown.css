@@ -31,13 +31,16 @@
 .account-selector {
     position: absolute;
     margin-left:18px;
+    max-height:330px;
     border-radius: 29px;
     box-shadow:0 3px 7px var(--composeSheetShadow);
     display: block;
-    transition:height 0.4s var(--animationTiming), box-shadow 0.4s var(--animationTiming);
+    transition:height 0.4s cubic-bezier(.1,1,.1,1), box-shadow 0.4s var(--animationTiming);
 }
 
 .account-selector.open {
+    overflow-y:auto;
+    transition:height 0.4s cubic-bezier(.15,1,.1,1), box-shadow 0.4s var(--animationTiming);
     box-shadow:0 7px 12px var(--composeSheetOpenShadow);
 }
 
@@ -50,4 +53,20 @@
     position:absolute;
     left:0;
     margin-top:-13px
+}
+
+.mdl-retweet .account-selector {
+    top:10px;
+    right:20px;
+    max-height:230px;
+    transition:height 0.4s cubic-bezier(.1,1,.1,1), box-shadow 0.4s var(--animationTiming);
+    z-index:5
+}
+
+.account-selector::-webkit-scrollbar {
+    width:3px
+}
+
+.mdl-retweet .account-selector.open {
+    transition:height 0.4s cubic-bezier(.2,.6,.1,1), box-shadow 0.4s var(--animationTiming);
 }

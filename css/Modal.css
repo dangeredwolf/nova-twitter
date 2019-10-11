@@ -58,7 +58,7 @@
 	width:var(--mdlWidth);
 	border-radius:3px 3px 0 0;
 	animation:modalRetweetEnter 0.5s var(--animationTiming);
-	--mdlHeight:0;
+	--mdlHeight: 1px;
 }
 
 .mdl-retweet-btn {

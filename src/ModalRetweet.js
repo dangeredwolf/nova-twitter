@@ -2,11 +2,15 @@ const $ = require("jquery");
 const { make, div, assert } = require("./Helpers.js");
 const { Modal } = require("./Modal.js");
 const { Tweet } = require("./Tweet.js");
+const { AccountSelector } = require("./AccountSelector.js");
+const { ProviderRetweet } = require("./ProviderRetweet.js");
+const { TwitterAPI } = require("./TwitterAPI.js");
 
 class ModalRetweet extends Modal {
 
 	buttonRetweet;
 	buttonQuote;
+	accountSelector;
 
 	constructor(parameters) {
 		super(parameters);
@@ -15,6 +19,7 @@ class ModalRetweet extends Modal {
 
 		this.element.addClass("mdl-retweet");
 		this.title.html("Retweet from...");
+		this.accountSelector = new AccountSelector();
 
 		let newData = parameters.tweet.data;
 		newData.disableActionButtons = true;
@@ -23,7 +28,11 @@ class ModalRetweet extends Modal {
 		this.buttonRetweet = make("a").addClass("btn-retweet mdl-retweet-btn waves-effect waves-light btn").append(
 			make("i").addClass("icon icon-retweet"),
 			"Retweet"
-		);
+		).click(() => {
+			let acc = this.accountSelector.selectedAccount;
+			ProviderRetweet.retweet(parameters.tweet.sourceTweet, acc);
+			this.dismiss();
+		})
 
 		this.buttonQuote = make("a").addClass("btn-quote-tweet mdl-retweet-btn waves-effect waves-dark btn-flat").append(
 			make("i").addClass("icon icon-quote-tweet"),
@@ -31,7 +40,7 @@ class ModalRetweet extends Modal {
 		);
 
 		this.body.append(
-			div("mdl-retweet-account-selector"),
+			this.accountSelector.element,
 			new Tweet(newData).element
 		);
 
