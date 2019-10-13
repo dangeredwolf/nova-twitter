@@ -3,6 +3,8 @@ const {TweetTextFormatUtils} = require("./TweetTextFormatUtils.js");
 const {TweetDetailHolder} = require("./TweetDetailHolder.js");
 const {ProviderLikeTweet} = require("./ProviderLikeTweet.js");
 const {ProfileMiniCard} = require("./ProfileMiniCard.js");
+const {Dropdown} = require("./Dropdown.js");
+const {TweetDropdown} = require("./TweetDropdown.js");
 const Waves = require("node-waves");
 
 class Tweet {
@@ -258,7 +260,10 @@ class Tweet {
 					ProviderLikeTweet.unlike(this.sourceTweet, this.column.account).then((res) => {
 						console.log(res);
 					}).catch(e => {
-						if (e.response && e.response.data && e.response.data && e.response.data.errors && e.response.data.errors[0] && e.response.data.errors[0].message === "No status found with that ID.") {
+						if (e.response && e.response.data && e.response.data.errors
+							&& e.response.data.errors[0] && e.response.data.errors[0].message ===
+							"No status found with that ID.") {
+
 							console.log("Oh, it's ok, the fave didn't actually exist")
 						} else {
 							this.tweetActionLike.addClass("activated");
@@ -270,7 +275,10 @@ class Tweet {
 					ProviderLikeTweet.like(this.sourceTweet, this.column.account).then((res) => {
 						console.log(res);
 					}).catch(e => {
-						if (e.response && e.response.data && e.response.data && e.response.data.errors && e.response.data.errors[0] && e.response.data.errors[0].message === "You have already favorited this status.") {
+						if (e.response && e.response.data && e.response.data.errors &&
+							e.response.data.errors[0] && e.response.data.errors[0].message ===
+							"You have already favorited this status.") {
+
 							console.log("Oh, it's ok, we already faved it.")
 						} else {
 							this.tweetActionLike.removeClass("activated");
@@ -278,8 +286,6 @@ class Tweet {
 						console.log(e);
 					})
 				}
-
-
 			});
 
 			if (this.sourceTweet.favorited)
@@ -290,7 +296,12 @@ class Tweet {
 
 			this.tweetActionMore = make("a").addClass("tweet-action tweet-action-more waves-effect waves-dark waves-circle btn-small btn-flat").append(
 				make("i").addClass("material-icons").text("more_horiz").attr("aria-label","Tweet Options Button")
-			).attr("href","#")
+			).attr("href","#").click(e => {
+				console.log("This means we should open the dropdown");
+				e.stopPropagation();
+
+				$(document.body).append(new Dropdown(TweetDropdown, this.sourceTweet, this.tweetActionMore.offset()).element);
+			});
 
 			Waves.attach(
 				this.tweetActionReply[0],
@@ -399,6 +410,19 @@ class Tweet {
 			for (let i in tweet.entities.user_mentions) {
 				let letsSee = tweet.entities.user_mentions[i];
 				if (("@" + letsSee.screen_name) === username) {
+					arr.push(letsSee);
+				}
+			}
+		});
+		return arr;
+	}
+
+	findTags(text, tweet) {
+		let arr = [];
+		(text.match(/#[a-zA-Z0-9_]+(?=\b)/g) || []).forEach(username => {
+			for (let i in tweet.entities.user_mentions) {
+				let letsSee = tweet.entities.user_mentions[i];
+				if (("#" + letsSee.screen_name) === username) {
 					arr.push(letsSee);
 				}
 			}

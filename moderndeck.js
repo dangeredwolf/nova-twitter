@@ -19,6 +19,7 @@ $(document).ready(() => {
     // DefaultColumns.makeDefaultColumns();
 
 		window.Modals = [];
+		window.Dropdowns = [];
 
 		$(".mdl-container").click(() => {
 			window.Modals.forEach((a, i) => {
@@ -27,6 +28,12 @@ $(document).ready(() => {
 					window.Modals[i] = undefined;
 				}
 			})
+		})
+
+		$(document).click(() => {
+			while (window.Dropdowns.length > 0) {
+				window.Dropdowns.pop().dismiss();
+			}
 		})
 
         setInterval(UpdateTimes.do, 12000);

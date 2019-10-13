@@ -10,17 +10,18 @@
 .dropdown-menu {
     background:#fff;
     box-shadow:0 3px 7px var(--dropdownShadow);
-    width:280px;
+    /* width:280px; */
     border-radius:5px;
     overflow-y:hidden;
-    transition:height 0.4s var(--animationTiming)
+    transition:height 0.4s var(--animationTiming);
+    z-index: 5;
 }
 
 .dropdown-children {
     transition:margin-top 0.4s var(--animationTiming)
 }
 
-.dropdown-menu:not(.open) {
+.account-selector:not(.open) {
     height:50px!important
 }
 
@@ -28,11 +29,23 @@
     height:auto;
 }
 
+.dropdown-menu:not(.account-selector) a {
+    width:100%;
+    padding:10px;
+    height:40px
+}
+
+.dropdown-menu:not(.account-selector) {
+	position:absolute;
+	display:block
+}
+
 .account-selector {
     position: absolute;
     margin-left:18px;
     max-height:330px;
     border-radius: 29px;
+    width:280px;
     box-shadow:0 3px 7px var(--composeSheetShadow);
     display: block;
     transition:height 0.4s cubic-bezier(.1,1,.1,1), box-shadow 0.4s var(--animationTiming);

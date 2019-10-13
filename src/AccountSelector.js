@@ -52,6 +52,8 @@ class AccountSelector {
             });
         }
 
+		window.Dropdowns.push(this);
+
         return this;
     }
 

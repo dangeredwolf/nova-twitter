@@ -9,3 +9,8 @@
 .btn-small:hover {
 	background-color:inherit
 }
+
+button:focus {
+  outline: none;
+  background-color: #2ab7a9;
+}

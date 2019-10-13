@@ -161,11 +161,11 @@ max-width: 170px;
 }
 
 .tweet.has-profile-pic>.tweet-media-container>.tweet-media>.tweet-media-img {
-    margin-left:60px
+    margin-left:60px;
 }
 
 .column-settings-media_preview_size-large .tweet.has-profile-pic>.tweet-media-container>.tweet-media>.tweet-media-img {
-	/* margin-left:0 */
+	margin-left:0;
 }
 
 .column-settings-media_preview_size-large .tweet-media-img  {

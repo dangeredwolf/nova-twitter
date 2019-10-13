@@ -118,8 +118,12 @@ class TweetDetailHolder {
 		console.log(data);
 		let ray = [];
 		for (let j in convo) {
-			let id = convo[j].conversationTweetComponent.tweet.id;
-			ray.push(this.processConvoTweet(data.globalObjects.tweets[id], data));
+			if (convo[j].conversationTweetComponent &&
+				convo[j].conversationTweetComponent.tweet &&
+				convo[j].conversationTweetComponent.tweet.id) {
+				let id = convo[j].conversationTweetComponent.tweet.id;
+				ray.push(this.processConvoTweet(data.globalObjects.tweets[id], data));
+			}
 		}
 		return ray;
 	}
@@ -132,7 +136,10 @@ class TweetDetailHolder {
 					let convoComponents = timeline[i].content.item.content.conversationThread.conversationComponents;
 					for (let j in convoComponents) {
 						console.log(convoComponents[j]);
-						if (convoComponents[j].conversationTweetComponent.tweet.id === id) {
+						if (convoComponents[j] &&
+							convoComponents[j].conversationTweetComponent &&
+							convoComponents[j].conversationTweetComponent.tweet &&
+							convoComponents[j].conversationTweetComponent.tweet.id === id) {
 							return convoComponents;
 						}
 					}

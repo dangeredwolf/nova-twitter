@@ -65,7 +65,12 @@ class TwitterAPI {
 			}
 
 			if (!!realAccount) {
-				reqObj.headers["x-act-as-user-id"] = StorageAccount.getAccount(realAccount).contribId;
+				if (typeof realAccount === "number") {
+					reqObj.headers["x-act-as-user-id"] = StorageAccount.getAccount(realAccount).contribId;
+				} else {
+					reqObj.headers["x-act-as-user-id"] = realAccount.contribId;
+				}
+
 			}
 
             if (info.method === "POST") {
