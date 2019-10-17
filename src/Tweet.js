@@ -115,7 +115,7 @@ class Tweet {
 			this.tweetUsernameGroup = div("tweet-username-group").append(this.tweetDisplayName, this.tweetUsername)
 		}
 
-		if ((this.useProfilePic && !this.isQuotedTweet)) {
+		if ((this.useProfilePic && !this.isQuotedTweet && !this.composeAttachment)) {
 			this.tweetProfilePic = make("img")
 			.attr("src", this.sourceTweet.user.profile_image_url_https).addClass("tweet-profile-pic")
 			.on("mouseover",() => {
@@ -185,6 +185,11 @@ class Tweet {
 			text = text.replace(new RegExp("@" + user.screen_name,"g"),"<a class=\"tweet-link-inline tweet-link-user\" target=\"_blank\" href=\"https://twitter.com/" + user.screen_name + "\"> @" + user.screen_name + "</a>");
 		})
 
+		this.findTags(text, this.sourceTweet).forEach(tag => {
+			console.log(tag);
+			text = text.replace(new RegExp("#" + tag.text,"g"),"<a class=\"tweet-link-inline tweet-link-tag\" target=\"_blank\" href=\"https://twitter.com/hashtag/" + tag.text + "\"> #" + tag.text + "</a>");
+		})
+
 		this.tweetText = make("p").addClass("tweet-text").html(text);
 
 		this.tweetBody = div("tweet-body").append(this.tweetText);
@@ -225,11 +230,12 @@ class Tweet {
 
 		this.tweetHead.append(this.tweetLink, this.tweetTime);
 
-		if (this.attachedTweet && !this.isQuotedTweet && !(this.data.disableActionButtons)) {
+		if (this.attachedTweet && !this.isQuotedTweet && !(this.data.disableActionButtons) && !this.composeAttachment) {
 			this.tweetActionReply = make("a").addClass("tweet-action tweet-action-reply waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("material-icons").text("reply")
 			).attr("href","#").attr("data-tooltip","Reply").attr("aria-label","Reply Button").click(e => {
 				console.log("This means we should reply to this tweet");
+				composeController.replyTo = this.sourceTweet;
 				e.stopPropagation();
 			});
 
@@ -419,10 +425,10 @@ class Tweet {
 
 	findTags(text, tweet) {
 		let arr = [];
-		(text.match(/#[a-zA-Z0-9_]+(?=\b)/g) || []).forEach(username => {
-			for (let i in tweet.entities.user_mentions) {
-				let letsSee = tweet.entities.user_mentions[i];
-				if (("#" + letsSee.screen_name) === username) {
+		(text.match(/#[a-zA-Z0-9_]+(?=\b)/g) || []).forEach(tag => {
+			for (let i in tweet.entities.hashtags) {
+				let letsSee = tweet.entities.hashtags[i];
+				if (("#" + letsSee.text) === tag) {
 					arr.push(letsSee);
 				}
 			}

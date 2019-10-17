@@ -19,6 +19,8 @@ class LinkDelegation {
             e.preventDefault();
         } else if (link.match(/^https?:\/\/twitter\.com\/(about|account|help|jobs|privacy|search|search\-advanced|search\-home|tos)/g) !== null) {
             console.log("This is a Twitter service link. Thus, there's something we could probably do here.")
+        } else if (link.match(/^https?:\/\/twitter\.com\/hashtag\//g) !== null) {
+            console.log("This is a Twitter hashtag. Thus, there's something we could probably do here.")
         } else if (link.match(/^https?:\/\/twitter\.com\/[a-zA-Z0-9_]{1,15}\/status(es)?/g)) {
             console.log("This is a Tweet URL. We should probably do something with this.");
         } else if (link.match(/^https?:\/\/t\.co\//g)) {

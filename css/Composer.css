@@ -5,7 +5,8 @@
 	bottom:0;
 	width:320px;
 	box-shadow:0 3px 7px var(--composePanelShadow);
-	background-color:var(--composeBackground)
+	background-color:var(--composeBackground);
+	overflow-y: auto;
 }
 
 .compose-accounts {
@@ -21,19 +22,23 @@
 	border-radius:50%
 }
 
-.compose-sheet {
+.compose-sheet, .compose-card {
 	width:280px;
 	margin-left:19px;
-	margin-top:60px;
-	margin-bottom:14px;
-	height:180px;
-	padding:0!important;
-	padding-top:10px!important;
 	box-shadow:0 3px 7px var(--composeSheetShadow);
 	border-radius:4px;
 	overflow:visible;
+	padding:0!important;
+	position:relative;
 	z-index:2;
 	background-color:var(--composeSheetBackground)
+}
+
+.compose-sheet {
+	padding-top:10px!important;
+	margin-top:60px;
+	margin-bottom:14px;
+	height:180px;
 }
 
 
@@ -146,4 +151,50 @@
 
 .compose-tabs.tabs .tab a {
 	color:var(--composeTabText)!important
+}
+
+.compose-reply-to-remove {
+	right:20px;
+	z-index:5;
+	top: 5px;
+	position:absolute;
+}
+
+.compose-card-before {
+	margin-top:80px;
+}
+
+.compose-card-before:empty {
+	margin-bottom:0
+}
+
+.compose-card {
+	font-size:12px;
+	padding-bottom:0;
+	margin-bottom:-50px
+}
+
+
+.compose-card .tweet-text {
+	font-size:12px
+}
+
+.compose-card .tweet-actions,
+.compose-card .tweet-time
+{
+	display:none
+}
+
+.compose-card .quote-tweet {
+	margin-left:5px!important
+}
+
+.compose-card .tweet-profile-pic {
+	height:28px;
+	width:28px;
+}
+
+.compose-card .tweet.has-profile-pic>.tweet-body>.tweet-text {
+	padding-left:38px;
+	padding-top:16px
 }
