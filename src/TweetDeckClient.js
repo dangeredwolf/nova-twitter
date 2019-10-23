@@ -95,11 +95,12 @@ class TweetDeckClient {
                 var colType = new ColumnActivity(acc, filters, settings).placeInHolder();
                 colType.renderTimer();
                 break;
-            case "search": // TODO: Add query
-                // var colType = new ColumnSearch(acc, filters, settings).placeInHolder();
-                // colType.renderTimer();
+            case "search":
+				var data = JSON.parse(col.metadata);
+                var colType = new ColumnSearch(acc, filters || data.searchFilterData, settings, data.baseQuery).placeInHolder();
+                colType.renderTimer();
                 break;
-            case "scheduled": // TODO: Add query
+            case "scheduled": // TODO: Add scheduled
                 var colType = new ColumnScheduled(acc, filters, settings).placeInHolder();
                 colType.renderTimer();
                 break;

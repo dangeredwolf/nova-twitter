@@ -9,6 +9,7 @@ const { Media } = require("./src/Media.js");
 const { TwitterAPI } = require("./src/TwitterAPI.js");
 const { UpdateTimes } = require("./src/UpdateTimes.js");
 const $ = require("jquery");
+const jquery = require("jquery");
 
 const { ModalRetweet } = require("./src/ModalRetweet.js");
 

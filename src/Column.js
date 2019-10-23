@@ -24,12 +24,15 @@ class Column {
     shouldReverse = false;
     isLoadingMore = false;
 
-	shouldCatchErrs = true;
+	shouldCatchErrs = false;
+	pauseColumnIfErrored = true;
 
     filters = {};
     settings = {};
 	queuedTweets = [];
 	tweetLimit = 50;
+
+	lastUpdated = 0;
 
 
     constructor(user, filters, settings) {
@@ -120,10 +123,14 @@ class Column {
 		let reset = headers["x-rate-limit-reset"];
 
 		let percentage = remaining / limit;
-		let timeLeft = (new Date(reset*1000) - new Date())/1000;
+		let timeLeft = Math.min(15*60,(new Date(reset*1000) - new Date())/1000);
 
-		let throttleTime = Math.max(1000, (timeLeft / remaining) * 1500);
+		let throttleTime = Math.max(1500, (timeLeft / remaining) * 1500);
 		console.warn((throttleTime/1000) + " seconds ("+remaining+" requests, " + timeLeft + " seconds remaining)");
+
+		if (throttleTime < 1000) {
+			throw "Throttle time cannot be less than a second. We can't flood Twitter's API and get ratelimited."
+		}
 
 		setTimeout(() => {
 			console.warn("Updated again");
@@ -132,6 +139,13 @@ class Column {
 	}
 
 	renderTweetsWrapper(overrideId) {
+
+		if (!overrideId && (new Date() - this.lastUpdated < 500)) {
+			throw "Safeguard hit: You can't update the column more than once every 0.5s. This error indicates that the API flood control is malfunctioning.";
+		}
+
+		this.lastUpdated = new Date();
+
 		let func = this.renderTweets(overrideId); // Promise
 
 		if (this.shouldCatchErrs) {
@@ -141,11 +155,19 @@ class Column {
 				try {
 					errMsg = e.data.errors[0].message;
 				} catch(ee) {}
-				M.toast({html: errMsg})
+				if (!this.pauseColumnIfErrored) {
+					setTimeout(() => {
+						this.renderTweetsWrapper();
+					},5000);
+				}
+				M.toast({html: errMsg});
+			});
+		} else {
+			if (!this.pauseColumnIfErrored) {
 				setTimeout(() => {
 					this.renderTweetsWrapper();
 				},5000);
-			});
+			}
 		}
 
 		return func;
@@ -166,6 +188,21 @@ class Column {
 		this.trimTweets();
         return new Promise((resolve, reject) => {
             this.updateTweets(overrideId).then((tweets) => {
+
+				assert(tweets, "Column subclass didn't give Column its tweets");
+
+				if (!tweets.sort && tweets.modules) {
+					let mods = tweets.modules;
+					tweets = [];
+					mods.forEach(mod => {
+						if (mod.status) {
+							tweets.push(mod.status.data);
+						} else if (!mod.user_gallery) {
+							console.error("can you tell me what this means?");
+							console.error(mod);
+						}
+					})
+				}
 
 				tweets.sort((a,b) => {
 					if (Date.parse(a.created_at) > Date.parse(b.created_at)) {
