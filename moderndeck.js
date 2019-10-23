@@ -1,15 +1,12 @@
-const { Account } = require("./src/Account.js");
-const { Column } = require("./src/Column.js");
+const { make, div, assert } = require("./src/Helpers.js");
 const { ComposeController } = require("./src/ComposeController.js");
 const { DefaultColumns } = require("./src/DefaultColumns.js");
 const { LinkDelegation } = require("./src/LinkDelegation.js");
 const { StorageAccount } = require("./src/StorageAccount.js");
-const { Settings } = require("./src/Settings.js");
 const { TweetDeckClient } = require("./src/TweetDeckClient.js");
-const { TweetSender } = require("./src/TweetSender.js");
 const { Tweet } = require("./src/Tweet.js");
+const { Media } = require("./src/Media.js");
 const { TwitterAPI } = require("./src/TwitterAPI.js");
-const { TwitterPollCard } = require("./src/TwitterPollCard.js");
 const { UpdateTimes } = require("./src/UpdateTimes.js");
 const $ = require("jquery");
 
@@ -20,6 +17,10 @@ $(document).ready(() => {
 
 		window.Modals = [];
 		window.Dropdowns = [];
+
+		window.body = $(document.body);
+		window.head = $(document.head);
+
 
 		$(".mdl-container").click(() => {
 			window.Modals.forEach((a, i) => {
@@ -32,7 +33,7 @@ $(document).ready(() => {
 
 		$(document).click(() => {
 			while (window.Dropdowns.length > 0) {
-				window.Dropdowns.pop().dismiss();
+				(window.Dropdowns.pop()).dismiss();
 			}
 		})
 

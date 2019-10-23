@@ -7,8 +7,9 @@
     --tweetDisplayNameText:#000;
     --txtMuteText:#787878;
     --composeBackground:#00BCD4;
+    --composeButton:#00BCD4;
     --composeSheetBackground:#fff;
-	--composeSheetShadow:rgba(17,17,17,.25);
+	--composeSheetShadow:rgba(17,17,17,.5);
 	--composeSheetOpenShadow:rgba(17,17,17,.5);
 	--dropdownShadow:rgba(17,17,17,.25);
     --tweetDetailWrapperBackground:#fff;

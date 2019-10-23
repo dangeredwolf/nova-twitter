@@ -4,6 +4,7 @@ const {TweetDetailHolder} = require("./TweetDetailHolder.js");
 const {ProviderLikeTweet} = require("./ProviderLikeTweet.js");
 const {ProfileMiniCard} = require("./ProfileMiniCard.js");
 const {Dropdown} = require("./Dropdown.js");
+const {Media} = require("./Media.js");
 const {TweetDropdown} = require("./TweetDropdown.js");
 const Waves = require("node-waves");
 
@@ -64,10 +65,10 @@ class Tweet {
 		this.column = column;
 		this.sourceTweet = data;
 
-		console.log(data)
+		console.debug(data)
 
-		if (typeof data.quotedTweet !== "undefined") {
-			this.sourceTweet = data.quotedTweet;
+		if (typeof this.data.quotedTweet !== "undefined") {
+			this.sourceTweet = this.data.quotedTweet;
 			this.isQuotedTweet = true;
 
 			if (this.data.is_detail_holder) {
@@ -94,7 +95,7 @@ class Tweet {
 				this.sourceTweet = {user:this.data.sources[0]};
 			}
 
-			console.log("This is an action",this.sourceTweet);
+			console.debug("This is an action",this.sourceTweet);
 
 			if (typeof this.data.targets[0].retweeted_status !== "undefined") {
 				this.sourceTweet = this.data.targets[0].retweeted_status;
@@ -106,59 +107,57 @@ class Tweet {
 			this.sourceInteractionUser = this.data.user;
 		}
 
+		if (typeof this.sourceTweet === "undefined") {
+			console.debug("We couldn't find a source tweet, so we'll treat it as if it doesn't have one.");
+			this.attachedTweet = false;
+		}
+
+		if (typeof this.sourceTweet.profile_background_tile !== "undefined") {
+			console.debug("This is a notification without a tweet (i.e. follow)");
+			this.attachedTweet = false;
+		}
+
+		if (typeof this.sourceTweet !== "undefined") {
+			this.user = this.sourceTweet.user || this.sourceTweet;
+		}
+
+
 		if (this.attachedTweet) {
-			// console.log(this.sourceTweet);
-			this.tweetDisplayName = div("tweet-display-name").text(this.sourceTweet.user.name);
-
-		 	this.tweetUsername = div("tweet-username txt-mute").text("@" + this.sourceTweet.user.screen_name);
-
-			this.tweetUsernameGroup = div("tweet-username-group").append(this.tweetDisplayName, this.tweetUsername)
+			if (typeof this.user === "undefined") {
+				console.warn("NO USER ATTACHED TO SOURCE TWEET");
+				console.warn("SOURCE TWEET: ",this.sourceTweet);
+			} else {
+				this.tweetDisplayName = div("tweet-display-name").text(this.user.name);
+			 	this.tweetUsername = div("tweet-username txt-mute").text("@" + this.user.screen_name);
+				this.tweetUsernameGroup = div("tweet-username-group").append(this.tweetDisplayName, this.tweetUsername)
+			}
 		}
 
 		if ((this.useProfilePic && !this.isQuotedTweet && !this.composeAttachment)) {
 			this.tweetProfilePic = make("img")
-			.attr("src", this.sourceTweet.user.profile_image_url_https).addClass("tweet-profile-pic")
-			.on("mouseover",() => {
-				if (this.avatarHoverTimeout) {
-					clearTimeout(this.avatarHoverTimeout);
-					this.avatarHoverTimeout = undefined;
-				}
-				this.avatarHoverTimeout = setTimeout(() => {
-					console.log("Open profile mini card");
-					new ProfileMiniCard(this.sourceTweet.user, this.tweetProfilePic.offset());
-				}, 700);
-			}).on("mouseout",() => {
-				if (this.avatarHoverTimeout) {
-					clearTimeout(this.avatarHoverTimeout);
-					this.avatarHoverTimeout = undefined;
-				}
-			})
+			.attr("src", (typeof this.user !== "undefined" ? this.user.profile_image_url_https : this.sourceTweet.profile_image_url_https)).addClass("tweet-profile-pic")
 		}
 
-		this.tweetLink = make("a").attr("target","_blank").attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name)
-						 .append(this.tweetProfilePic, this.tweetUsernameGroup);
+		this.tweetLink = make("a").attr("target","_blank").attr("href","https://twitter.com/" + (this.user.screen_name))
+						 .append(this.tweetProfilePic, this.tweetUsernameGroup)
 
-
+		this.attachTweetLinkEvents(this.tweetLink);
 
 		if (!this.isQuotedTweet) {
 				this.tweetTime = make("a").addClass("tweet-time txt-mute").text(timeAgo(this.sourceTweet.created_at))
-				.attr("href","https://twitter.com/" + this.sourceTweet.user.screen_name + "/status/" + this.sourceTweet.id_str).attr("target","_blank")
+				.attr("href","https://twitter.com/" + this.user.screen_name + "/status/" + this.sourceTweet.id_str).attr("target","_blank")
 				.click(e => e.stopPropagation());
 
 				if (timeAgoRaw(this.sourceTweet.created_at) < 60) { // 60 seconds
-					var interval = setInterval(() => {
-						this.tweetTime.text(timeAgo(this.sourceTweet.created_at))
-						if (timeAgoRaw(this.sourceTweet.created_at) > 60) { // 60 seconds
-							console.log("it's time to stop :D");
-							clearInterval(interval);
-						}
-					}, 500)
+					this.attachTimekeeper(this.tweetTime)
 				}
 		}
 
 		if (!!this.linkInAttribution && !this.isQuotedTweet) {
 			this.interactionAttribLink = make("a").addClass("interaction-attribution-link").attr("href",this.linkInAttribution.link)
 								 		 .attr("target","_blank").text(this.linkInAttribution.name)
+
+			this.attachTweetLinkEvents(this.interactionAttribLink);
 		}
 
 		this.tweetHead = div("tweet-header");
@@ -177,16 +176,15 @@ class Tweet {
 			} else {
 				text = text.replace(new RegExp(link.url,"g"),"<a class=\"tweet-link-inline\" target=\"_blank\" href=\"" + link.url + "\">" + link.display_url + "</a>");
 			}
-
 		})
 
 		this.findUsers(text, this.sourceTweet).forEach(user => {
-			console.log(user);
+			console.debug(user);
 			text = text.replace(new RegExp("@" + user.screen_name,"g"),"<a class=\"tweet-link-inline tweet-link-user\" target=\"_blank\" href=\"https://twitter.com/" + user.screen_name + "\"> @" + user.screen_name + "</a>");
 		})
 
 		this.findTags(text, this.sourceTweet).forEach(tag => {
-			console.log(tag);
+			console.debug(tag);
 			text = text.replace(new RegExp("#" + tag.text,"g"),"<a class=\"tweet-link-inline tweet-link-tag\" target=\"_blank\" href=\"https://twitter.com/hashtag/" + tag.text + "\"> #" + tag.text + "</a>");
 		})
 
@@ -352,24 +350,14 @@ class Tweet {
 				this.sourceTweet.extended_entities.media.forEach(media => {
 					if (!media.video_info || !this.data.is_detail_holder) {
 						this.tweetMediaContainer.append(
-							make("a").addClass("tweet-media").attr("href",media.expanded_url).attr("target","_blank").click(e => e.stopPropagation()).append(
-								make("div").addClass("tweet-media-img").attr("style","background-image:url(\""+media.media_url_https+"\")")
-							)
+							new Media(media.media_url_https,{display_url:media.expanded_url,tweet:this,num:this.tweetMediaContainer.children().length}).element
 						)
 					} else if (!!media.video_info && !!this.data.is_detail_holder) {
-						let url;
-						let max_bitrate = 0;
 
-						media.video_info.variants.forEach(variant => {
-							if (variant.content_type === "video/mp4") {
-								if (variant.bitrate > max_bitrate) {
-									max_bitrate = variant.bitrate;
-									url = variant.url;
-								}
-							}
-						})
+						let url = Media.getBestMediaVariant(media.video_info.variants);
+
 						this.tweetMediaContainer.append(
-							make("iframe").attr("allowfullscreen","true").attr("frameborder","0").attr("src",url).addClass("tweet-media-video")
+							new Media(url,{type:"video",tweet:this,num:this.tweetMediaContainer.children().length}).element
 						)
 					}
 				})
@@ -378,9 +366,9 @@ class Tweet {
 			}
 
 			if (this.sourceTweet.is_quote_status && !!this.sourceTweet.quoted_status) {
-				console.log("IM A QUOTE TWEET!!!");
+				console.debug("IM A QUOTE TWEET!!!");
 				let quotedTweet = new Tweet({quotedTweet:this.sourceTweet.quoted_status}, this.column);
-				console.log(quotedTweet);
+				console.debug(quotedTweet);
 				this.element.append(quotedTweet.element);
 				quotedTweet.element.click(e => e.stopPropagation())
 			}
@@ -421,6 +409,34 @@ class Tweet {
 			}
 		});
 		return arr;
+	}
+
+	attachTweetLinkEvents(link) {
+		link.on("mouseover",() => {
+		   if (this.avatarHoverTimeout) {
+			   clearTimeout(this.avatarHoverTimeout);
+			   this.avatarHoverTimeout = undefined;
+		   }
+		   this.avatarHoverTimeout = setTimeout(() => {
+			   console.log("Open profile mini card");
+			   new ProfileMiniCard(this.user || this.sourceTweet, this.tweetProfilePic ? this.tweetProfilePic.offset() : link.offset());
+		   }, 700);
+	   }).on("mouseout",() => {
+		   if (this.avatarHoverTimeout) {
+			   clearTimeout(this.avatarHoverTimeout);
+			   this.avatarHoverTimeout = undefined;
+		   }
+	   })
+	}
+
+	attachTimekeeper(tweetTime) {
+		var interval = setInterval(() => {
+			tweetTime.text(timeAgo(this.sourceTweet.created_at))
+			if (timeAgoRaw(this.sourceTweet.created_at) > 60) { // 60 seconds
+				console.log("it's time to stop :D");
+				clearInterval(interval);
+			}
+		}, 500)
 	}
 
 	findTags(text, tweet) {

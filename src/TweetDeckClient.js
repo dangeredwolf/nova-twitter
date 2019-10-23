@@ -33,7 +33,13 @@ class TweetDeckClient {
         TweetDeckClient.getTweetDeckPreferences({
             account:account
         })
-        .then(prefs => TweetDeckClient.loadTweetDeckPreferences(prefs.data));
+        .then(prefs => TweetDeckClient.loadTweetDeckPreferences(prefs.data))
+		.catch(e => {
+			console.log(e);
+			console.log(e.trace);
+			console.log(e.message);
+			console.log(Object(e));
+		});
 
         TweetDeckClient.getContributees({account:account})
         .then(contributees => {

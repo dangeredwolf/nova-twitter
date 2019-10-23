@@ -25,6 +25,7 @@ class ColumnLikes extends Column {
                 url,
                 {account:this.account, method:"GET"}
             ).then((reply) => {
+				this.apiThrottleHook(reply.headers);
                 resolve(reply.data);
             }).catch(e => reject(e))
         });

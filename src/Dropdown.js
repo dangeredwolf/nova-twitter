@@ -1,5 +1,3 @@
-const {make, div} = require("./Helpers.js");
-
 /*
 	new Dropdown(Array options, optional Tweet tweet, css Position)
 

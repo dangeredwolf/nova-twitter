@@ -24,7 +24,7 @@ class Column {
     shouldReverse = false;
     isLoadingMore = false;
 
-	shouldCatchErrs = false;
+	shouldCatchErrs = true;
 
     filters = {};
     settings = {};
@@ -67,7 +67,7 @@ class Column {
         this.body1.scroll(() => {
             if ($(this.body1).scrollTop() + $(this.body1).height() > $(this.body1).prop("scrollHeight") - 200) {
     			if (!this.isLoadingMore) {
-                    console.log("im actually screaming")
+                    console.debug("im actually screaming")
                     this.isLoadingMore = true;
 
                     this.renderTweets(this.earliestId).catch(e => {
@@ -95,7 +95,7 @@ class Column {
     }
 
     placeInHolder() {
-        console.log("placeInHolder");
+        console.debug("placeInHolder");
         $(".column-holder").append(this.element);
         return this;
     }
@@ -106,24 +106,45 @@ class Column {
     }
 
     renderTimer() {
-        setInterval(() => {
-            this.renderTweetsWrapper();
-        }, 10000);
+        // setInterval(() => {
+        //     this.renderTweetsWrapper();
+        // }, 10000);
         setTimeout(() => {
             this.renderTweetsWrapper();
         }, 0);
     }
 
+	apiThrottleHook(headers) {
+		let limit = headers["x-rate-limit-limit"];
+		let remaining = headers["x-rate-limit-remaining"];
+		let reset = headers["x-rate-limit-reset"];
+
+		let percentage = remaining / limit;
+		let timeLeft = (new Date(reset*1000) - new Date())/1000;
+
+		let throttleTime = Math.max(1000, (timeLeft / remaining) * 1500);
+		console.warn((throttleTime/1000) + " seconds ("+remaining+" requests, " + timeLeft + " seconds remaining)");
+
+		setTimeout(() => {
+			console.warn("Updated again");
+			this.renderTweetsWrapper();
+		},throttleTime)
+	}
+
 	renderTweetsWrapper(overrideId) {
 		let func = this.renderTweets(overrideId); // Promise
 
 		if (this.shouldCatchErrs) {
-			func.catch(e => {
+			func.catch((e) => {
+				console.error(e);
 				let errMsg = e.data;
 				try {
 					errMsg = e.data.errors[0].message;
 				} catch(ee) {}
 				M.toast({html: errMsg})
+				setTimeout(() => {
+					this.renderTweetsWrapper();
+				},5000);
 			});
 		}
 
@@ -146,22 +167,30 @@ class Column {
         return new Promise((resolve, reject) => {
             this.updateTweets(overrideId).then((tweets) => {
 
+				tweets.sort((a,b) => {
+					if (Date.parse(a.created_at) > Date.parse(b.created_at)) {
+						return -1;
+					} else {
+						return 1;
+					}
+				});
+
 				if (this.body1.scrollTop() > 0) {
 					tweets.forEach(tweet => this.queuedTweets.push(new Tweet(tweet, this)));
 				} else {
 					tweets.forEach((tweet) => {
-	                    console.log(tweet);
+	                    console.debug(tweet);
 
 	                    let id = tweet.id || tweet.max_position;
 
 	                    if (this.displayedIds[id] !== true && Filter.filterTweet(tweet, this)) {
 	                        let makeTweet = new Tweet(tweet, this).element;
 	                        this.displayedIds[id] = true;
-	                        console.log(makeTweet)
+	                        console.debug(makeTweet)
 	                        if (this.shouldReverse || overrideId) {
-	                            this.body1.append(makeTweet);
+								this.body1.prepend(makeTweet);
+								// this.body1.append(makeTweet);
 	                        } else {
-	                            this.body1.prepend(makeTweet);
 	                        }
 
 

@@ -54,11 +54,13 @@
 }
 
 .mdl-retweet {
-	bottom:0;
+	bottom: 0px;
 	width:var(--mdlWidth);
 	border-radius:3px 3px 0 0;
 	animation:modalRetweetEnter 0.5s var(--animationTiming);
-	--mdlHeight: 1px;
+	--mdlHeight: 0;
+	top: auto;
+	padding-bottom: 10px;
 }
 
 .mdl-retweet-btn {

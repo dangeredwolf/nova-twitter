@@ -3,7 +3,7 @@ const axios = require("axios");
 const {StorageAccount} = require("./StorageAccount.js");
 const qs = require('qs');
 
-window.useFiddlerProxy = false;
+window.useFiddlerProxy = true;
 
 class TwitterAPI {
 
@@ -17,24 +17,25 @@ class TwitterAPI {
 			let realAccount;
             // var postData;
 
-            // console.log(url);
-			console.log(typeof info.postData)
+            // console.debug(url);
+			// console.debug(typeof info.postData)
 
 			if (!info.account) {
 				throw "Account property required";
 			}
 
 			if (!info.account.bearerToken) {
-				console.log("Using x-act-as-user-id");
+				console.debug("Using x-act-as-user-id");
 				realAccount = info.account;
 				info.account = StorageAccount.getDefaultAccount();
-				console.log(realAccount);
+				console.debug(realAccount);
 			}
 
             let reqObj = {
                 headers:
                 {
                     Accept:"Accept: text/plain, */*",
+					"Accept-Language":"en-GB", // TODO: Match with user's UI language
                     Authorization:`Bearer ${info.account.bearerToken}`,
                     Cookie: `auth_token=${info.account.authToken}; ct0=00000000000000000000000000000000; lang=en`,
                     DNT:1,
@@ -99,7 +100,7 @@ class TwitterAPI {
 	            });
 
 
-            console.log(info.postData);
+            console.debug(info.postData);
 
         });
 
