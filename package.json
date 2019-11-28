@@ -15,18 +15,18 @@
     "author": "GitHub",
     "license": "MIT",
     "devDependencies": {
-        "electron": "^6.0.12"
+        "electron": "^7.1.0"
     },
     "dependencies": {
         "@material/mwc-button": "^0.9.1",
         "@material/mwc-drawer": "^0.9.1",
         "@material/mwc-radio": "^0.9.1",
-        "@webcomponents/webcomponentsjs": "^2.3.0",
+        "@webcomponents/webcomponentsjs": "^2.4.0",
         "axios": "^0.19.0",
-        "electron-store": "^5.0.0",
+        "electron-store": "^5.1.0",
         "jquery": "^3.4.1",
         "materialize-css": "^1.0.0",
         "node-waves": "^0.7.6",
-        "qs": "^6.9.0"
+        "qs": "^6.9.1"
     }
 }

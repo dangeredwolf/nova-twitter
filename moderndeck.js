@@ -8,8 +8,12 @@ const { Tweet } = require("./src/Tweet.js");
 const { Media } = require("./src/Media.js");
 const { TwitterAPI } = require("./src/TwitterAPI.js");
 const { UpdateTimes } = require("./src/UpdateTimes.js");
+const {DataTweet} = require("./src/DataTweet.js");
+const {DataUser} = require("./src/DataUser.js");
 const $ = require("jquery");
 const jquery = require("jquery");
+
+window.mode = "comfortable";
 
 const { ModalRetweet } = require("./src/ModalRetweet.js");
 
@@ -18,6 +22,10 @@ $(document).ready(() => {
 
 		window.Modals = [];
 		window.Dropdowns = [];
+		window.TweetCache = [];
+		window.UserCache = [];
+		window.Tweets = [];
+		window.TweetsByUser = [];
 
 		window.body = $(document.body);
 		window.head = $(document.head);

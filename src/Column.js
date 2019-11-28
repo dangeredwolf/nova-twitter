@@ -58,8 +58,8 @@ class Column {
 		this.wrapper1 = div("column-wrapper column-wrapper-level-1").append(this.headElement1, this.body1);
 		this.wrapper2 = div("column-wrapper column-wrapper-level-2").append(this.headElement2, this.body2);
         this.element.append(this.wrapper1,this.wrapper2);
-        this.filters = filters;
-        this.settings = settings;
+        this.filters = filters || {};
+        this.settings = settings || {};
 
 		for (let setting in this.settings) {
 			if (setting === "media_preview_size") {
@@ -115,6 +115,7 @@ class Column {
         setTimeout(() => {
             this.renderTweetsWrapper();
         }, 0);
+		return this;
     }
 
 	apiThrottleHook(headers) {
@@ -126,6 +127,12 @@ class Column {
 		let timeLeft = Math.min(15*60,(new Date(reset*1000) - new Date())/1000);
 
 		let throttleTime = Math.max(1500, (timeLeft / remaining) * 1500);
+
+		if (throttleTime > timeLeft*1000) {
+			console.warn("Warning: Throttle time exceeded timeLeft")
+			throttleTime = timeLeft*1000
+		}
+
 		console.warn((throttleTime/1000) + " seconds ("+remaining+" requests, " + timeLeft + " seconds remaining)");
 
 		if (throttleTime < 1000) {
@@ -136,6 +143,8 @@ class Column {
 			console.warn("Updated again");
 			this.renderTweetsWrapper();
 		},throttleTime)
+
+		return this;
 	}
 
 	renderTweetsWrapper(overrideId) {
@@ -188,7 +197,6 @@ class Column {
 		this.trimTweets();
         return new Promise((resolve, reject) => {
             this.updateTweets(overrideId).then((tweets) => {
-
 				assert(tweets, "Column subclass didn't give Column its tweets");
 
 				if (!tweets.sort && tweets.modules) {
@@ -226,8 +234,8 @@ class Column {
 	                        console.debug(makeTweet)
 	                        if (this.shouldReverse || overrideId) {
 								this.body1.prepend(makeTweet);
-								// this.body1.append(makeTweet);
 	                        } else {
+								this.body1.prepend(makeTweet); //append
 	                        }
 
 

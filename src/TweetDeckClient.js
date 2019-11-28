@@ -2,6 +2,8 @@ const { TwitterAPI } = require("./TwitterAPI.js");
 const { StorageAccount } = require("./StorageAccount.js");
 const { Account } = require("./Account.js");
 
+const { ViewComfortable } = require("./ViewComfortable.js");
+
 const { ColumnActivity } = require("./ColumnActivity.js");
 const { ColumnCollections } = require("./ColumnCollections.js");
 const { ColumnFollowers } = require("./ColumnFollowers.js");
@@ -114,23 +116,27 @@ class TweetDeckClient {
     }
 
     static loadTweetDeckPreferences(prefs) {
-        prefs.client.columns.forEach((column) => {
-            let col = prefs.columns[column];
+		if (window.mode === "deck") {
+	        prefs.client.columns.forEach((column) => {
+	            let col = prefs.columns[column];
 
-            if (col.type === "other") {
-                if (col.feeds.length >= 1) {
-                    if (col.feeds.length > 1)
-                        console.log("Multi-feed is not yet implemented");
+	            if (col.type === "other") {
+	                if (col.feeds.length >= 1) {
+	                    if (col.feeds.length > 1)
+	                        console.log("Multi-feed is not yet implemented");
 
-                    let feed = prefs.feeds[col.feeds[0]];
-                    TweetDeckClient.interpretColumn(feed, col.filters || {}, col.settings);
-                } else {
-                    console.log("Oh, interesting, it's both not an 'other' column and doesn't have any feeds")
-                }
-            } else {
-                console.log("Trends, etc not yet implemented")
-            }
-        })
+	                    let feed = prefs.feeds[col.feeds[0]];
+	                    TweetDeckClient.interpretColumn(feed, col.filters || {}, col.settings);
+	                } else {
+	                    console.log("Oh, interesting, it's both not an 'other' column and doesn't have any feeds")
+	                }
+	            } else {
+	                console.log("Trends, etc not yet implemented")
+	            }
+	        })
+		} else if (window.mode === "comfortable") {
+			(new ViewComfortable()).makeView()
+		}
     }
 }
 

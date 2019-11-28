@@ -60,6 +60,40 @@ class Tweet {
 
 	column;
 
+	user = {
+		parent:null,
+
+		set name(val) {
+			this.__name = val;
+			console.log(this.parent);
+			this.parent.tweetDisplayName.text(val);
+		},
+
+		get name() {
+			return this.__name;
+		},
+
+		set screen_name(val) {
+			this.__screen_name = val;
+			console.log(this.parent);
+			this.parent.tweetUsername.text("@" + val);
+		},
+
+		get screen_name() {
+			return this.__screen_name;
+		},
+
+		set profile_image_url_https(val) {
+			this.__profile_image_url_https = val;
+			console.log(this.parent);
+			this.parent.tweetProfilePic.attr("src", val)
+		},
+
+		get profile_image_url_https() {
+			return this.__profile_image_url_https;
+		}
+	};
+
 	constructor(data, column) {
 		this.data = data;
 		this.column = column;
@@ -110,48 +144,35 @@ class Tweet {
 		if (typeof this.sourceTweet === "undefined") {
 			console.debug("We couldn't find a source tweet, so we'll treat it as if it doesn't have one.");
 			this.attachedTweet = false;
+		} else if (!!this.sourceTweet.id) {
+			if (!window.Tweets[this.sourceTweet.id]) {
+				window.Tweets[this.sourceTweet.id] = []
+			}
+			window.Tweets[this.sourceTweet.id].push(this);
+		} else if (!!this.sourceTweet.user) {
+			if (!window.UserCache[this.sourceTweet.user.id]) {
+				window.UserCache[this.sourceTweet.user.id] = []
+			}
+			window.UserCache[this.sourceTweet.user.id].push(this);
 		}
 
 		if (typeof this.sourceTweet.profile_background_tile !== "undefined") {
 			console.debug("This is a notification without a tweet (i.e. follow)");
 			this.attachedTweet = false;
 		}
+		this.tweetDisplayName = div("tweet-display-name");
+		this.tweetUsername = div("tweet-username txt-mute");
+		this.tweetUsernameGroup = div("tweet-username-group").append(this.tweetDisplayName, this.tweetUsername)
+		this.tweetProfilePic = make("img").addClass("tweet-profile-pic")
 
-		if (typeof this.sourceTweet !== "undefined") {
-			this.user = this.sourceTweet.user || this.sourceTweet;
-		}
-
-
-		if (this.attachedTweet) {
-			if (typeof this.user === "undefined") {
-				console.warn("NO USER ATTACHED TO SOURCE TWEET");
-				console.warn("SOURCE TWEET: ",this.sourceTweet);
-			} else {
-				this.tweetDisplayName = div("tweet-display-name").text(this.user.name);
-			 	this.tweetUsername = div("tweet-username txt-mute").text("@" + this.user.screen_name);
-				this.tweetUsernameGroup = div("tweet-username-group").append(this.tweetDisplayName, this.tweetUsername)
-			}
-		}
-
-		if ((this.useProfilePic && !this.isQuotedTweet && !this.composeAttachment)) {
-			this.tweetProfilePic = make("img")
-			.attr("src", (typeof this.user !== "undefined" ? this.user.profile_image_url_https : this.sourceTweet.profile_image_url_https)).addClass("tweet-profile-pic")
+		if (!this.useProfilePic || this.isQuotedTweet || this.composeAttachment) {
+			this.tweetProfilePic.addClass("hidden")
 		}
 
 		this.tweetLink = make("a").attr("target","_blank").attr("href","https://twitter.com/" + (this.user.screen_name))
 						 .append(this.tweetProfilePic, this.tweetUsernameGroup)
 
 		this.attachTweetLinkEvents(this.tweetLink);
-
-		if (!this.isQuotedTweet) {
-				this.tweetTime = make("a").addClass("tweet-time txt-mute").text(timeAgo(this.sourceTweet.created_at))
-				.attr("href","https://twitter.com/" + this.user.screen_name + "/status/" + this.sourceTweet.id_str).attr("target","_blank")
-				.click(e => e.stopPropagation());
-
-				if (timeAgoRaw(this.sourceTweet.created_at) < 60) { // 60 seconds
-					this.attachTimekeeper(this.tweetTime)
-				}
-		}
 
 		if (!!this.linkInAttribution && !this.isQuotedTweet) {
 			this.interactionAttribLink = make("a").addClass("interaction-attribution-link").attr("href",this.linkInAttribution.link)
@@ -192,8 +213,7 @@ class Tweet {
 
 		this.tweetBody = div("tweet-body").append(this.tweetText);
 
-		this.element = make("article").addClass("tweet").attr("data-id", data.id)
-					   .attr("data-time", Date.parse(data.created_at)).append(this.tweetHead, this.tweetBody);
+		this.element = make("article").addClass("tweet").append(this.tweetHead, this.tweetBody);
 
 
 		if (!this.data.is_detail_holder && this.attachedTweet) {
@@ -226,6 +246,8 @@ class Tweet {
 			this.element.addClass("is-retweet");
 		}
 
+		this.tweetTime = make("a").addClass("tweet-time txt-mute");
+
 		this.tweetHead.append(this.tweetLink, this.tweetTime);
 
 		if (this.attachedTweet && !this.isQuotedTweet && !(this.data.disableActionButtons) && !this.composeAttachment) {
@@ -237,8 +259,7 @@ class Tweet {
 				e.stopPropagation();
 			});
 
-			if (this.sourceTweet.reply_count > 0)
-				this.tweetActionReplyCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.reply_count));
+			this.tweetActionReplyCount = div("tweet-action-count");
 
 			this.tweetActionRetweet = make("a").addClass("tweet-action tweet-action-retweet waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("icon icon-retweet").text("repeat")
@@ -247,20 +268,18 @@ class Tweet {
 				e.stopPropagation();
 				new ModalRetweet({tweet:this}).display();
 			});
-
-			if (this.sourceTweet.retweeted)
-				this.tweetActionRetweet.addClass("activated")
-
-			if (this.sourceTweet.retweet_count > 0)
-				this.tweetActionRetweetCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.retweet_count));
+			this.tweetActionRetweetCount = div("tweet-action-count");
 
 			this.tweetActionLike = make("a").addClass("tweet-action tweet-action-like waves-effect waves-dark waves-circle btn-small btn-flat tooltipped").append(
 				make("i").addClass("icon icon-heart").text("heart")
-			).attr("href","#").attr("data-tooltip","Like Tweet").attr("aria-label","Like Button").click(e => {
+			).attr("href","#").attr("data-tooltip","Like Tweet").attr("aria-label","Like Button");
+			this.tweetActionLike.click(e => {
 				console.log("This means we should like this tweet");
 				e.stopPropagation();
-				if (this.tweetActionLike.hasClass("activated")) {
-					this.tweetActionLike.removeClass("activated");
+				if (this.tweetActionLike && this.tweetActionLike.hasClass("activated")) {
+					this.favorited = false;
+					console.log(this.favorite_count);
+					this.favorite_count--;
 					ProviderLikeTweet.unlike(this.sourceTweet, this.column.account).then((res) => {
 						console.log(res);
 					}).catch(e => {
@@ -270,11 +289,20 @@ class Tweet {
 
 							console.log("Oh, it's ok, the fave didn't actually exist")
 						} else {
-							this.tweetActionLike.addClass("activated");
+							this.favorited = true;
+							this.favorite_count++;
+
+							let errMsg = e;
+							try {
+								errMsg = e.errors[0].message;
+							} catch(ee) {}
+							M.toast({html: errMsg});
 						}
 						console.log(e);
 					})
-				} else {
+				} else if (this.tweetActionLike) {
+					this.favorited = true;
+					this.favorite_count++;
 					this.tweetActionLike.addClass("activated");
 					ProviderLikeTweet.like(this.sourceTweet, this.column.account).then((res) => {
 						console.log(res);
@@ -285,18 +313,20 @@ class Tweet {
 
 							console.log("Oh, it's ok, we already faved it.")
 						} else {
-							this.tweetActionLike.removeClass("activated");
+							this.favorited = false;
+							this.favorite_count--;
+
+							let errMsg = e;
+							try {
+								errMsg = e.errors[0].message;
+							} catch(ee) {}
+							M.toast({html: errMsg});
 						}
 						console.log(e);
 					})
 				}
 			});
-
-			if (this.sourceTweet.favorited)
-				this.tweetActionLike.addClass("activated")
-
-			if (this.sourceTweet.favorite_count > 0)
-				this.tweetActionLikeCount = div("tweet-action-count").text(this.formatInteractionCount(this.sourceTweet.favorite_count));
+			this.tweetActionLikeCount = div("tweet-action-count");
 
 			this.tweetActionMore = make("a").addClass("tweet-action tweet-action-more waves-effect waves-dark waves-circle btn-small btn-flat").append(
 				make("i").addClass("material-icons").text("more_horiz").attr("aria-label","Tweet Options Button")
@@ -338,43 +368,21 @@ class Tweet {
 			)
 		}
 
-		if (this.attachedTweet || this.isQuotedTweet || this.sourceTweet.is_quote_status) {
+		this.tweetFooter = div("tweet-footer").append(this.tweetActions);
+		this.element.append(this.tweetFooter);
 
-			if (typeof this.sourceTweet.extended_entities !== "undefined" && typeof this.sourceTweet.extended_entities.media !== "undefined") {
-				this.tweetMediaContainer = div("tweet-media-container");
+		if (typeof this.sourceTweet !== "undefined") {
+			let user = this.sourceTweet.user || this.sourceTweet;
 
-				if (this.sourceTweet.extended_entities.media.length > 1) {
-					this.tweetMediaContainer.addClass("tweet-media-container-grid tweet-media-container-grid-" + this.sourceTweet.extended_entities.media.length)
-				}
+			this.user.parent = this;
 
-				this.sourceTweet.extended_entities.media.forEach(media => {
-					if (!media.video_info || !this.data.is_detail_holder) {
-						this.tweetMediaContainer.append(
-							new Media(media.media_url_https,{display_url:media.expanded_url,tweet:this,num:this.tweetMediaContainer.children().length}).element
-						)
-					} else if (!!media.video_info && !!this.data.is_detail_holder) {
-
-						let url = Media.getBestMediaVariant(media.video_info.variants);
-
-						this.tweetMediaContainer.append(
-							new Media(url,{type:"video",tweet:this,num:this.tweetMediaContainer.children().length}).element
-						)
-					}
-				})
-
-				this.element.append(this.tweetMediaContainer)
+			for (let prop in user) {
+				this.user[prop] = user[prop];
 			}
+		}
 
-			if (this.sourceTweet.is_quote_status && !!this.sourceTweet.quoted_status) {
-				console.debug("IM A QUOTE TWEET!!!");
-				let quotedTweet = new Tweet({quotedTweet:this.sourceTweet.quoted_status}, this.column);
-				console.debug(quotedTweet);
-				this.element.append(quotedTweet.element);
-				quotedTweet.element.click(e => e.stopPropagation())
-			}
-
-			this.tweetFooter = div("tweet-footer").append(this.tweetActions)
-			this.element.append(this.tweetFooter);
+		for (let prop in this.sourceTweet) {
+			this[prop] = this.sourceTweet[prop];
 		}
 
 		return this;
@@ -462,6 +470,165 @@ class Tweet {
 		} else {
 			return String(count)
 		}
+	}
+
+	updateQuotedStatus(isQuoteStatus, quotedStatus) {
+		if (this.sourceTweet.is_quote_status && !!this.sourceTweet.quoted_status && !this.quotedTweet) {
+			console.debug("IM A QUOTE TWEET!!!");
+			this.quotedTweet = new Tweet({quotedTweet:this.sourceTweet.quoted_status}, this.column);
+			this.element.append(this.quotedTweet.element);
+			this.quotedTweet.element.click(e => e.stopPropagation())
+		}
+	}
+
+	set id(val) {
+		this.element.attr("data-id", val);
+		this.sourceTweet.id = val;
+	}
+
+	get id() {
+		return this.sourceTweet.id;
+	}
+
+	set reply_count(val) {
+		if (this.tweetActionReplyCount) {
+			if (val !== 0) {
+				this.tweetActionReplyCount.text(this.formatInteractionCount(val));
+			} else {
+				this.tweetActionReplyCount.text("");
+			}
+		}
+		this.sourceTweet.reply_count = val;
+	}
+
+	get reply_count() {
+		return this.sourceTweet.reply_count;
+	}
+
+	set favorite_count(val) {
+		if (this.tweetActionLikeCount) {
+			if (val !== 0) {
+				this.tweetActionLikeCount.text(this.formatInteractionCount(val));
+			} else {
+				this.tweetActionLikeCount.text("");
+			}
+		}
+		this.sourceTweet.favorite_count = val;
+	}
+
+	get favorite_count() {
+		return this.sourceTweet.favorite_count;
+	}
+
+	set retweet_count(val) {
+		if (this.tweetActionRetweetCount) {
+			if (val !== 0) {
+				this.tweetActionRetweetCount.text(this.formatInteractionCount(val));
+			} else {
+				this.tweetActionRetweetCount.text("");
+			}
+		}
+
+		this.sourceTweet.retweet_count = val;
+	}
+
+	get retweet_count() {
+		return this.sourceTweet.retweet_count;
+	}
+
+	set is_quote_status(val) {
+		this.updateQuotedStatus(val, this.quoted_status);
+		this.sourceTweet.is_quote_status = val;
+	}
+
+	get is_quote_status() {
+		return this.sourceTweet.is_quote_status;
+	}
+
+	set quoted_status(val) {
+		this.updateQuotedStatus(this.is_quote_status, val);
+		this.sourceTweet.quoted_status = val;
+	}
+
+	get quoted_status() {
+		return this.sourceTweet.quoted_status;
+	}
+
+	set favorited(val) {
+		if (val && this.tweetActionLike) {
+			this.tweetActionLike.addClass("activated");
+		} else if (!val && this.tweetActionLike) {
+			this.tweetActionLike.removeClass("activated");
+		}
+		this.sourceTweet.favorited = val;
+	}
+
+	get favorited() {
+		return this.sourceTweet.favorited;
+	}
+
+	set retweeted(val) {
+		if (val && this.tweetActionRetweet) {
+			this.tweetActionRetweet.addClass("activated");
+		} else if (!val && this.tweetActionRetweet) {
+			this.tweetActionRetweet.removeClass("activated");
+		}
+		this.sourceTweet.retweeted = val;
+	}
+
+	get retweeted() {
+		return this.sourceTweet.retweeted;
+	}
+
+	set created_at(time) {
+		this.element.attr("data-time", Date.parse(time));
+
+		if (!this.isQuotedTweet) {
+			this.tweetTime.text(timeAgo(time))
+			.attr("href","https://twitter.com/" + this.user.screen_name + "/status/" + this.sourceTweet.id_str).attr("target","_blank")
+			.click(e => e.stopPropagation());
+
+			if (timeAgoRaw(time) < 60) { // 60 seconds
+				this.attachTimekeeper(this.tweetTime)
+			}
+		}
+		this.sourceTweet.created_at = time;
+	}
+
+	get created_at() {
+		return this.sourceTweet.created_at
+	}
+
+	set extended_entities(entities) {
+		if (typeof entities !== "undefined" && typeof entities.media !== "undefined") {
+			this.tweetMediaContainer = div("tweet-media-container");
+
+			if (entities.media.length > 1) {
+				this.tweetMediaContainer.addClass("tweet-media-container-grid tweet-media-container-grid-" + entities.media.length)
+			}
+
+			entities.media.forEach(media => {
+				if (!media.video_info || !this.data.is_detail_holder) {
+					this.tweetMediaContainer.append(
+						new Media(media.media_url_https,{display_url:media.expanded_url,tweet:this,num:this.tweetMediaContainer.children().length}).element
+					)
+				} else if (!!media.video_info && !!this.data.is_detail_holder) {
+
+					let url = Media.getBestMediaVariant(media.video_info.variants);
+
+					this.tweetMediaContainer.append(
+						new Media(url,{type:"video",tweet:this,num:this.tweetMediaContainer.children().length}).element
+					)
+				}
+			})
+
+			this.element.append(this.tweetMediaContainer)
+		}
+		this.sourceTweet.extended_entities = entities;
+	}
+
+	get extended_entities() {
+		return this.sourceTweet.extended_entities;
 	}
 
 	determineAttributionHeader() {

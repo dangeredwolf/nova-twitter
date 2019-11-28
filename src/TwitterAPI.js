@@ -3,7 +3,7 @@ const axios = require("axios");
 const {StorageAccount} = require("./StorageAccount.js");
 const qs = require('qs');
 
-window.useFiddlerProxy = true;
+window.useFiddlerProxy = false;
 
 class TwitterAPI {
 
