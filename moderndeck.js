@@ -13,12 +13,15 @@ const {DataUser} = require("./src/DataUser.js");
 const $ = require("jquery");
 const jquery = require("jquery");
 
-window.mode = "comfortable";
+window.mode = "deck";
+window.loginOpen = false;
 
 const { ModalRetweet } = require("./src/ModalRetweet.js");
 
 $(document).ready(() => {
     // DefaultColumns.makeDefaultColumns();
+
+	$(alphaversion).html("Version 10.0.0.2020.02.01")
 
 		window.Modals = [];
 		window.Dropdowns = [];

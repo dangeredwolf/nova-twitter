@@ -3,6 +3,10 @@ const {timeAgo} = require("./Helpers.js");
 
 class UpdateTimes {
     static do() {
+		if (window.loginOpen) {
+			return;
+		}
+		
         $(".tweet,.interaction").each((i, tweet) => {
             // console.log(tweet.getAttribute("data-time"),parseInt(tweet.getAttribute("data-time"))),timeAgo(parseInt(tweet.getAttribute("data-time")));
 			let um = tweet.getAttribute("data-time");

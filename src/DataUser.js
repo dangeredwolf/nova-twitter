@@ -1,6 +1,6 @@
 
-class TweetData {
-	
+class DataUser {
+
 }
 
-exports.TweetData = TweetData;
+exports.DataUser = DataUser;

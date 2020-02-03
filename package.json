@@ -1,6 +1,6 @@
 {
     "name": "ModernDeck",
-    "version": "10.0.0",
+    "version": "10.0.0.2020.02.01",
     "description": "A new, powerful Twitter client.",
     "main": "main.js",
     "scripts": {
@@ -15,7 +15,7 @@
     "author": "GitHub",
     "license": "MIT",
     "devDependencies": {
-        "electron": "^7.1.0"
+        "electron": "^7.1.11"
     },
     "dependencies": {
         "@material/mwc-button": "^0.9.1",
@@ -27,6 +27,7 @@
         "jquery": "^3.4.1",
         "materialize-css": "^1.0.0",
         "node-waves": "^0.7.6",
-        "qs": "^6.9.1"
+        "qs": "^6.9.1",
+        "twitter-text": "^3.0.1"
     }
 }

@@ -1,6 +1,7 @@
 const { TwitterAPI } = require("./TwitterAPI.js");
 const { StorageAccount } = require("./StorageAccount.js");
 const { Account } = require("./Account.js");
+const { LoginController } = require("./LoginController.js");
 
 const { ViewComfortable } = require("./ViewComfortable.js");
 
@@ -40,6 +41,12 @@ class TweetDeckClient {
 			console.log(e);
 			console.log(e.trace);
 			console.log(e.message);
+			if (e.message === "Request failed with status code 401") {
+				console.error("we gotta reauthenticate");
+				if (typeof theAcc === "undefined") {
+					new LoginController();
+				}
+			}
 			console.log(Object(e));
 		});
 

@@ -17,7 +17,7 @@ function createSettingsWindow() {
     settingsWindow.loadFile("settings.html");
 }
 
-function createWindow () {
+function createWindow() {
 	mainWindow = new BrowserWindow({
 		width: 800,
 		height: 600,
@@ -30,7 +30,7 @@ function createWindow () {
 	mainWindow.loadFile("index.html")
 
 	mainWindow.webContents.openDevTools();
-	mainWindow.webContents.setUserAgent("Mozilla/5.0 ModernDeck/10.0 (Chrome, like AppleWebKit) Safari/537.36");
+	mainWindow.webContents.userAgent = "Mozilla/5.0 ModernDeck/10.0 (Chrome, like AppleWebKit) Safari/537.36";
 
 	mainWindow.on("closed", function () {
 		mainWindow = null

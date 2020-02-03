@@ -1,3 +1,10 @@
+#alphaversion {
+	color:#fff;
+	bottom:0;
+	left:15px;
+	position:absolute;
+}
+
 .compose {
 	position:absolute;
 	top:0;

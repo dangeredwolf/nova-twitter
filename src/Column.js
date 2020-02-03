@@ -1,6 +1,7 @@
 const $ = require("jquery");
 const { div, make } = require("./Helpers.js");
 const { ColumnHolder } = require("./ColumnHolder.js");
+const { ColumnInteractions } = require("./ColumnInteractions.js");
 const { Tweet } = require("./Tweet.js");
 const { Filter } = require("./Filter.js");
 const Waves = require("node-waves");
@@ -148,6 +149,9 @@ class Column {
 	}
 
 	renderTweetsWrapper(overrideId) {
+		if (window.loginOpen) {
+			return;
+		}
 
 		if (!overrideId && (new Date() - this.lastUpdated < 500)) {
 			throw "Safeguard hit: You can't update the column more than once every 0.5s. This error indicates that the API flood control is malfunctioning.";
@@ -193,10 +197,15 @@ class Column {
 	}
 
     renderTweets(overrideId) {
+		if (window.loginOpen) {
+			return;
+		}
 
 		this.trimTweets();
         return new Promise((resolve, reject) => {
             this.updateTweets(overrideId).then((tweets) => {
+				console.error("I GOT TWEETS");
+				console.error(tweets)
 				assert(tweets, "Column subclass didn't give Column its tweets");
 
 				if (!tweets.sort && tweets.modules) {
@@ -228,24 +237,30 @@ class Column {
 
 	                    let id = tweet.id || tweet.max_position;
 
-	                    if (this.displayedIds[id] !== true && Filter.filterTweet(tweet, this)) {
-	                        let makeTweet = new Tweet(tweet, this).element;
-	                        this.displayedIds[id] = true;
-	                        console.debug(makeTweet)
-	                        if (this.shouldReverse || overrideId) {
-								this.body1.prepend(makeTweet);
-	                        } else {
-								this.body1.prepend(makeTweet); //append
-	                        }
+						try {
+
+		                    if (this.displayedIds[id] !== true && Filter.filterTweet(tweet, this)) {
+		                        let makeTweet = new Tweet(tweet, this).element;
+		                        this.displayedIds[id] = true;
+		                        console.debug(makeTweet)
+		                        if (this.shouldReverse || overrideId) {
+									this.body1.prepend(makeTweet);
+		                        } else {
+									this.body1.prepend(makeTweet); //append
+		                        }
 
 
-	                    }
-	                    if (id > this.latestId) {
-	                        this.latestId = id;
-	                    }
-	                    if (id < this.earliestId) {
-	                        this.earliestId = id;
-	                    }
+		                    }
+		                    if (id > this.latestId) {
+		                        this.latestId = id;
+		                    }
+		                    if (id < this.earliestId) {
+		                        this.earliestId = id;
+		                    }
+						} catch(e) {
+							console.error("error making tweet");
+							console.error(e);
+						}
 	                })
 				}
 
