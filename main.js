@@ -3,6 +3,7 @@ const path = require("path")
 
 let mainWindow;
 let settingsWindow;
+let authWindow;
 
 let useFiddlerProxy = false;
 
@@ -58,6 +59,17 @@ function createWindow() {
     ipcMain.on("open_settings",()=> {
         createSettingsWindow()
    });
+
+   ipcMain.on("auth_twitter",()=> {
+       authWindow = new BrowserWindow({
+           width: 715,
+           height: 540,
+           webPreferences: {
+               nodeIntegration: true
+           }
+       })
+       authWindow.loadURL("https://mobile.twitter.com/login?hide_message=true&redirect_after_login=https%3A%2F%2Fdangeredwolf.com");
+  });
 
    if (useFiddlerProxy) {
 	   const ses = mainWindow.webContents.session;

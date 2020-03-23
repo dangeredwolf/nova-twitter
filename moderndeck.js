@@ -21,7 +21,7 @@ const { ModalRetweet } = require("./src/ModalRetweet.js");
 $(document).ready(() => {
     // DefaultColumns.makeDefaultColumns();
 
-	$(alphaversion).html("Version 10.0.0.2020.02.01")
+	$(alphaversion).html("Version 10.0.0.2020.03.23")
 
 		window.Modals = [];
 		window.Dropdowns = [];
