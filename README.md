@@ -2,7 +2,12 @@
  
 Project Nova (NOT the final name) is an early prototype open-source TweetDeck clone which is designed to be fast and beautiful.
 
-While a promising project, Electron just did not have the performance we needed to do this right, and issues with the authentication system made this impossible.
+While originally a promising project, Electron just did not have the performance we needed to do this right, and issues with the authentication system made this impossible to do well.
+
+As it stands today, development for this platform has ceased.
+
+![https://github.com/dangeredwolf/nova-twitter/raw/master/docs/Screenshot_7018.png](https://github.com/dangeredwolf/nova-twitter/raw/master/docs/Screenshot_7018.png)
+![https://github.com/dangeredwolf/nova-twitter/raw/master/docs/Screenshot_554.png](https://github.com/dangeredwolf/nova-twitter/raw/master/docs/Screenshot_554.png)
 
 ## Features
 
@@ -14,6 +19,10 @@ Implemented features include:
 * Like tweets
 * Retweet tweets
 * Hover over someone's profile picture to get a preview of their profile
+
+## Bugs
+
+There are many bugs, and many unimplemented features.
 
 
 ## Logging in
