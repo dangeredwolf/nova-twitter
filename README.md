@@ -19,6 +19,7 @@ Implemented features include:
 * Like tweets
 * Retweet tweets
 * Hover over someone's profile picture to get a preview of their profile
+* Adding images (except there's a 403 error for images from twitter API)
 
 ## Bugs
 
