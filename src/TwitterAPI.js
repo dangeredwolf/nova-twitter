@@ -1,5 +1,5 @@
 const https = require("https");
-const axios = require("axios");
+const axios = require("electron").remote.require("axios");
 const {StorageAccount} = require("./StorageAccount.js");
 const qs = require('qs');
 

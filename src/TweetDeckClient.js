@@ -9,13 +9,13 @@ const { ColumnActivity } = require("./ColumnActivity.js");
 const { ColumnCollections } = require("./ColumnCollections.js");
 const { ColumnFollowers } = require("./ColumnFollowers.js");
 const { ColumnHome } = require("./ColumnHome.js");
-const { ColumnInteractions } = require("./ColumnInteractions.js");
 const { ColumnLikes } = require("./ColumnLikes.js");
 const { ColumnList } = require("./ColumnList.js");
 const { ColumnMentions } = require("./ColumnMentions.js");
 const { ColumnScheduled } = require("./ColumnScheduled.js");
 const { ColumnSearch } = require("./ColumnSearch.js");
 const { ColumnUser } = require("./ColumnUser.js");
+const { ColumnInteractions } = require("./ColumnInteractions.js");
 
 class TweetDeckClient {
 
@@ -89,8 +89,8 @@ class TweetDeckClient {
                 colType.renderTimer();
                 break;
             case "interactions":
-                var colType = new ColumnInteractions(acc, filters, settings).placeInHolder();
-                colType.renderTimer();
+                // var colType = new ColumnInteractions(acc, filters, settings).placeInHolder();
+                // colType.renderTimer();
                 break;
             case "list":
                 // var colType = new ColumnList(acc, filters, settings).placeInHolder();

@@ -56,11 +56,11 @@ function createWindow() {
 
 	});
 
-    ipcMain.on("open_settings",()=> {
+    ipcMain.on("open_settings", () => {
         createSettingsWindow()
    });
 
-   ipcMain.on("auth_twitter",()=> {
+   ipcMain.on("auth_twitter", () => {
        authWindow = new BrowserWindow({
            width: 715,
            height: 540,
@@ -68,7 +68,19 @@ function createWindow() {
                nodeIntegration: true
            }
        })
-       authWindow.loadURL("https://mobile.twitter.com/login?hide_message=true&redirect_after_login=https%3A%2F%2Fdangeredwolf.com");
+       authWindow.loadURL("https://mobile.twitter.com/login?hide_message=true&redirect_after_login=https%3A%2F%2Ftweetdeck.twitter.com%2F%3Fvia_twitter_login%3Dtrue");
+	   authWindow.webContents.on("did-finish-load", (e) => {
+		   console.log(e)
+		   if (authWindow.webContents.getURL() === "https://twitter.com/" ||
+		   authWindow.webContents.getURL() === "https://twitter.com/home" ||
+		   authWindow.webContents.getURL() === "https://tweetdeck.twitter.com/" ||
+		   authWindow.webContents.getURL() === "https://tweetdeck.twitter.com/?via_twitter_login=true") {
+			   authWindow.loadURL("https://api.twitter.com")
+		   }
+		   authWindow.webContents.executeJavaScript("document.cookie").then(result => {
+			   console.log(result.split("; "))
+		   })
+	   })
   });
 
    if (useFiddlerProxy) {

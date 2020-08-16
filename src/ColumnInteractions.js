@@ -1,11 +1,13 @@
-const {Column} = require("./Column.js");
 const { TwitterAPI } = require("./TwitterAPI.js");
 const {buildApiUrl} = require("./Helpers.js");
 
-class ColumnInteractions extends Column {
+console.log(require("./Column.js")); // something is fucking stupid because only in ColumnInteractions Column returns nothing and i don't know why what the heck
+const { Column } = require("./Column.js");
+
+class ColumnInteractions /*extends Column*/ {
 
     constructor(user, filters, settings) {
-        super(user, filters, settings);
+        // super(user, filters, settings);
         this.columnTitle.html("Notifications");
         this.columnUsername.html("@" + (user.userName || ""));
         this.account = user;
