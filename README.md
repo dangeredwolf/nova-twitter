@@ -6,7 +6,14 @@ While a promising project, Electron just did not have the performance we needed 
 
 ## Features
 
-View tweets and notifications. Syncs with TweetDeck.
+Implemented features include:
+
+* View tweets and notifications (notifications are broken due to a bizarre V8 quirk)
+* Syncs with TweetDeck (as it stands, only TweetDeck -> Nova)
+* Compose tweets and reply to people
+* Like tweets
+* Retweet tweets
+* Hover over someone's profile picture to get a preview of their profile
 
 
 ## Logging in
