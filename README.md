@@ -16,4 +16,13 @@ StorageAccount.saveAccount{
 }
 ```
 
-twitterId: You can check a website like https://tweeterid.com/ to find this
+twitterId, authToken, bearerToken can be found by looking at a network request from a currently logged in session of TweetDeck.
+![https://github.com/dangeredwolf/nova-twitter/raw/master/docs/Screenshot_7014.png](https://github.com/dangeredwolf/nova-twitter/raw/master/docs/Screenshot_7014.png)
+
+authToken is the thing under auth_token in cookie
+
+twitterId is the number itself displayed by twid in cookie
+
+bearerToken is the Authorization token, excluding "Bearer "
+
+userName is your user name.
