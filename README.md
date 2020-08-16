@@ -1,6 +1,6 @@
 # Project Nova (MD10)
  
-Project Nova (NOT the final name) is an early prototype open-source TweetDeck clone which is designed to be fast and beautiful.
+Project Nova is an early prototype open-source TweetDeck clone which is designed to be fast and beautiful.
 
 While originally a promising project, Electron just did not have the performance we needed to do this right, and issues with the authentication system made this impossible to do well.
 
